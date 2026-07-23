@@ -1,0 +1,29 @@
+/* ═══════════════════════════════════════════
+   🏷️ DIFFICULTY BADGE & LESSON META
+   ═══════════════════════════════════════════ */
+.lesson-meta {
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  margin-bottom: 18px; padding: 14px 18px;
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.diff-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 12px; border-radius: 20px;
+  font-size: 0.8em; font-weight: 700;
+}
+.diff-badge.beginner { background: #dcfce7; color: #166534; }
+.diff-badge.intermediate { background: #fef9c3; color: #854d0e; }
+.diff-badge.advanced { background: #fee2e2; color: #991b1b; }
+[data-theme="dark"] .diff-badge.beginner { background: #052e16; color: #86efac; }
+[data-theme="dark"] .diff-badge.intermediate { background: #422006; color: #fde047; }
+[data-theme="dark"] .diff-badge.advanced { background: #450a0a; color: #fca5a5; }
+.reading-time { font-size: 0.8em; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+.prereq-card {
+  margin: 0 0 20px; padding: 14px 18px;
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  border-radius: var(--radius); font-size: 0.9em;
+}
+.prereq-card .prereq-title { font-weight: 700; font-size: 0.85em; color: var(--text-muted); margin-bottom: 6px; }
+.prereq-card .prereq-item { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
+.prereq-card .prereq-check { color: var(--success-border); }

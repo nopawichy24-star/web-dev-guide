@@ -1,0 +1,662 @@
+<div class="section" id="sec-git">
+  <span class="section-emoji">📦</span>
+  <h1>คู่มือ Git ฉบับละเอียด</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge beginner">🟢 Beginner</span>
+    <span class="reading-time">⏱️ อ่าน ~20 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> ติดตั้ง Git แล้ว</div><div class="prereq-item"><span class="prereq-check">✓</span> พื้นฐาน Command Line</div>
+  </div>
+  <p><span class="en" data-th="ระบบควบคุมเวอร์ชัน — ติดตามทุกการเปลี่ยนแปลงของไฟล์โค้ดตลอดเวลา">Git</span> คือระบบที่ช่วยบันทึกทุกการเปลี่ยนแปลงของโค้ด เหมือน "ประวัติการแก้ไข" ใน Google Docs แต่ทรงพลังกว่ามาก</p>
+
+  <div class="callout info">
+    <div class="callout-title">💡 ทำไมต้องใช้ Git?</div>
+    <p>ลองนึกว่าเราเขียนรายงานแล้วแก้ไปแก้มา จนไม่รู้ว่าเวอร์ชันไหนดีที่สุด Git ช่วยให้เรา <strong>ย้อนกลับ</strong> ไปเวอร์ชันไหนก็ได้ <strong>ดูว่าใครแก้อะไร</strong> เมื่อไหร่ และ <strong>ทำงานพร้อมกัน</strong> หลายคนโดยไม่ชนกัน</p>
+  </div>
+
+  <!-- ═══ GIT vs GITHUB ═══ -->
+  <h2>🆚 Git กับ GitHub ต่างกันอย่างไร?</h2>
+  <div class="compare-grid">
+    <div class="compare-box">
+      <h4>📦 Git</h4>
+      <p><strong>โปรแกรม</strong>ที่ติดตั้งในเครื่องคอมฯ ทำงานแบบ <span class="en" data-th="ทำงานโดยไม่ต้องต่ออินเทอร์เน็ต">offline</span> ได้</p>
+      <p>🔧 เป็น<strong>เครื่องมือ</strong></p>
+    </div>
+    <div class="compare-box">
+      <h4>🐙 GitHub</h4>
+      <p><strong>เว็บไซต์</strong>ที่เก็บโค้ดบนคลาวด์ ต้อง<span class="en" data-th="เชื่อมต่ออินเทอร์เน็ต">online</span></p>
+      <p>☁️ เป็น<strong>บริการ</strong> (เหมือน Google Drive)</p>
+    </div>
+  </div>
+
+  <!-- ═══ CORE CONCEPTS ═══ -->
+  <h2>🧩 แนวคิดหลักของ Git</h2>
+
+  <h3>📁 <span class="en" data-th="ที่เก็บโค้ดทั้งโปรเจกต์ — โฟลเดอร์ที่ Git ติดตาม พร้อมประวัติทุกการเปลี่ยนแปลง">Repository</span> (Repo)</h3>
+  <p>คือโฟลเดอร์โปรเจกต์ที่ Git ติดตามอยู่ ข้างในมีโฟลเดอร์ซ่อน <code>.git</code> ที่เก็บประวัติทั้งหมด</p>
+  <div class="callout warning">
+    <div class="callout-title">⚠️ อย่าลบโฟลเดอร์ .git!</div>
+    <p>ถ้าลบ <code>.git</code> ประวัติทุกอย่างจะหายหมด! โฟลเดอร์นี้ซ่อนอยู่ (ขึ้นต้นด้วยจุด) ปกติจะมองไม่เห็น</p>
+  </div>
+
+  <h3>🔄 3 สถานะของไฟล์ใน Git</h3>
+  <p>ไฟล์ใน Git มี 3 สถานะ ลองนึกภาพว่าเหมือนการจัดของใส่กล่องส่งไปรษณีย์:</p>
+  <div class="workflow">
+    <div class="wf-step">📂 <span class="en" data-th="โฟลเดอร์ที่เราทำงานอยู่ — เปลี่ยนไฟล์ได้ตามใจ">Working Directory</span><div class="wf-sub">โฟลเดอร์ทำงาน — แก้ไขไฟล์ตามใจ 🖊️</div></div>
+    <div class="wf-arrow">⬇️ <code style="color:var(--text-muted)">git add</code></div>
+    <div class="wf-step">📋 <span class="en" data-th="พื้นที่เตรียมบันทึก — เลือกว่าจะบันทึกอะไรบ้าง">Staging Area</span><div class="wf-sub">พื้นที่เตรียม — เลือกไฟล์ที่จะบันทึก 📝</div></div>
+    <div class="wf-arrow">⬇️ <code style="color:var(--text-muted)">git commit</code></div>
+    <div class="wf-step">📸 <span class="en" data-th="ที่เก็บถาวร — ประวัติที่บันทึกแล้วปลอดภัย ย้อนกลับได้">Repository</span><div class="wf-sub">ที่เก็บถาวร — บันทึกเรียบร้อย ปลอดภัย! ✅</div></div>
+  </div>
+  <div class="callout tip">
+    <div class="callout-title">💜 เปรียบเทียบให้เห็นภาพ</div>
+    <p>🖊️ <strong>Working Directory</strong> = โต๊ะทำงาน (แก้ไฟล์ไปเรื่อยๆ)<br>
+    📋 <strong>Staging Area</strong> = จัดของใส่กล่อง (เลือกว่าจะส่งอะไร)<br>
+    📸 <strong>Commit</strong> = ส่งไปรษณีย์แล้ว (บันทึกถาวร ย้อนดูได้)</p>
+  </div>
+
+  <h3>📸 <span class="en" data-th="การบันทึกสถานะ ณ ตอนนั้น — เหมือนเซฟเกม เก็บ snapshot ไว้ย้อนกลับได้">Commit</span></h3>
+  <p>คือ "จุดบันทึก" หนึ่งจุด เก็บ snapshot ของไฟล์ทั้งหมด ณ ตอนนั้น แต่ละ Commit มี:</p>
+  <ul>
+    <li>🔑 <span class="en" data-th="รหัสเฉพาะยาว 40 ตัว — ไม่มีซ้ำกัน">Hash ID</span> — รหัสเฉพาะ (เช่น <code>a1b2c3d</code>)</li>
+    <li>📝 <span class="en" data-th="ข้อความอธิบายว่าเปลี่ยนอะไร">Commit Message</span> — ข้อความอธิบายว่าเปลี่ยนอะไร</li>
+    <li>👤 ชื่อคนที่ทำ + วันเวลา</li>
+  </ul>
+
+  <h3>🌿 <span class="en" data-th="สายงาน — เหมือนเส้นทางแยก ทำงานคนละทางแล้วค่อยรวมกัน">Branch</span></h3>
+  <p>คือ "เส้นทางแยก" ของโค้ด ให้เราทดลองเพิ่มฟีเจอร์ใหม่โดยไม่กระทบโค้ดหลัก</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">diagram</span></div>
+    <pre><code>main:     ●───●───●───●───●  (โค้ดหลัก เสถียร)
+               \       /
+feature:        ●───●──┘  (ทดลองฟีเจอร์ใหม่ แล้ว merge กลับ)</code></pre>
+  </div>
+
+  <h3>🔀 <span class="en" data-th="การรวม Branch — นำโค้ดจาก Branch หนึ่งไปรวมกับอีก Branch">Merge</span></h3>
+  <p>คือการนำโค้ดจาก Branch หนึ่งไปรวมกับอีก Branch เช่น รวม feature กลับเข้า main</p>
+
+  <h3>💥 <span class="en" data-th="ความขัดแย้ง — เกิดเมื่อ 2 คนแก้บรรทัดเดียวกัน Git ไม่รู้ว่าจะเอาของใคร">Conflict</span></h3>
+  <p>เกิดเมื่อ 2 คน (หรือ 2 Branch) แก้ไข<strong>บรรทัดเดียวกัน</strong>ในไฟล์เดียวกัน Git ไม่รู้จะเอาของใคร เราต้องเลือกเอง</p>
+
+  <h3>☁️ <span class="en" data-th="ที่เก็บโค้ดระยะไกล — อยู่บนเว็บ เช่น GitHub">Remote Repository</span></h3>
+  <p>คือ <span class="en" data-th="ที่เก็บโค้ดทั้งโปรเจกต์">Repository</span> ที่อยู่บนเว็บ (เช่น GitHub) เราส่งโค้ดจากเครื่องเราขึ้นไปด้วย <code>git push</code> และดึงลงมาด้วย <code>git pull</code></p>
+
+  <hr>
+
+  <!-- ═══ COMMANDS ═══ -->
+  <h2>⚡ คำสั่ง Git ทั้งหมดที่ต้องรู้</h2>
+
+  <!-- git --version -->
+  <h3>1. <code>git --version</code> — ตรวจสอบเวอร์ชัน</h3>
+  <p><strong>ใช้ทำอะไร:</strong> ดูว่าติดตั้ง Git แล้วหรือยัง และเวอร์ชันอะไร</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>git --version</code></pre>
+  </div>
+  <p><strong>ผลลัพธ์:</strong> <code>git version 2.47.1</code></p>
+  <div class="callout warning">
+    <div class="callout-title">⚠️ ถ้าขึ้น "command not found"</div>
+    <p>แปลว่ายังไม่ได้ติดตั้ง Git กลับไปดูบท <a onclick="goTo('install')">🔧 ติดตั้งเครื่องมือ</a></p>
+  </div>
+
+  <!-- git config -->
+  <h3>2. <code>git config</code> — ตั้งค่า Git</h3>
+  <p><strong>ใช้ทำอะไร:</strong> บอก Git ว่าเราชื่ออะไร ใช้อีเมลอะไร (ทำครั้งเดียว)</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># ตั้งชื่อ (เปลี่ยนเป็นชื่อจริงของคุณ)
+git config --global user.name "Nopawich"
+
+# ตั้งอีเมล (ใช้อีเมลเดียวกับ GitHub)
+git config --global user.email "your@email.com"
+
+# ดูค่าทั้งหมดที่ตั้งไว้
+git config --list</code></pre>
+  </div>
+
+  <!-- git init -->
+  <h3>3. <code>git init</code> — เริ่มโปรเจกต์ Git ใหม่</h3>
+  <p><strong>ใช้ทำอะไร:</strong> เปลี่ยนโฟลเดอร์ธรรมดาให้กลายเป็น <span class="en" data-th="ที่เก็บโค้ดที่ Git ติดตาม">Git Repository</span></p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal — ต้อง cd เข้าไปในโฟลเดอร์โปรเจกต์ก่อน</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># สร้างโฟลเดอร์ใหม่และเข้าไป
+mkdir my-project
+cd my-project
+
+# เริ่ม Git ในโฟลเดอร์นี้
+git init</code></pre>
+  </div>
+  <p><strong>ผลลัพธ์:</strong> <code>Initialized empty Git repository in /path/my-project/.git/</code></p>
+  <div class="callout danger">
+    <div class="callout-title">🚨 ข้อผิดพลาดที่พบบ่อย</div>
+    <p>อย่ารัน <code>git init</code> ในโฟลเดอร์ Home หรือ Desktop! ต้องรันในโฟลเดอร์โปรเจกต์เฉพาะเจาะจง ไม่งั้น Git จะติดตามไฟล์ทุกอย่างในเครื่อง</p>
+  </div>
+
+  <!-- git status -->
+  <h3>4. <code>git status</code> — ดูสถานะไฟล์ ⭐</h3>
+  <p><strong>ใช้ทำอะไร:</strong> ดูว่าไฟล์ไหนเปลี่ยนแปลง ไฟล์ไหนพร้อมบันทึก — <strong>คำสั่งที่ใช้บ่อยที่สุด!</strong></p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>git status</code></pre>
+  </div>
+  <p><strong>ผลลัพธ์ตัวอย่าง:</strong></p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">output</span></div>
+    <pre><code>On branch main
+
+Changes not staged for commit:
+  (use "git add &lt;file&gt;..." to update what will be committed)
+        modified:   index.html    ← ไฟล์ที่แก้ไขแล้ว (สีแดง)
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+        style.css                 ← ไฟล์ใหม่ที่ยังไม่ได้ track</code></pre>
+  </div>
+  <div class="callout tip">
+    <div class="callout-title">💜 นิสัยที่ดี</div>
+    <p>รัน <code>git status</code> <strong>ก่อนและหลัง</strong>ทุกคำสั่ง Git เพื่อดูว่าเกิดอะไรขึ้น!</p>
+  </div>
+
+  <!-- git add -->
+  <h3>5. <code>git add</code> — เลือกไฟล์ที่จะบันทึก ⭐</h3>
+  <p><strong>ใช้ทำอะไร:</strong> ย้ายไฟล์จาก <span class="en" data-th="โฟลเดอร์ทำงาน">Working Directory</span> ไปที่ <span class="en" data-th="พื้นที่เตรียมบันทึก">Staging Area</span></p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># เพิ่มไฟล์เฉพาะตัว
+git add index.html
+
+# เพิ่มหลายไฟล์
+git add index.html style.css
+
+# เพิ่มทุกไฟล์ที่เปลี่ยนแปลง (ใช้บ่อยสุด)
+git add .
+
+# เพิ่มเฉพาะไฟล์นามสกุล .html
+git add *.html</code></pre>
+  </div>
+  <div class="callout warning">
+    <div class="callout-title">⚠️ ระวังก่อน git add .</div>
+    <p>คำสั่ง <code>git add .</code> จะเพิ่ม<strong>ทุกไฟล์</strong> รวมถึงไฟล์ที่อาจมี Secret! ใช้ <code>git status</code> ตรวจสอบก่อนเสมอ และตั้ง <code>.gitignore</code> ให้เรียบร้อย</p>
+  </div>
+
+  <!-- git commit -->
+  <h3>6. <code>git commit</code> — บันทึกการเปลี่ยนแปลง ⭐</h3>
+  <p><strong>ใช้ทำอะไร:</strong> สร้าง "จุดบันทึก" ถาวร จากไฟล์ที่อยู่ใน Staging Area</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># บันทึกพร้อมข้อความอธิบาย
+git commit -m "add login page"
+
+# ลัดรวม add + commit (เฉพาะไฟล์ที่ track แล้ว ไม่รวมไฟล์ใหม่)
+git commit -am "fix typo in header"</code></pre>
+  </div>
+  <p><strong>ผลลัพธ์:</strong></p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">output</span></div>
+    <pre><code>[main a1b2c3d] add login page
+ 2 files changed, 45 insertions(+), 3 deletions(-)</code></pre>
+  </div>
+
+  <!-- git log -->
+  <h3>7. <code>git log</code> — ดูประวัติ Commit</h3>
+  <p><strong>ใช้ทำอะไร:</strong> ดูรายการ Commit ทั้งหมดที่เคยทำ</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># ดูประวัติเต็ม
+git log
+
+# ดูแบบย่อ 1 บรรทัดต่อ Commit (แนะนำ!)
+git log --oneline
+
+# ดู 5 อันล่าสุด
+git log --oneline -5
+
+# กด q เพื่อออกจาก log</code></pre>
+  </div>
+  <p><strong>ผลลัพธ์ <code>git log --oneline</code>:</strong></p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">output</span></div>
+    <pre><code>a1b2c3d (HEAD -> main) add login page
+e4f5g6h fix typo in header
+i7j8k9l initial commit</code></pre>
+  </div>
+
+  <!-- git diff -->
+  <h3>8. <code>git diff</code> — ดูว่าเปลี่ยนอะไรบ้าง</h3>
+  <p><strong>ใช้ทำอะไร:</strong> เปรียบเทียบไฟล์ปัจจุบันกับ Commit ก่อนหน้า</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># ดูสิ่งที่เปลี่ยนแต่ยังไม่ได้ add
+git diff
+
+# ดูสิ่งที่ add แล้วแต่ยังไม่ commit
+git diff --staged
+
+# ดูเฉพาะไฟล์
+git diff index.html</code></pre>
+  </div>
+
+  <!-- git branch -->
+  <h3>9. <code>git branch</code> — จัดการ Branch</h3>
+  <p><strong>ใช้ทำอะไร:</strong> สร้าง, ดูรายชื่อ, ลบ Branch</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># ดู Branch ทั้งหมด (* คือ Branch ที่อยู่ตอนนี้)
+git branch
+
+# สร้าง Branch ใหม่
+git branch feature-login
+
+# ลบ Branch (ต้อง merge แล้ว)
+git branch -d feature-login
+
+# ลบ Branch แบบบังคับ (ระวัง! โค้ดอาจหาย)
+git branch -D feature-login
+
+# เปลี่ยนชื่อ Branch ปัจจุบัน
+git branch -M main</code></pre>
+  </div>
+
+  <!-- git switch -->
+  <h3>10. <code>git switch</code> — สลับ Branch (แนะนำ)</h3>
+  <p><strong>ใช้ทำอะไร:</strong> ย้ายไปทำงานใน Branch อื่น</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># สลับไป Branch ที่มีอยู่แล้ว
+git switch feature-login
+
+# สร้าง Branch ใหม่ + สลับไปเลย
+git switch -c feature-signup
+
+# กลับไป main
+git switch main</code></pre>
+  </div>
+
+  <!-- git checkout -->
+  <h3>11. <code>git checkout</code> — สลับ Branch (แบบเก่า)</h3>
+  <p><strong>ใช้ทำอะไร:</strong> เหมือน <code>git switch</code> แต่เป็นคำสั่งเก่า ยังใช้ได้</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># สลับ Branch
+git checkout feature-login
+
+# สร้าง + สลับ
+git checkout -b feature-signup</code></pre>
+  </div>
+  <div class="callout tip">
+    <div class="callout-title">💜 แนะนำ</div>
+    <p>ใช้ <code>git switch</code> แทน <code>git checkout</code> เพราะชัดเจนกว่า — <code>checkout</code> ทำได้หลายอย่างเกินไปจนสับสนได้</p>
+  </div>
+
+  <!-- git merge -->
+  <h3>12. <code>git merge</code> — รวม Branch</h3>
+  <p><strong>ใช้ทำอะไร:</strong> นำโค้ดจาก Branch หนึ่งมารวมกับ Branch ปัจจุบัน</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># 1. สลับไป Branch ที่จะรับ (เช่น main)
+git switch main
+
+# 2. รวม Branch feature เข้ามา
+git merge feature-login</code></pre>
+  </div>
+  <p><strong>ผลลัพธ์ที่ดี:</strong> <code>Merge made by the 'ort' strategy.</code></p>
+
+  <!-- git remote -->
+  <h3>13. <code>git remote</code> — เชื่อมกับ GitHub</h3>
+  <p><strong>ใช้ทำอะไร:</strong> ตั้งค่าที่อยู่ <span class="en" data-th="ที่เก็บโค้ดระยะไกลบนเว็บ เช่น GitHub">Remote Repository</span></p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># เพิ่ม Remote ชื่อ origin (ทำครั้งเดียวต่อโปรเจกต์)
+git remote add origin https://github.com/username/my-project.git
+
+# ดู Remote ทั้งหมด
+git remote -v
+
+# เปลี่ยน URL
+git remote set-url origin https://github.com/username/new-url.git
+
+# ลบ Remote
+git remote remove origin</code></pre>
+  </div>
+
+  <!-- git clone -->
+  <h3>14. <code>git clone</code> — ดาวน์โหลดโปรเจกต์จาก GitHub</h3>
+  <p><strong>ใช้ทำอะไร:</strong> คัดลอกโปรเจกต์ทั้งหมดจาก GitHub มาที่เครื่องเรา</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>git clone https://github.com/username/project-name.git</code></pre>
+  </div>
+  <p>จะได้โฟลเดอร์ <code>project-name</code> พร้อมประวัติ Git ทั้งหมด</p>
+
+  <!-- git pull -->
+  <h3>15. <code>git pull</code> — ดึงโค้ดล่าสุดจาก GitHub ⭐</h3>
+  <p><strong>ใช้ทำอะไร:</strong> ดึงการเปลี่ยนแปลงล่าสุดจาก GitHub มาอัปเดตในเครื่องเรา</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>git pull</code></pre>
+  </div>
+  <div class="callout tip">
+    <div class="callout-title">💜 ควรทำก่อน push เสมอ!</div>
+    <p>รัน <code>git pull</code> ก่อน <code>git push</code> ทุกครั้ง เพื่อหลีกเลี่ยง <span class="en" data-th="ข้อขัดแย้ง — โค้ดชนกัน">Conflict</span></p>
+  </div>
+
+  <!-- git fetch -->
+  <h3>16. <code>git fetch</code> — ตรวจสอบอัปเดตโดยไม่รวม</h3>
+  <p><strong>ใช้ทำอะไร:</strong> ดาวน์โหลดข้อมูลใหม่จาก GitHub แต่ยังไม่รวมเข้ากับโค้ดเรา (ปลอดภัยกว่า pull)</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># ดึงข้อมูลมาดู
+git fetch
+
+# จะรวมเมื่อไหร่ ค่อยสั่ง merge เอง
+git merge origin/main</code></pre>
+  </div>
+
+  <!-- git push -->
+  <h3>17. <code>git push</code> — ส่งโค้ดขึ้น GitHub ⭐</h3>
+  <p><strong>ใช้ทำอะไร:</strong> อัปโหลด Commit จากเครื่องเราไปที่ GitHub</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># Push ครั้งแรก (ตั้ง upstream)
+git push -u origin main
+
+# Push ครั้งต่อไป (สั้นลง)
+git push</code></pre>
+  </div>
+  <div class="callout danger">
+    <div class="callout-title">🚨 ก่อน Push ทุกครั้ง!</div>
+    <p>ตรวจสอบว่าไม่มีไฟล์ <code>.env</code>, API Key, รหัสผ่าน หรือข้อมูลลับใดๆ อยู่ในไฟล์ที่จะ Push! ใช้ <code>git status</code> ตรวจสอบก่อน</p>
+  </div>
+
+  <!-- git reset -->
+  <h3>18. <code>git reset</code> — ย้อนกลับ (ระวัง!)</h3>
+  <p><strong>ใช้ทำอะไร:</strong> ยกเลิก Commit หรือเอาไฟล์ออกจาก Staging Area</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># เอาไฟล์ออกจาก Staging (ปลอดภัย ไม่เสียข้อมูล)
+git reset index.html
+
+# ย้อนกลับ 1 Commit แต่เก็บไฟล์ไว้ (ปลอดภัย)
+git reset --soft HEAD~1
+
+# ย้อนกลับ 1 Commit เอาออกจาก staging ด้วย (ปลอดภัย)
+git reset HEAD~1
+
+# ⚠️ ย้อนกลับ + ลบการเปลี่ยนแปลงทั้งหมด (อันตราย!)
+git reset --hard HEAD~1</code></pre>
+  </div>
+  <div class="callout danger">
+    <div class="callout-title">🚨 อันตราย: git reset --hard</div>
+    <p><code>--hard</code> จะ<strong>ลบโค้ดที่เปลี่ยนแปลงอย่างถาวร!</strong> กู้คืนไม่ได้ ห้ามใช้ถ้ายังไม่เข้าใจ ใช้ <code>--soft</code> แทนจะปลอดภัยกว่า</p>
+  </div>
+
+  <!-- git restore -->
+  <h3>19. <code>git restore</code> — กู้ไฟล์คืน</h3>
+  <p><strong>ใช้ทำอะไร:</strong> เอาไฟล์กลับไปสภาพ Commit ล่าสุด (ยกเลิกการแก้ไข)</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># ยกเลิกการแก้ไขไฟล์ (กลับไปเหมือน Commit ล่าสุด)
+git restore index.html
+
+# เอาไฟล์ออกจาก Staging (เหมือน git reset แต่ชัดกว่า)
+git restore --staged index.html</code></pre>
+  </div>
+
+  <!-- git revert -->
+  <h3>20. <code>git revert</code> — ย้อน Commit แบบปลอดภัย</h3>
+  <p><strong>ใช้ทำอะไร:</strong> สร้าง Commit ใหม่ที่ "ทำตรงข้าม" กับ Commit ที่ระบุ — ปลอดภัยกว่า reset เพราะไม่ลบประวัติ</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># ย้อน Commit ล่าสุด
+git revert HEAD
+
+# ย้อน Commit ที่ระบุ Hash
+git revert a1b2c3d</code></pre>
+  </div>
+  <div class="callout tip">
+    <div class="callout-title">💜 reset vs revert</div>
+    <p><code>reset</code> = ลบ Commit ทิ้ง (เหมือนฉีกหน้าสมุดออก) — อันตราย<br>
+    <code>revert</code> = สร้าง Commit ใหม่ที่แก้กลับ (เหมือนเขียนแก้ไขหน้าใหม่) — ปลอดภัย ✅</p>
+  </div>
+
+  <!-- git stash -->
+  <h3>21. <code>git stash</code> — เก็บงานชั่วคราว</h3>
+  <p><strong>ใช้ทำอะไร:</strong> เก็บงานที่ยังไม่เสร็จไว้ชั่วคราว เพื่อไปทำอย่างอื่นก่อน แล้วค่อยกลับมาทำต่อ</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># เก็บงานปัจจุบันไว้ชั่วคราว
+git stash
+
+# ดูรายการ stash ทั้งหมด
+git stash list
+
+# เอางานกลับมาทำต่อ
+git stash pop
+
+# ลบ stash ทั้งหมด
+git stash clear</code></pre>
+  </div>
+
+  <hr>
+
+  <!-- ═══ DAILY WORKFLOW ═══ -->
+  <h2>🔄 Workflow ที่แนะนำ (ใช้ทุกวัน)</h2>
+  <p>ลำดับคำสั่งที่ควรใช้ทุกครั้งที่จะบันทึกงาน:</p>
+
+  <div class="workflow">
+    <div class="wf-step">1️⃣ <code>git pull</code><div class="wf-sub">ดึงโค้ดล่าสุดจาก GitHub ก่อน — ป้องกัน Conflict</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">2️⃣ ✏️ แก้โค้ด<div class="wf-sub">เพิ่มฟีเจอร์ / แก้บั๊ก / ปรับหน้าตา</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">3️⃣ <code>git status</code><div class="wf-sub">ตรวจดูว่าไฟล์ไหนเปลี่ยน — มี .env หลุดไหม?</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">4️⃣ <code>git add .</code><div class="wf-sub">เลือกไฟล์ที่จะบันทึก (ย้ายเข้า Staging)</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">5️⃣ <code>git commit -m "add: login page"</code><div class="wf-sub">บันทึกถาวร พร้อมข้อความอธิบาย</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">6️⃣ <code>git push</code><div class="wf-sub">ส่งโค้ดขึ้น GitHub</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">7️⃣ ▲ Vercel Auto-Deploy!<div class="wf-sub">เว็บอัปเดตอัตโนมัติ 🎉</div></div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal — ใช้ทุกครั้งที่จะ save งาน</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># 1️⃣ ดึงโค้ดล่าสุด
+git pull
+
+# 2️⃣ (แก้โค้ด...)
+
+# 3️⃣ ดูสถานะ — ไฟล์ไหนเปลี่ยน? มี .env หลุดไหม?
+git status
+
+# 4️⃣ เพิ่มไฟล์ที่ต้องการบันทึก
+git add .
+
+# 5️⃣ บันทึก พร้อมข้อความอธิบาย
+git commit -m "add: login page with form validation"
+
+# 6️⃣ ส่งโค้ดขึ้น GitHub → Vercel จะ deploy อัตโนมัติ!
+git push</code></pre>
+  </div>
+
+  <hr>
+
+  <!-- ═══ COMMIT MESSAGES ═══ -->
+  <h2>✍️ วิธีเขียน <span class="en" data-th="ข้อความอธิบายว่า Commit นี้เปลี่ยนอะไร">Commit Message</span> ที่ดี</h2>
+
+  <h3>✅ ตัวอย่างที่ดี</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span></div>
+    <pre><code>git commit -m "add: user registration form"
+git commit -m "fix: login button not responding on mobile"
+git commit -m "update: change header color to blue"
+git commit -m "remove: unused CSS file"
+git commit -m "refactor: simplify database query"</code></pre>
+  </div>
+
+  <h3>❌ ตัวอย่างที่ไม่ดี</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span></div>
+    <pre><code>git commit -m "update"           ← อัปเดตอะไร?
+git commit -m "fix bug"          ← บั๊กอะไร?
+git commit -m "asdf"             ← ไม่มีความหมาย
+git commit -m "."                ← ?????
+git commit -m "แก้ไขเสร็จแล้ว"      ← แก้อะไร?</code></pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">💜 สูตรง่ายๆ</div>
+    <p>ใช้รูปแบบ: <strong>[ทำอะไร]: [ทำที่ไหน/อะไร]</strong><br>
+    เช่น <code>add: contact page</code> / <code>fix: 404 error on login</code> / <code>update: footer links</code></p>
+  </div>
+
+  <hr>
+
+  <!-- ═══ BRANCH WORKFLOW ═══ -->
+  <h2>🌿 Branch Workflow</h2>
+  <p>โปรเจกต์ที่เป็นระเบียบจะแบ่ง Branch ดังนี้:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Branch</th><th>หน้าที่</th><th>ตัวอย่างชื่อ</th></tr></thead>
+      <tbody>
+        <tr><td><code>main</code></td><td>โค้ดหลักที่พร้อมใช้งาน — ห้ามพัง!</td><td><code>main</code></td></tr>
+        <tr><td><span class="en" data-th="สายงานหลักสำหรับพัฒนา — ทดสอบก่อนรวมเข้า main">develop</span></td><td>โค้ดพัฒนา รวมฟีเจอร์ก่อนเข้า main</td><td><code>develop</code></td></tr>
+        <tr><td><span class="en" data-th="Branch สำหรับทำฟีเจอร์ใหม่">feature</span></td><td>เพิ่มฟีเจอร์ใหม่</td><td><code>feature/login</code></td></tr>
+        <tr><td><span class="en" data-th="Branch สำหรับแก้บั๊ก">bugfix</span></td><td>แก้บั๊ก</td><td><code>bugfix/fix-404</code></td></tr>
+        <tr><td><span class="en" data-th="Branch สำหรับแก้ไขฉุกเฉินบน production">hotfix</span></td><td>แก้ไขเร่งด่วนบน production</td><td><code>hotfix/fix-crash</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>ตัวอย่างการใช้ Feature Branch</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># 1. สร้าง Branch ใหม่จาก main
+git switch main
+git switch -c feature/login-page
+
+# 2. ทำงาน... แก้ไฟล์... commit ไปเรื่อยๆ
+git add .
+git commit -m "add: login form UI"
+git commit -m "add: form validation"
+
+# 3. เสร็จแล้ว กลับไป main
+git switch main
+
+# 4. รวม feature เข้า main
+git merge feature/login-page
+
+# 5. ลบ Branch ที่ใช้เสร็จแล้ว
+git branch -d feature/login-page
+
+# 6. Push ขึ้น GitHub
+git push</code></pre>
+  </div>
+
+  <hr>
+
+  <!-- ═══ MERGE CONFLICT ═══ -->
+  <h2>💥 แก้ <span class="en" data-th="ข้อขัดแย้ง — เกิดเมื่อแก้บรรทัดเดียวกัน Git ไม่รู้จะเอาของใคร">Merge Conflict</span> ทีละขั้นตอน</h2>
+
+  <h3>สถานการณ์ตัวอย่าง</h3>
+  <p>สมมติ Branch <code>main</code> แก้ไฟล์ <code>index.html</code> บรรทัดที่ 5 เป็น "สวัสดี" และ Branch <code>feature</code> แก้บรรทัดเดียวกันเป็น "Hello" — เมื่อ Merge จะเกิด Conflict</p>
+
+  <h3>ขั้นตอนแก้ไข</h3>
+  <p><strong>1️⃣</strong> เมื่อสั่ง Merge แล้วเกิด Conflict จะเห็น:</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">output</span></div>
+    <pre><code>Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result.</code></pre>
+  </div>
+
+  <p><strong>2️⃣</strong> เปิดไฟล์ที่มี Conflict จะเห็นเครื่องหมายพิเศษ:</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">html</span><span class="code-where">📄 index.html</span></div>
+    <pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+&lt;h1&gt;สวัสดี&lt;/h1&gt;
+=======
+&lt;h1&gt;Hello&lt;/h1&gt;
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature</code></pre>
+  </div>
+  <div class="callout info">
+    <div class="callout-title">💡 อ่านเครื่องหมาย</div>
+    <p><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> = โค้ดของ Branch ปัจจุบัน (main)<br>
+    <code>=======</code> = เส้นแบ่ง<br>
+    <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature</code> = โค้ดของ Branch ที่จะ Merge เข้ามา</p>
+  </div>
+
+  <p><strong>3️⃣</strong> เลือกว่าจะเอาแบบไหน แล้ว<strong>ลบเครื่องหมายทิ้ง</strong>:</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">html</span><span class="code-where">📄 index.html — หลังแก้ Conflict</span></div>
+    <pre><code>&lt;h1&gt;สวัสดี — Hello&lt;/h1&gt;</code></pre>
+  </div>
+
+  <p><strong>4️⃣</strong> บันทึกการแก้ไข:</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>git add index.html
+git commit -m "resolve: merge conflict in index.html"</code></pre>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-title">✅ จบ! Conflict ถูกแก้แล้ว</div>
+    <p>Conflict ดูน่ากลัวแต่จริงๆ แค่เลือกโค้ดที่ถูกต้องแล้วลบเครื่องหมายทิ้ง ใน VS Code มีปุ่มช่วย "Accept Current / Accept Incoming / Accept Both" ให้กดง่ายๆ</p>
+  </div>
+
+  <hr>
+
+  <!-- ═══ QUIZ ═══ -->
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ Git</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">git add . ทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📋 เพิ่มไฟล์ทั้งหมดที่เปลี่ยนแปลงเข้า Staging Area (เตรียมพร้อม Commit)</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Working Directory → Staging → Commit ต้องใช้คำสั่งอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">git add → git commit -m "message"</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">git reset --hard ทำไมถึงอันตราย?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🚨 เพราะลบการเปลี่ยนแปลงทั้งหมดอย่างถาวร! กู้คืนไม่ได้ ใช้ --soft แทนจะปลอดภัยกว่า</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ก่อน push ควรทำอะไรก่อน?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">1) git status ตรวจสอบไฟล์ 2) git pull ดึงโค้ดล่าสุด 3) ตรวจว่าไม่มี .env หรือ Secret</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Branch คืออะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🌿 เส้นทางแยกของโค้ด — ทดลองเพิ่มฟีเจอร์ใหม่โดยไม่กระทบโค้ดหลัก แล้ว Merge รวมกลับทีหลัง</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Conflict เกิดขึ้นเมื่อไหร่?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">💥 เมื่อ 2 Branch แก้ไขบรรทัดเดียวกันในไฟล์เดียวกัน Git ไม่รู้จะเอาของใคร ต้องเลือกเอง</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('install')">
+      <div class="nav-label">← ก่อนหน้า</div>
+      <div class="nav-title">🔧 ติดตั้งเครื่องมือ</div>
+    </a>
+    <a class="next" onclick="goTo('github')">
+      <div class="nav-label">ถัดไป →</div>
+      <div class="nav-title">🐙 คู่มือ GitHub</div>
+    </a>
+  </div>
+  <div class="callout tip">
+    <div class="callout-title">🎯 Mini Project — ลองทำ!</div>
+    <p>สร้างโฟลเดอร์ใหม่ → <code>git init</code> → สร้างไฟล์ 3 ไฟล์ → commit → สร้าง branch → แก้ไขใน branch → merge กลับ main → push ขึ้น GitHub!</p>
+  </div>
+  <button class="fc-start-btn" onclick="openFlashcard()" style="margin-bottom:1em">🃏 ทบทวน Flashcard</button>
+  <button class="section-complete-btn" onclick="toggleComplete('git')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

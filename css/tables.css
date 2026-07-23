@@ -1,0 +1,15 @@
+/* ═══════════════════════════════════════════
+   📊 TABLE
+   ═══════════════════════════════════════════ */
+.table-wrap { overflow-x: auto; margin: 1em 0; -webkit-overflow-scrolling: touch; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+th, td {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+th { background: var(--bg-secondary); font-weight: 600; white-space: nowrap; }

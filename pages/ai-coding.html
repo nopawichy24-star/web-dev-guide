@@ -1,0 +1,327 @@
+<div class="section" id="sec-ai-coding">
+  <span class="section-emoji">🤖</span>
+  <h1>เทคนิคใช้ AI ช่วยเขียนโค้ด</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge intermediate">🟡 Intermediate</span>
+    <span class="reading-time">⏱️ อ่าน ~15 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> JavaScript</div><div class="prereq-item"><span class="prereq-check">✓</span> Next.js พื้นฐาน</div>
+  </div>
+  <p>Claude, ChatGPT และ AI อื่นๆ ช่วยเขียนโค้ดได้ดีมาก แต่ต้องใช้อย่างถูกวิธีและปลอดภัย!</p>
+
+  <h2>📝 วิธีเขียน Prompt ที่ดี</h2>
+  <p>ยิ่งให้ข้อมูลละเอียด ผลลัพธ์ยิ่งตรงใจ ควรระบุ:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ข้อมูล</th><th>ตัวอย่าง</th></tr></thead>
+      <tbody>
+        <tr><td><span class="en" data-th="เฟรมเวิร์กที่ใช้">Framework</span></td><td>Next.js 15 (App Router)</td></tr>
+        <tr><td>ภาษา</td><td>TypeScript</td></tr>
+        <tr><td>Database</td><td>Supabase</td></tr>
+        <tr><td>สิ่งที่ต้องการ</td><td>สร้างหน้า Login ด้วย Email + Password</td></tr>
+        <tr><td>Error ที่เจอ</td><td>วาง Error message มาด้วย</td></tr>
+        <tr><td>โค้ดที่มีอยู่</td><td>วาง code ปัจจุบันมาด้วย</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>✅ ตัวอย่าง Prompt ที่ดี</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span><span class="code-where">💬 Prompt สำหรับ AI</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>ฉันใช้ Next.js 15 (App Router), TypeScript, Tailwind CSS, Supabase
+ต้องการสร้างหน้า Login ที่:
+- มีฟอร์ม email + password
+- กดสมัครสมาชิกหรือเข้าสู่ระบบ
+- มี loading state ตอนรอ
+- มี error message เมื่อ login ไม่สำเร็จ
+- redirect ไป /tasks เมื่อ login สำเร็จ
+- ใช้ Supabase Auth
+
+โปรดระบุ:
+1. ไฟล์ที่ต้องสร้าง + path
+2. โค้ดเต็มของแต่ละไฟล์
+3. Environment Variables ที่ใช้
+4. วิธีทดสอบ</code></pre>
+  </div>
+
+  <h3>❌ ตัวอย่าง Prompt ที่ไม่ดี</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span></div>
+    <pre><code>สร้างหน้า login ให้หน่อย
+← ไม่บอก framework, ภาษา, database, รายละเอียด</code></pre>
+  </div>
+
+  <h2>📋 Prompt สำเร็จรูป 10 แบบ</h2>
+  <p>Copy ไปใช้ได้เลย เปลี่ยนรายละเอียดตามโปรเจกต์:</p>
+
+  <h3>1️⃣ สร้างฟีเจอร์ใหม่</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span><span class="code-where">💬 Prompt</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>ฉันใช้ Next.js 15 App Router, TypeScript, Tailwind CSS, Supabase
+ต้องการสร้าง [ชื่อฟีเจอร์] ที่:
+- [รายละเอียด 1]
+- [รายละเอียด 2]
+โปรดระบุไฟล์ที่ต้องสร้าง, โค้ดเต็ม, วิธีทดสอบ</code></pre>
+  </div>
+
+  <h3>2️⃣ แก้ Bug</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span><span class="code-where">💬 Prompt</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>ฉันใช้ Next.js + Supabase เจอ Error นี้:
+[วาง Error message ทั้งก้อน]
+
+เกิดเมื่อ: [ทำอะไรอยู่ตอนที่ Error]
+ไฟล์ที่เกี่ยวข้อง: [ชื่อไฟล์]
+โค้ดปัจจุบัน:
+[วางโค้ด]
+
+ช่วยอธิบายสาเหตุและวิธีแก้</code></pre>
+  </div>
+
+  <h3>3️⃣ ตรวจ Security</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span><span class="code-where">💬 Prompt</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>ช่วยตรวจความปลอดภัยของโค้ดนี้:
+[วางโค้ด — เอา Secret จริงออกก่อน!]
+
+ตรวจสอบ:
+- มี Secret หลุดใน Client ไหม?
+- RLS Policy ถูกต้องไหม?
+- มีช่องโหว่อะไรบ้าง?</code></pre>
+  </div>
+
+  <h3>4️⃣ สร้าง RLS Policy</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span><span class="code-where">💬 Prompt</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>ฉันมีตาราง Supabase ชื่อ [ชื่อตาราง] มี Column:
+- id (uuid, PK)
+- user_id (uuid, FK → auth.users)
+- [column อื่นๆ]
+
+ต้องการ RLS Policy ที่:
+- ผู้ใช้อ่าน/สร้าง/แก้/ลบ เฉพาะข้อมูลของตัวเอง
+ช่วยเขียน SQL ให้ครบ 4 Policy</code></pre>
+  </div>
+
+  <h3>5️⃣ วิเคราะห์ Build Error</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span><span class="code-where">💬 Prompt</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>Vercel Build failed ด้วย Error นี้:
+[วาง Build Logs]
+
+ฉันใช้ Next.js 15 + TypeScript
+ช่วยอธิบายว่า Error คืออะไร และแก้อย่างไร</code></pre>
+  </div>
+
+  <h3>6️⃣ ตรวจ Environment Variables</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span><span class="code-where">💬 Prompt</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>ช่วยตรวจว่า Environment Variables ตั้งค่าถูกต้องไหม:
+- .env.example ของฉัน: [วาง — ห้ามวางค่าจริง!]
+- Framework: Next.js 15
+- ตัวแปรไหนควรมี NEXT_PUBLIC_ ตัวไหนไม่ควร?</code></pre>
+  </div>
+
+  <h3>7️⃣ เขียน README</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span><span class="code-where">💬 Prompt</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>ช่วยเขียน README.md สำหรับโปรเจกต์:
+- ชื่อ: [ชื่อโปรเจกต์]
+- ฟีเจอร์: [รายการฟีเจอร์]
+- เทคโนโลยี: Next.js, TypeScript, Supabase, Vercel
+- ต้องมี: วิธีติดตั้ง, วิธีรัน, Env Vars ที่ต้องตั้ง</code></pre>
+  </div>
+
+  <h3>8️⃣ Refactor โค้ด</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span><span class="code-where">💬 Prompt</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>ช่วย Refactor โค้ดนี้ให้ดีขึ้น:
+[วางโค้ด]
+อยากได้: อ่านง่ายขึ้น, แยก function, เพิ่ม TypeScript type
+รักษาพฤติกรรมเดิมไว้</code></pre>
+  </div>
+
+  <h3>9️⃣ ตรวจ Database Schema</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span><span class="code-where">💬 Prompt</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>ช่วยตรวจ Database Schema ของฉัน:
+[วาง CREATE TABLE SQL]
+ตรวจ: Primary Key, Foreign Key, Index, Data Type เหมาะสมไหม?
+แนะนำสิ่งที่ควรปรับ</code></pre>
+  </div>
+
+  <h3>🔟 วิเคราะห์ Vercel Log</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span><span class="code-where">💬 Prompt</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>Vercel Function Log แสดง Error นี้:
+[วาง Log — เอา Secret ออกก่อน!]
+ช่วยอธิบายว่าเกิดอะไรขึ้นและแก้อย่างไร</code></pre>
+  </div>
+
+  <h2>🧩 เทคนิคใช้ร่วมกับ Claude โดยเฉพาะ</h2>
+
+  <h3>📐 Prompt Template — โครงสร้างที่ดีที่สุด</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span><span class="code-where">💬 Prompt Template สำหรับ Claude</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># Role (บทบาท)
+คุณคือ Senior Frontend Engineer ที่เชี่ยวชาญ Next.js + Supabase
+
+# Task (งาน)
+สร้างหน้า Login ที่รองรับ Email + Password
+
+# Requirements (ข้อกำหนด)
+- ใช้ Next.js 15 App Router
+- ใช้ TypeScript
+- ใช้ Tailwind CSS
+- ใช้ Supabase Auth
+- มี Loading state
+- มี Error handling
+- Responsive (มือถือ + Desktop)
+
+# Output (ผลลัพธ์ที่ต้องการ)
+- ระบุไฟล์ที่ต้องสร้าง + path
+- โค้ดเต็มทุกไฟล์
+- อธิบายว่าแต่ละส่วนทำอะไร
+- วิธีทดสอบ</code></pre>
+  </div>
+
+  <h3>❌ vs ✅ วิธีถาม Claude</h3>
+  <div class="compare-grid">
+    <div class="compare-box">
+      <h4>❌ ถามแบบไม่ดี</h4>
+      <p><code>แก้หน่อย</code></p>
+      <p><code>มันไม่ทำงาน</code></p>
+      <p><code>ทำให้สวยขึ้น</code></p>
+      <p>← ไม่มีข้อมูล ไม่มี context</p>
+    </div>
+    <div class="compare-box">
+      <h4>✅ ถามแบบดี</h4>
+      <p><strong>Error:</strong> [วาง error]</p>
+      <p><strong>Code:</strong> [วางโค้ดปัจจุบัน]</p>
+      <p><strong>Expected:</strong> ควรจะ...</p>
+      <p><strong>Actual:</strong> แต่จริงๆ เกิด...</p>
+    </div>
+  </div>
+
+  <h3>🔧 เทคนิคเฉพาะ Claude</h3>
+  <ul>
+    <li>📎 <strong>แนบไฟล์ได้</strong> — ลาก .tsx, .ts, .json ใส่ Claude ได้เลย ไม่ต้อง copy-paste</li>
+    <li>🔄 <strong>ขอแก้ทีละจุด</strong> — อย่าขอทั้งโปรเจกต์ในครั้งเดียว ขอทีละฟีเจอร์จะดีกว่า</li>
+    <li>📸 <strong>Screenshot ได้</strong> — ถ่ายหน้าจอ Error แล้วส่งรูปให้ Claude ได้</li>
+    <li>✅ <strong>ให้ตรวจก่อน Deploy</strong> — "ช่วยตรวจโค้ดนี้ก่อน Push ว่ามี Security issue ไหม"</li>
+    <li>📋 <strong>ขอ Checklist</strong> — "ช่วยสร้าง Checklist ก่อน Deploy ให้หน่อย"</li>
+    <li>🧪 <strong>ขอ Test case</strong> — "ช่วยบอกว่าควรทดสอบอะไรบ้าง"</li>
+  </ul>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠️ สิ่งที่ห้ามทำกับ Claude (และ AI ทุกตัว)</div>
+    <p>❌ ห้ามวาง <code>service_role key</code>, Database Password, API Secret จริง<br>
+    ❌ ห้ามวางข้อมูลส่วนตัวของผู้ใช้จริง (ชื่อ, อีเมล, เบอร์โทร)<br>
+    ✅ ใช้ค่าตัวอย่างเสมอ: <code>your-key-here</code>, <code>test@example.com</code></p>
+  </div>
+
+  <hr>
+
+  <h2>📋 Cheat Sheet — คำสั่งที่ใช้บ่อย</h2>
+
+  <h3>📦 Git</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 คำสั่ง Git ที่ใช้ทุกวัน</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>git clone URL             # ดาวน์โหลดโปรเจกต์
+git status                # ดูสถานะไฟล์
+git add .                 # เพิ่มทุกไฟล์เข้า Staging
+git commit -m "message"   # บันทึก
+git pull                  # ดึงโค้ดล่าสุด
+git push                  # ส่งโค้ดขึ้น GitHub
+git log --oneline         # ดูประวัติ Commit
+git switch -c branch-name # สร้าง+สลับ Branch</code></pre>
+  </div>
+
+  <h3>📦 npm</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 คำสั่ง npm ที่ใช้บ่อย</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>npm install               # ติดตั้ง dependencies ทั้งหมด
+npm install package-name  # ติดตั้ง package เพิ่ม
+npm run dev               # รันเว็บใน localhost
+npm run build             # สร้างเว็บสำหรับ production
+npm run start             # รัน production build</code></pre>
+  </div>
+
+  <h3>⚡ Supabase JS</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">ts</span><span class="code-where">📄 คำสั่ง Supabase ที่ใช้บ่อย</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>// อ่านทั้งหมด
+supabase.from('tasks').select('*')
+
+// อ่านแบบกรอง
+supabase.from('tasks').select('*').eq('completed', true)
+
+// เพิ่ม
+supabase.from('tasks').insert({ title: '...', user_id: '...' })
+
+// แก้
+supabase.from('tasks').update({ completed: true }).eq('id', '...')
+
+// ลบ
+supabase.from('tasks').delete().eq('id', '...')
+
+// Login
+supabase.auth.signInWithPassword({ email, password })
+
+// Signup
+supabase.auth.signUp({ email, password })
+
+// Logout
+supabase.auth.signOut()
+
+// ดู User
+supabase.auth.getUser()</code></pre>
+  </div>
+  <div class="callout danger">
+    <div class="callout-title">🚨 กฎเหล็ก — ห้ามส่งข้อมูลลับให้ AI!</div>
+    <ul>
+      <li>❌ ห้ามวาง <code>service_role key</code></li>
+      <li>❌ ห้ามวาง Database Password</li>
+      <li>❌ ห้ามวาง API Secret หรือ Token จริง</li>
+      <li>❌ ห้ามวางข้อมูลส่วนตัวของผู้ใช้จริง</li>
+    </ul>
+    <p>ใช้ค่าตัวอย่างแทน เช่น <code>your-key-here</code></p>
+  </div>
+
+  <h3>ก่อนใช้โค้ดจาก AI ต้อง:</h3>
+  <ul class="checklist" data-checklist="ai">
+    <li><input type="checkbox" id="ai1"><label for="ai1">อ่านโค้ดก่อน — เข้าใจว่ามันทำอะไร</label></li>
+    <li><input type="checkbox" id="ai2"><label for="ai2"><code>git commit</code> ก่อนแก้ไขครั้งใหญ่ (เพื่อย้อนกลับได้)</label></li>
+    <li><input type="checkbox" id="ai3"><label for="ai3">ทดสอบใน Local ก่อน Deploy</label></li>
+    <li><input type="checkbox" id="ai4"><label for="ai4">ตรวจว่าไม่มี <code>service_role key</code> ในโค้ดฝั่ง Client</label></li>
+    <li><input type="checkbox" id="ai5"><label for="ai5">ตรวจ RLS Policy ที่ AI สร้าง — อย่าใช้ <code>USING (true)</code> ใน DELETE</label></li>
+    <li><input type="checkbox" id="ai6"><label for="ai6">ห้ามให้ AI ลบไฟล์หรือ DROP TABLE โดยไม่ตรวจสอบ</label></li>
+  </ul>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ — ใช้ AI อย่างปลอดภัย</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ข้อมูลอะไรบ้างที่ห้ามส่งให้ AI?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🚨 service_role key, Database Password, API Secret, Token จริง, ข้อมูลส่วนตัวผู้ใช้จริง — ใช้ค่าตัวอย่างแทนเสมอ!</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ก่อนใช้โค้ดจาก AI ต้องทำอะไรก่อน?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📖 1) อ่านโค้ดก่อน 2) git commit ก่อนแก้ใหญ่ 3) ทดสอบใน Local 4) ตรวจ Security (RLS, Secret)</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Prompt ที่ดีต้องมีข้อมูลอะไรบ้าง?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📝 Framework, ภาษา, Database, สิ่งที่ต้องการ, Error ที่เจอ, โค้ดปัจจุบัน — ยิ่งละเอียดยิ่งตรงใจ</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('project')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">📋 Task App</div></a>
+    <a class="next" onclick="goTo('troubleshoot')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🔧 แก้ปัญหา</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('ai-coding')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

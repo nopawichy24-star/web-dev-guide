@@ -1,0 +1,75 @@
+<div class="section" id="sec-gh-vercel">
+  <span class="section-emoji">🔗</span>
+  <h1>เชื่อม GitHub กับ Vercel</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge beginner">🟢 Beginner</span>
+    <span class="reading-time">⏱️ อ่าน ~5 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> GitHub</div><div class="prereq-item"><span class="prereq-check">✓</span> Vercel</div>
+  </div>
+  <p>เมื่อเชื่อม GitHub กับ Vercel แล้ว ทุกครั้งที่เรา <span class="en" data-th="ส่งโค้ดขึ้น GitHub">Push</span> โค้ด Vercel จะ <span class="en" data-th="สร้างและเผยแพร่เว็บอัตโนมัติ">auto-deploy</span> ให้ทันที!</p>
+
+  <h2>🔄 Workflow อัตโนมัติ</h2>
+  <div class="workflow">
+    <div class="wf-step">✏️ แก้โค้ดในเครื่อง</div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">📤 <code>git push</code> ไป GitHub</div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">▲ Vercel ตรวจพบอัตโนมัติ → เริ่ม Build</div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">✅ Build สำเร็จ → เว็บอัปเดตทันที!</div>
+  </div>
+
+  <h2>📌 วิธีเชื่อม (ทำครั้งเดียว)</h2>
+  <ol>
+    <li>สมัคร Vercel ด้วย GitHub (ถ้ายังไม่ได้ทำ)</li>
+    <li>Vercel Dashboard → <strong>Add New → Project</strong></li>
+    <li>เลือก Repository จาก GitHub → กด <strong>Import</strong></li>
+    <li>ตั้งค่า Framework / Env Vars → กด <strong>Deploy</strong></li>
+    <li>เสร็จ! จากนี้ทุกครั้งที่ Push ไป <code>main</code> → Production อัปเดตอัตโนมัติ</li>
+  </ol>
+
+  <h2>🌿 Branch กับ Deployment</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Push ไป Branch</th><th>Vercel ทำอะไร</th><th>URL</th></tr></thead>
+      <tbody>
+        <tr><td><code>main</code></td><td>🌍 <span class="en" data-th="เผยแพร่จริง">Production</span> Deploy</td><td><code>your-site.vercel.app</code></td></tr>
+        <tr><td>Branch อื่น / <span class="en" data-th="คำขอรวมโค้ด">PR</span></td><td>👁️ <span class="en" data-th="เผยแพร่ตัวอย่าง">Preview</span> Deploy</td><td>URL ชั่วคราวสำหรับทดสอบ</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">💜 ขั้นตอนทำงานที่แนะนำ</div>
+    <p>1) สร้าง Branch ใหม่ → 2) แก้โค้ด → 3) Push → 4) Vercel สร้าง Preview URL ให้ทดสอบ → 5) ทดสอบแล้วโอเค → 6) Merge เข้า main → 7) Production อัปเดต!</p>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Push ไป main กับ Push ไป branch อื่น ต่างกันอย่างไรบน Vercel?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🌍 main → Production Deploy (เว็บจริง) / 🔀 branch อื่น → Preview Deploy (URL ชั่วคราวสำหรับทดสอบ)</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">auto-deploy หมายความว่าอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🤖 Vercel จะ Build + Deploy อัตโนมัติทุกครั้งที่เรา Push โค้ดไป GitHub ไม่ต้องกดปุ่มเอง!</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('vercel')">
+      <div class="nav-label">← ก่อนหน้า</div>
+      <div class="nav-title">▲ คู่มือ Vercel</div>
+    </a>
+    <a class="next" onclick="goTo('supabase')">
+      <div class="nav-label">ถัดไป →</div>
+      <div class="nav-title">⚡ คู่มือ Supabase</div>
+    </a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('gh-vercel')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

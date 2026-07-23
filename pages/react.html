@@ -1,0 +1,463 @@
+<div class="section" id="sec-react">
+  <span class="section-emoji">⚛️</span>
+  <h1>React Fundamentals</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge beginner">🟢 Beginner</span>
+    <span class="reading-time">⏱️ อ่าน ~30 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> HTML / CSS พื้นฐาน</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> JavaScript พื้นฐาน (ตัวแปร, ฟังก์ชัน, if/else)</div>
+  </div>
+
+  <p><span class="en" data-th="ไลบรารี่สร้างหน้าเว็บจากชิ้นส่วนเล็กๆ ประกอบกัน เหมือนเลโก้">React</span> คือไลบรารี่ที่ช่วยสร้างหน้าเว็บจากชิ้นส่วนเล็กๆ เรียกว่า <span class="en" data-th="ชิ้นส่วน UI ที่นำกลับมาใช้ซ้ำได้ เหมือนเลโก้ 1 ชิ้น">Component</span> — เหมือนต่อเลโก้ ประกอบชิ้นเล็กๆ เป็นเว็บทั้งหน้า</p>
+
+  <div class="callout info">
+    <div class="callout-title">💡 ทำไมต้องเรียน React ก่อน?</div>
+    <p>โค้ดตัวอย่างทั้งเว็บนี้เขียนด้วย React (ผ่าน Next.js) ถ้าไม่เข้าใจ React → จะอ่านโค้ดไม่ออก เขียนไม่เป็น! บทนี้สอนทุกอย่างที่จำเป็น</p>
+  </div>
+
+  <!-- ═══ 1. COMPONENT ═══ -->
+  <h2>1️⃣ <span class="en" data-th="ชิ้นส่วน UI — เหมือนเลโก้ 1 ชิ้น สร้างครั้งเดียว ใช้ซ้ำได้ทั่วเว็บ">Component</span> — ชิ้นส่วนของหน้าเว็บ</h2>
+  <p>ทุกอย่างใน React คือ Component — ปุ่ม, ฟอร์ม, เมนู, การ์ด ล้วนเป็น Component ทั้งนั้น</p>
+
+  <div class="workflow">
+    <div class="wf-step">🌐 หน้าเว็บทั้งหน้า<div class="wf-sub">ประกอบจาก Component หลายตัว</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">📦 Header + Sidebar + Content + Footer<div class="wf-sub">แต่ละส่วนเป็น Component แยก</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">🧱 Button, Card, Input, Modal...<div class="wf-sub">Component เล็กสุดที่ใช้ซ้ำได้</div></div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 components/Button.tsx — Component แรกของเรา!</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>// Component คือ "ฟังก์ชันที่ return HTML"
+function Button() {
+  return (
+    &lt;button className="bg-blue-500 text-white px-4 py-2 rounded"&gt;
+      กดฉัน!
+    &lt;/button&gt;
+  )
+}
+
+export default Button</code></pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">💜 กฎ Component</div>
+    <p>1) ชื่อต้อง<strong>ขึ้นต้นด้วยตัวพิมพ์ใหญ่</strong> เช่น <code>Button</code> ไม่ใช่ <code>button</code><br>
+    2) ต้อง <code>return</code> HTML (จริงๆ คือ JSX)<br>
+    3) สร้างครั้งเดียว ใช้ซ้ำได้ทุกที่: <code>&lt;Button /&gt;</code></p>
+  </div>
+
+  <!-- ═══ 2. JSX ═══ -->
+  <h2>2️⃣ <span class="en" data-th="ภาษาผสม HTML + JavaScript — เขียน HTML ใน JavaScript ได้เลย">JSX</span> — HTML ใน JavaScript</h2>
+  <p>JSX หน้าตาเหมือน HTML แต่จริงๆ เป็น JavaScript ที่แปลงเป็น HTML!</p>
+
+  <div class="compare-grid">
+    <div class="compare-box">
+      <h4>📄 HTML ปกติ</h4>
+      <code>&lt;div class="box"&gt;สวัสดี&lt;/div&gt;</code>
+    </div>
+    <div class="compare-box">
+      <h4>⚛️ JSX (React)</h4>
+      <code>&lt;div className="box"&gt;สวัสดี&lt;/div&gt;</code>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 ตัวอย่าง JSX</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>function Greeting() {
+  const name = "สมชาย"       // ตัวแปร JavaScript
+  const isLoggedIn = true
+
+  return (
+    &lt;div&gt;
+      {/* ใส่ตัวแปร JavaScript ใน { } */}
+      &lt;h1&gt;สวัสดี {name}!&lt;/h1&gt;
+
+      {/* ใส่เงื่อนไขได้ */}
+      {isLoggedIn ? &lt;p&gt;ยินดีต้อนรับ&lt;/p&gt; : &lt;p&gt;กรุณา Login&lt;/p&gt;}
+
+      {/* คำนวณได้ */}
+      &lt;p&gt;ปีนี้ {2026}&lt;/p&gt;
+    &lt;/div&gt;
+  )
+}</code></pre>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>HTML</th><th>JSX (React)</th><th>ทำไม</th></tr></thead>
+      <tbody>
+        <tr><td><code>class</code></td><td><code>className</code></td><td><code>class</code> เป็นคำสงวนใน JavaScript</td></tr>
+        <tr><td><code>for</code></td><td><code>htmlFor</code></td><td><code>for</code> เป็นคำสงวนใน JavaScript</td></tr>
+        <tr><td><code>onclick</code></td><td><code>onClick</code></td><td>JSX ใช้ camelCase</td></tr>
+        <tr><td><code>style="color:red"</code></td><td><code>style={{color:'red'}}</code></td><td>JSX ใช้ object</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══ 3. PROPS ═══ -->
+  <h2>3️⃣ <span class="en" data-th="ข้อมูลที่ส่งจาก Component แม่ไป Component ลูก — เหมือนจดหมายที่แม่ส่งให้ลูก">Props</span> — ส่งข้อมูลให้ Component</h2>
+  <p>Props คือข้อมูลที่ Component แม่ส่งให้ Component ลูก — เหมือนพ่อแม่ส่งจดหมายให้ลูก</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 ตัวอย่าง Props</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>// Component ลูก — รับ Props
+function UserCard({ name, age }: { name: string; age: number }) {
+  return (
+    &lt;div className="p-4 border rounded"&gt;
+      &lt;h2&gt;{name}&lt;/h2&gt;
+      &lt;p&gt;อายุ {age} ปี&lt;/p&gt;
+    &lt;/div&gt;
+  )
+}
+
+// Component แม่ — ส่ง Props
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;UserCard name="สมชาย" age={25} /&gt;
+      &lt;UserCard name="สมศรี" age={30} /&gt;
+      {/* Component เดียวกัน แต่ข้อมูลต่างกัน! */}
+    &lt;/div&gt;
+  )
+}</code></pre>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠️ Props เป็น Read-Only!</div>
+    <p>Component ลูก<strong>ห้ามแก้ไข</strong> Props ที่ได้มา — ถ้าต้องการข้อมูลที่เปลี่ยนได้ ต้องใช้ <span class="en" data-th="ข้อมูลที่เปลี่ยนได้ใน Component">State</span></p>
+  </div>
+
+  <!-- ═══ 4. EVENT ═══ -->
+  <h2>4️⃣ <span class="en" data-th="เหตุการณ์ที่เกิดขึ้นบนหน้าเว็บ เช่น คลิก พิมพ์ เลื่อน — เหมือนกดกริ่ง">Event</span> — ตอบสนองต่อผู้ใช้</h2>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 ตัวอย่าง Event</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>function EventDemo() {
+  // ฟังก์ชันที่ทำงานเมื่อเกิด Event
+  function handleClick() {
+    alert('คลิกแล้ว!')
+  }
+
+  function handleChange(e: React.ChangeEvent&lt;HTMLInputElement&gt;) {
+    console.log('พิมพ์:', e.target.value)
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()    // ป้องกันหน้า reload
+    alert('ส่งฟอร์มแล้ว!')
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;button onClick={handleClick}&gt;กดฉัน&lt;/button&gt;
+      &lt;input onChange={handleChange} placeholder="พิมพ์อะไรสักอย่าง" /&gt;
+      &lt;form onSubmit={handleSubmit}&gt;
+        &lt;button type="submit"&gt;ส่ง&lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+  )
+}</code></pre>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Event</th><th>เมื่อไหร่</th><th>ใช้กับ</th></tr></thead>
+      <tbody>
+        <tr><td><code>onClick</code></td><td>เมื่อคลิก</td><td>ปุ่ม, ลิงก์, div</td></tr>
+        <tr><td><code>onChange</code></td><td>เมื่อค่าเปลี่ยน</td><td>input, select, textarea</td></tr>
+        <tr><td><code>onSubmit</code></td><td>เมื่อส่งฟอร์ม</td><td>form</td></tr>
+        <tr><td><code>onKeyDown</code></td><td>เมื่อกดคีย์บอร์ด</td><td>input, div</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══ 5. STATE ═══ -->
+  <h2>5️⃣ <span class="en" data-th="ข้อมูลที่เปลี่ยนได้ใน Component — เมื่อ State เปลี่ยน React จะอัปเดตหน้าจออัตโนมัติ">State</span> — ข้อมูลที่เปลี่ยนได้ ⭐</h2>
+  <p>State คือ "ความจำ" ของ Component — เมื่อ State เปลี่ยน React จะ <span class="en" data-th="วาดหน้าจอใหม่ เฉพาะส่วนที่เปลี่ยน">Re-render</span> อัปเดตหน้าจอให้อัตโนมัติ!</p>
+
+  <div class="workflow">
+    <div class="wf-step">👤 ผู้ใช้กดปุ่ม<div class="wf-sub">เกิด Event</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">📊 State เปลี่ยน<div class="wf-sub"><code>setCount(count + 1)</code></div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">🔄 React Re-render<div class="wf-sub">อัปเดตหน้าจอเฉพาะส่วนที่เปลี่ยน</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">🖥️ ผู้ใช้เห็นผลลัพธ์ใหม่!</div>
+  </div>
+
+  <!-- ═══ 6. useState ═══ -->
+  <h2>6️⃣ <span class="en" data-th="Hook สำหรับสร้างและจัดการ State ใน Component — กล่องเก็บของที่เปิดปิดได้">useState</span> — Hook สำคัญที่สุด ⭐</h2>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 ตัวอย่าง useState — Counter</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>import { useState } from 'react'
+
+function Counter() {
+  //        ค่า      ฟังก์ชันเปลี่ยนค่า    ค่าเริ่มต้น
+  const [count, setCount] = useState(0)
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;กดแล้ว {count} ครั้ง&lt;/p&gt;
+      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;+1&lt;/button&gt;
+      &lt;button onClick={() =&gt; setCount(count - 1)}&gt;-1&lt;/button&gt;
+      &lt;button onClick={() =&gt; setCount(0)}&gt;Reset&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}</code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 ตัวอย่าง useState — ฟอร์ม Input</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>import { useState } from 'react'
+
+function SearchBox() {
+  const [query, setQuery] = useState('')       // เก็บข้อความค้นหา
+  const [results, setResults] = useState([])   // เก็บผลลัพธ์
+
+  return (
+    &lt;div&gt;
+      &lt;input
+        value={query}
+        onChange={(e) =&gt; setQuery(e.target.value)}
+        placeholder="ค้นหา..."
+      /&gt;
+      &lt;p&gt;กำลังค้นหา: {query}&lt;/p&gt;
+    &lt;/div&gt;
+  )
+}</code></pre>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">🚨 กฎ useState</div>
+    <p>❌ ห้ามแก้ State ตรงๆ: <code>count = 5</code> ← ไม่ทำงาน!<br>
+    ✅ ต้องใช้ setter: <code>setCount(5)</code> ← React ถึงจะรู้ว่าต้อง re-render<br><br>
+    ❌ ห้ามเรียก useState ใน if/loop — ต้องอยู่บนสุดของ Component เสมอ</p>
+  </div>
+
+  <!-- ═══ 7. HOOK ═══ -->
+  <h2>7️⃣ <span class="en" data-th="ฟังก์ชันพิเศษของ React ที่ขึ้นต้นด้วย use — ดึงความสามารถพิเศษมาใช้ใน Component">Hook</span> — ฟังก์ชันพิเศษของ React</h2>
+  <p>Hook คือฟังก์ชันที่ขึ้นต้นด้วย <code>use</code> — ใช้เพิ่มความสามารถให้ Component</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Hook</th><th>ใช้ทำอะไร</th><th>ใช้บ่อยแค่ไหน</th></tr></thead>
+      <tbody>
+        <tr><td><code>useState</code></td><td>เก็บข้อมูลที่เปลี่ยนได้</td><td>⭐⭐⭐⭐⭐ ทุกวัน</td></tr>
+        <tr><td><code>useEffect</code></td><td>ทำงานหลัง render (โหลดข้อมูล, ตั้ง listener)</td><td>⭐⭐⭐⭐ บ่อยมาก</td></tr>
+        <tr><td><code>useRef</code></td><td>อ้างอิง DOM element หรือเก็บค่าที่ไม่ re-render</td><td>⭐⭐⭐ บ่อย</td></tr>
+        <tr><td><code>useContext</code></td><td>แชร์ข้อมูลข้าม Component</td><td>⭐⭐ ปานกลาง</td></tr>
+        <tr><td><code>useCallback</code></td><td>จำฟังก์ชันไว้ไม่สร้างใหม่</td><td>⭐ เมื่อต้อง optimize</td></tr>
+        <tr><td><code>useMemo</code></td><td>จำผลลัพธ์การคำนวณ</td><td>⭐ เมื่อต้อง optimize</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══ 8. RENDERING ═══ -->
+  <h2>8️⃣ <span class="en" data-th="กระบวนการแสดงผล — React วาดหน้าจอจากข้อมูลใน State + Props">Rendering</span> — React วาดหน้าจออย่างไร</h2>
+
+  <h3><span class="en" data-th="แสดงตามเงื่อนไข — ถ้า...แสดง... ถ้าไม่...แสดง...">Conditional Rendering</span></h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 แสดง Component ตามเงื่อนไข</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>function Dashboard({ user }: { user: any | null }) {
+  // ถ้ายังไม่ login → แสดงหน้า Login
+  if (!user) {
+    return &lt;LoginPage /&gt;
+  }
+
+  // ถ้า login แล้ว → แสดง Dashboard
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;ยินดีต้อนรับ {user.name}&lt;/h1&gt;
+      {user.isAdmin &amp;&amp; &lt;AdminPanel /&gt;}  {/* แสดงเฉพาะ Admin */}
+    &lt;/div&gt;
+  )
+}</code></pre>
+  </div>
+
+  <h3>Render รายการ (List)</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 ใช้ .map() สร้างรายการ</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>function TaskList({ tasks }: { tasks: { id: string; title: string }[] }) {
+  if (tasks.length === 0) {
+    return &lt;p&gt;📭 ยังไม่มี Task&lt;/p&gt;   // Empty state
+  }
+
+  return (
+    &lt;ul&gt;
+      {tasks.map(task =&gt; (
+        &lt;li key={task.id}&gt;{task.title}&lt;/li&gt;
+        {/* ⚠️ ต้องมี key ที่ไม่ซ้ำกัน! */}
+      ))}
+    &lt;/ul&gt;
+  )
+}</code></pre>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠️ ต้องมี key ใน List!</div>
+    <p>เมื่อใช้ <code>.map()</code> สร้างรายการ ทุก element ต้องมี <code>key</code> ที่ไม่ซ้ำกัน — React ใช้ key บอกว่าแถวไหนเปลี่ยน ห้ามใช้ index เป็น key!</p>
+  </div>
+
+  <!-- ═══ 9. useEffect ═══ -->
+  <h2>9️⃣ <span class="en" data-th="Hook สำหรับทำงานหลัง Render — เช่น โหลดข้อมูลจาก API, ตั้ง listener">useEffect</span> — ทำงานหลัง Render ⭐</h2>
+  <p>ใช้ทำงานที่ต้องเกิด<strong>หลัง</strong>จากหน้าจอแสดงผลแล้ว เช่น โหลดข้อมูลจาก Supabase</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 ตัวอย่าง useEffect — โหลดข้อมูลตอนเปิดหน้า</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
+
+function TaskPage() {
+  const [tasks, setTasks] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  // useEffect รันหลังจาก Component แสดงผลครั้งแรก
+  useEffect(() =&gt; {
+    async function loadTasks() {
+      const { data } = await supabase.from('tasks').select('*')
+      if (data) setTasks(data)
+      setLoading(false)
+    }
+    loadTasks()
+  }, [])  // ← [] = รันครั้งเดียวตอนเปิดหน้า
+
+  if (loading) return &lt;p&gt;⏳ กำลังโหลด...&lt;/p&gt;
+
+  return (
+    &lt;ul&gt;
+      {tasks.map(t =&gt; &lt;li key={t.id}&gt;{t.title}&lt;/li&gt;)}
+    &lt;/ul&gt;
+  )
+}</code></pre>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Dependency Array</th><th>รันเมื่อ</th><th>ตัวอย่าง</th></tr></thead>
+      <tbody>
+        <tr><td><code>[]</code></td><td>ครั้งเดียว ตอนเปิดหน้า</td><td>โหลดข้อมูลครั้งแรก</td></tr>
+        <tr><td><code>[count]</code></td><td>ทุกครั้งที่ <code>count</code> เปลี่ยน</td><td>อัปเดตเมื่อค่าเปลี่ยน</td></tr>
+        <tr><td>ไม่ใส่</td><td>ทุกครั้งที่ re-render ⚠️</td><td>ระวัง! อาจทำงานซ้ำไม่หยุด</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="practice-card mistake">
+    <div class="pc-title">❌ Common Mistake — Infinite Loop!</div>
+    <p>ถ้าลืมใส่ <code>[]</code> ใน useEffect + มี setState ข้างใน → จะวน loop ไม่หยุด! เพราะ setState → re-render → useEffect รันใหม่ → setState → re-render → ...</p>
+  </div>
+
+  <!-- ═══ 10. CONTEXT ═══ -->
+  <h2>🔟 <span class="en" data-th="แชร์ข้อมูลข้าม Component หลายชั้น โดยไม่ต้องส่ง Props ทีละชั้น — เหมือนวิทยุ ทุกคนรับสัญญาณเดียวกัน">Context</span> — แชร์ข้อมูลทั้งแอป</h2>
+  <p>ปกติต้องส่ง Props จากแม่ → ลูก → หลาน ทีละชั้น (เรียก <span class="en" data-th="การส่ง Props ลงลึกหลายชั้น — เหมือนบอกข่าวต่อ ๆ กันหลายคน ยุ่งยาก">Prop Drilling</span>) แต่ Context ให้ทุก Component เข้าถึงข้อมูลได้เลย!</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 ตัวอย่าง Context — แชร์ข้อมูล User ทั้งแอป</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>import { createContext, useContext, useState } from 'react'
+
+// 1. สร้าง Context
+const UserContext = createContext(null)
+
+// 2. สร้าง Provider (ครอบทั้งแอป)
+function UserProvider({ children }) {
+  const [user, setUser] = useState(null)
+  return (
+    &lt;UserContext.Provider value={{ user, setUser }}&gt;
+      {children}
+    &lt;/UserContext.Provider&gt;
+  )
+}
+
+// 3. ใช้ใน Component ไหนก็ได้!
+function Navbar() {
+  const { user } = useContext(UserContext)
+  return &lt;p&gt;สวัสดี {user?.name || 'Guest'}&lt;/p&gt;
+}
+
+function LoginButton() {
+  const { setUser } = useContext(UserContext)
+  return (
+    &lt;button onClick={() =&gt; setUser({ name: 'สมชาย' })}&gt;
+      Login
+    &lt;/button&gt;
+  )
+}</code></pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">💜 ใช้ Context เมื่อไหร่?</div>
+    <p>✅ ข้อมูลที่ใช้ทั่วแอป: User, Theme (Dark/Light), ภาษา<br>
+    ❌ ข้อมูลเฉพาะ Component: ค่า input, สถานะ loading → ใช้ useState ธรรมดา</p>
+  </div>
+
+  <!-- ═══ SUMMARY ═══ -->
+  <h2>📊 สรุป React Flow ทั้งหมด</h2>
+  <div class="workflow">
+    <div class="wf-step">🧱 <span class="en" data-th="ชิ้นส่วน UI">Component</span> = ฟังก์ชันที่ return <span class="en" data-th="HTML ใน JavaScript">JSX</span></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">📬 <span class="en" data-th="ข้อมูลจากแม่">Props</span> = ข้อมูลจากข้างนอก (อ่านอย่างเดียว)</div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">📊 <span class="en" data-th="ข้อมูลข้างใน">State</span> = ข้อมูลข้างใน (เปลี่ยนได้ → re-render)</div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">🔔 <span class="en" data-th="เหตุการณ์">Event</span> = ผู้ใช้ทำอะไร → เปลี่ยน State</div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">⚡ <span class="en" data-th="ทำงานหลัง render">useEffect</span> = โหลดข้อมูล, ทำงานหลัง render</div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">📻 <span class="en" data-th="แชร์ข้อมูลทั้งแอป">Context</span> = แชร์ข้อมูลข้าม Component ทั้งแอป</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ React</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Component คืออะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🧱 ฟังก์ชันที่ return JSX — ชิ้นส่วน UI ที่สร้างครั้งเดียว ใช้ซ้ำได้ทั่วเว็บ ชื่อต้องขึ้นต้นตัวพิมพ์ใหญ่</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Props กับ State ต่างกันอย่างไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📬 Props = ข้อมูลจากภายนอก อ่านอย่างเดียว / 📊 State = ข้อมูลภายใน เปลี่ยนได้ ทำให้ re-render</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">useState([]) ใน useEffect หมายถึงอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📦 [] = Dependency Array ว่าง → useEffect จะรันครั้งเดียวตอนเปิดหน้า (mount) เท่านั้น</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ทำไม list ต้องมี key?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🔑 React ใช้ key บอกว่าแถวไหนเปลี่ยน เพิ่ม หรือลบ — ถ้าไม่มี key React จะ re-render ทั้ง list (ช้า!)</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Context ใช้แก้ปัญหาอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📻 แก้ Prop Drilling — ไม่ต้องส่ง Props ทีละชั้น ทุก Component เข้าถึงข้อมูลเดียวกันได้เลย</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">setCount(count + 1) ทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📊 เปลี่ยน State → React รู้ → re-render หน้าจอ → ผู้ใช้เห็นค่าใหม่! ห้ามเขียน count = count + 1</div>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">🎯 Mini Project — ลองทำ!</div>
+    <p>สร้าง Counter App: ปุ่ม +1, -1, Reset → ใช้ useState<br>
+    สร้าง Todo App: เพิ่ม/ลบ/ติ๊กเสร็จ → ใช้ useState + .map() + key<br>
+    สร้าง Calculator: กดตัวเลข + เครื่องหมาย → ใช้ useState + Event</p>
+  </div>
+  <button class="fc-start-btn" onclick="openFlashcard()" style="margin-bottom:1em">🃏 ทบทวน Flashcard</button>
+
+  <div class="page-nav">
+    <a onclick="goTo('install')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🔧 ติดตั้งเครื่องมือ</div></a>
+    <a class="next" onclick="goTo('git')"><div class="nav-label">ถัดไป →</div><div class="nav-title">📦 คู่มือ Git</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('react')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

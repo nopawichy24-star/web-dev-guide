@@ -1,0 +1,48 @@
+<div class="section" id="sec-flashcard">
+  <span class="section-emoji">🃏</span>
+  <h1>Flashcard — ฝึกจำศัพท์</h1>
+  <p>ฝึกจำคำศัพท์เทคนิคทั้งหมด กดคำศัพท์ในบทเรียนแล้วกด "❌ จำไม่ได้" เพื่อเพิ่มเข้า Flashcard</p>
+
+  <!-- Stats -->
+  <div class="fc-page-stats">
+    <div class="fc-page-stat"><div class="fps-val" id="fpsTotal">0</div><div class="fps-label">ทั้งหมด</div></div>
+    <div class="fc-page-stat"><div class="fps-val" id="fpsKnown">0</div><div class="fps-label">✅ จำได้</div></div>
+    <div class="fc-page-stat"><div class="fps-val" id="fpsUnknown">0</div><div class="fps-label">❌ ต้องทบทวน</div></div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="fc-page-actions">
+    <button class="fc-page-btn primary" onclick="fcPracticeAll()">🃏 ฝึกทั้งหมด</button>
+    <button class="fc-page-btn" onclick="fcPracticeUnknown()">❌ ฝึกเฉพาะที่จำไม่ได้</button>
+    <button class="fc-page-btn" onclick="fcPracticeKnown()">✅ ทบทวนที่จำได้แล้ว</button>
+  </div>
+  <div class="fc-page-actions">
+    <button class="fc-page-btn" onclick="fcAddAllVocab()">📥 เพิ่มศัพท์ทั้งหมดจาก Vocab DB</button>
+    <button class="fc-page-btn danger" onclick="fcClearAll()">🗑️ ลบ Flashcard ทั้งหมด</button>
+  </div>
+
+  <!-- Practice Area -->
+  <div id="fcPracticeArea" style="display:none; margin: 1.5em 0;">
+    <div class="fc-practice-progress" id="fcPracProgress">0 / 0</div>
+    <div class="fc-practice-card" id="fcPracCard" onclick="fcFlipCard()">
+      <div class="fpc-term" id="fcPracTerm">—</div>
+      <div class="fpc-ipa" id="fcPracIpa"></div>
+      <div class="fpc-hint">👆 แตะเพื่อพลิกการ์ด</div>
+      <div class="fpc-answer" id="fcPracAnswer">—</div>
+      <div class="fpc-cmp" id="fcPracCmp"></div>
+    </div>
+    <div class="fc-practice-btns" id="fcPracBtns" style="display:none">
+      <button class="fc-pbtn-know" onclick="fcPracKnow()">😊 จำได้!</button>
+      <button class="fc-pbtn-dunno" onclick="fcPracDunno()">😵 จำไม่ได้</button>
+    </div>
+  </div>
+
+  <!-- Card Lists -->
+  <h2>❌ ต้องทบทวน (<span id="fcUnknownCount">0</span>)</h2>
+  <div class="fc-card-list" id="fcUnknownList"><p style="color:var(--text-muted)">ยังไม่มี — กดคำศัพท์ในบทเรียนแล้วกด "❌ จำไม่ได้" เพื่อเพิ่ม</p></div>
+
+  <h2>✅ จำได้แล้ว (<span id="fcKnownCount">0</span>)</h2>
+  <div class="fc-card-list" id="fcKnownList"><p style="color:var(--text-muted)">ยังไม่มี</p></div>
+
+  <button class="section-complete-btn" onclick="toggleComplete('flashcard')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

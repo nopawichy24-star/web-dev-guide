@@ -1,0 +1,93 @@
+/* ═══════════════════════════════════════════
+   🖨 PRINT
+   ═══════════════════════════════════════════ */
+@media print {
+  .sidebar, .topbar, .page-nav, .hamburger, .theme-toggle, .search-btn { display: none !important; }
+  .main { margin-left: 0 !important; }
+  .en { background: none; border-bottom: 1px dotted #666; }
+  .code-block { break-inside: avoid; }
+  .callout { break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* Smooth scroll */
+html { scroll-behavior: smooth; }
+
+/* Section visibility */
+.section { display: none; }
+.section.active { display: block; }
+
+/* Scroll to top button */
+.scroll-top {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
+  box-shadow: var(--shadow-lg);
+  z-index: 80;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.scroll-top.show { opacity: 1; transform: translateY(0); }
+.scroll-top:hover { transform: translateY(-2px); }
+
+/* Keyboard shortcut hints */
+.kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  font-size: 0.75em;
+  font-family: monospace;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-muted);
+}
+
+/* Completion badge */
+.section-complete-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 2px solid var(--success-border);
+  background: var(--success-bg);
+  color: var(--success-text);
+  cursor: pointer;
+  font-size: 0.95em;
+  font-weight: 600;
+  transition: all 0.2s;
+  margin-top: 1.5em;
+}
+.section-complete-btn:hover { box-shadow: var(--shadow); }
+.section-complete-btn.done { background: var(--success-border); color: #fff; }
+
+/* Comparison boxes */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 1em 0;
+}
+@media (max-width: 500px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-box {
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+.compare-box h4 { margin-top: 0; }
+
+/* Emoji list */
+.emoji-list { list-style: none; padding: 0; }
+.emoji-list li { padding: 6px 0; display: flex; gap: 8px; align-items: flex-start; }
+.emoji-list li::before { content: none; }
+
+/* Visual separator for sections */
+.section-emoji { font-size: 2.5em; margin-bottom: 8px; display: block; }

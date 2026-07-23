@@ -1,0 +1,11 @@
+/* ═══════════════════════════════════════════
+   🪗 ACCORDION
+   ═══════════════════════════════════════════ */
+.accordion { border: 1px solid var(--border); border-radius: var(--radius); margin: 0.5em 0; overflow: hidden; }
+.accordion summary {
+  padding: 12px 16px; cursor: pointer; font-weight: 600; font-size: 0.95em;
+  background: var(--bg-secondary); list-style: none; display: flex; align-items: center; gap: 8px;
+}
+.accordion summary::before { content: '▸'; transition: transform 0.2s; }
+.accordion[open] summary::before { transform: rotate(90deg); }
+.accordion .acc-body { padding: 14px 16px; border-top: 1px solid var(--border); }

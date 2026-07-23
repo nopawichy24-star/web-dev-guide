@@ -1,0 +1,161 @@
+<div class="section" id="sec-deployment">
+  <span class="section-emoji">🚀</span>
+  <h1>Deployment (การเผยแพร่เว็บ)</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge intermediate">🟡 Intermediate</span>
+    <span class="reading-time">⏱️ อ่าน ~10 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> Git + GitHub</div><div class="prereq-item"><span class="prereq-check">✓</span> Vercel</div><div class="prereq-item"><span class="prereq-check">✓</span> Supabase</div>
+  </div>
+  <p>สรุป Workflow ตั้งแต่เขียนโค้ดจนเว็บขึ้นออนไลน์ พร้อมข้อควรระวังที่สำคัญ</p>
+
+  <h2>📋 ขั้นตอน Deploy ครบวงจร</h2>
+  <div class="workflow">
+    <div class="wf-step">1️⃣ เขียนโค้ด → ทดสอบใน <code>localhost</code></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">2️⃣ <code>git add . → git commit → git push</code></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">3️⃣ Vercel ดึงโค้ดจาก GitHub → Build อัตโนมัติ</div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">4️⃣ ตรวจ Build Logs — ผ่านหรือไม่?</div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">5️⃣ ✅ เว็บออนไลน์! หรือ ❌ แก้ Error แล้ว Push ใหม่</div>
+  </div>
+
+  <h2>🚨 ข้อควรระวังสำคัญ 15 ข้อ</h2>
+  <p>อ่านทุกข้อก่อนเปิดใช้งานเว็บจริง!</p>
+
+  <div class="callout danger">
+    <div class="callout-title">1. ❌ ห้าม Push <code>.env</code></div>
+    <p><strong>ความเสี่ยง:</strong> API Key, รหัสผ่าน ถูกเปิดเผยต่อสาธารณะ<br>
+    <strong>ป้องกัน:</strong> ใส่ <code>.env</code> ใน <code>.gitignore</code> ก่อน Commit แรกเสมอ<br>
+    <strong>แก้ไข:</strong> เปลี่ยน Key ทันที → <code>git rm --cached .env</code></p>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">2. ❌ ห้ามใช้ service_role key ใน Frontend</div>
+    <p><strong>ความเสี่ยง:</strong> ข้าม RLS ได้ทั้งหมด → ใครก็เข้าถึงข้อมูลทุกอย่างได้<br>
+    <strong>ป้องกัน:</strong> ห้ามมี prefix <code>NEXT_PUBLIC_</code> กับ service_role key<br>
+    <strong>แก้ไข:</strong> ลบออกจาก Client code ทันที + เปลี่ยน Key</p>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">3. ❌ ห้ามปิด RLS โดยไม่จำเป็น</div>
+    <p><strong>ความเสี่ยง:</strong> ผู้ใช้ทุกคนเห็น/แก้/ลบข้อมูลของทุกคนได้<br>
+    <strong>ป้องกัน:</strong> เปิด RLS ทุกตาราง + ตั้ง Policy ครบ 4 แบบ</p>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">4. ❌ ห้ามใช้ <code>git reset --hard</code> โดยไม่เข้าใจ</div>
+    <p><strong>ความเสี่ยง:</strong> ลบโค้ดทั้งหมดอย่างถาวร กู้คืนไม่ได้<br>
+    <strong>ป้องกัน:</strong> ใช้ <code>--soft</code> แทน หรือ <code>git revert</code> ที่ปลอดภัยกว่า</p>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">5. ❌ ห้าม Force Push บน Branch หลัก</div>
+    <p><strong>ความเสี่ยง:</strong> เขียนทับประวัติของทีม → โค้ดคนอื่นหาย<br>
+    <strong>ป้องกัน:</strong> ห้ามใช้ <code>git push --force</code> บน <code>main</code></p>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">6. ❌ ห้ามรัน DELETE/DROP โดยไม่ตรวจ WHERE</div>
+    <p><strong>ความเสี่ยง:</strong> ลบข้อมูลทั้งตารางหรือลบตารางทั้งตัว<br>
+    <strong>ป้องกัน:</strong> ตรวจ WHERE ทุกครั้ง ทดสอบใน Development ก่อน มี Backup</p>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">7. ❌ ห้าม Copy โค้ดจาก AI โดยไม่อ่าน</div>
+    <p><strong>ความเสี่ยง:</strong> โค้ดอาจมี bug, ช่องโหว่ security, หรือ pattern ที่ล้าสมัย<br>
+    <strong>ป้องกัน:</strong> อ่านทุกบรรทัด, Commit ก่อนแก้ใหญ่, ทดสอบใน Local</p>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">8. ⚠️ ห้ามส่ง Secret ให้ AI</div>
+    <p>ห้ามวาง API Key, Database Password, service_role key ให้ AI ช่วยดู ใช้ค่าตัวอย่างแทน</p>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">9. ⚠️ ห้ามเก็บ Password แบบ Plain Text</div>
+    <p>Supabase Auth จัดการ hashing ให้แล้ว อย่าเก็บรหัสผ่านเองในตารางแยก</p>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">10. ⚠️ ห้ามแก้ Production โดยตรง</div>
+    <p>แก้ใน Local → ทดสอบ → Push → ให้ Vercel Deploy อัตโนมัติ อย่าแก้โค้ดผ่าน Dashboard</p>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">11. ⚠️ ห้ามเปลี่ยน Schema บน Production โดยไม่มีแผน</div>
+    <p>ทดสอบ SQL ใน Development ก่อน ถ้าจะเพิ่ม/ลบ Column ต้องมั่นใจว่าโค้ดรองรับแล้ว</p>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">12. ⚠️ ห้ามใช้ Package ที่ไม่รู้แหล่งที่มา</div>
+    <p>ตรวจ npm package ก่อนติดตั้ง: ดูจำนวนดาวน์โหลด, ผู้สร้าง, อายุ, GitHub issues</p>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">13. ⚠️ ห้ามเปิด Permission กว้างเกินไป</div>
+    <p>RLS Policy ควรจำกัดเฉพาะสิ่งที่จำเป็น — ใช้หลัก <span class="en" data-th="ให้สิทธิ์น้อยที่สุดเท่าที่จำเป็น">Least Privilege</span></p>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">14. ⚠️ ตรวจ Redirect URL ทุกครั้ง</div>
+    <p>ต้องเพิ่มทั้ง localhost + production URL ใน Supabase Auth → URL Config ไม่งั้น Login ไม่กลับมาที่เว็บ</p>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">15. ⚠️ Redeploy หลังเปลี่ยน Env Vars</div>
+    <p>เปลี่ยน Environment Variables บน Vercel แล้วต้อง Deploy ใหม่เสมอ — ไม่งั้นยังใช้ค่าเก่าอยู่!</p>
+  </div>
+
+  <h2>✅ Checklist ก่อน Deploy</h2>
+  <ul class="checklist" data-checklist="deploy">
+    <li><input type="checkbox" id="dp1"><label for="dp1">รัน <code>npm run build</code> ใน Local ผ่าน ไม่มี Error</label></li>
+    <li><input type="checkbox" id="dp2"><label for="dp2">ตรวจ <code>.gitignore</code> — ไม่มี <code>.env</code> หลุด</label></li>
+    <li><input type="checkbox" id="dp3"><label for="dp3">ตรวจ Environment Variables บน Vercel ครบทุกตัว</label></li>
+    <li><input type="checkbox" id="dp4"><label for="dp4">ตรวจ Supabase Redirect URLs (localhost + production)</label></li>
+    <li><input type="checkbox" id="dp5"><label for="dp5">ตรวจ RLS เปิดทุกตาราง + Policy ถูกต้อง</label></li>
+    <li><input type="checkbox" id="dp6"><label for="dp6">ทดสอบ Login/Logout บนเว็บจริง</label></li>
+    <li><input type="checkbox" id="dp7"><label for="dp7">ทดสอบ CRUD บนเว็บจริง</label></li>
+    <li><input type="checkbox" id="dp8"><label for="dp8">ทดสอบบนมือถือ</label></li>
+  </ul>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠️ สิ่งที่คนมักลืม</div>
+    <p>1) Env Vars ใน Vercel ไม่ตรงกับ Local 2) ลืม Redeploy หลังเปลี่ยน Env Vars 3) Redirect URL ไม่ได้เพิ่ม production domain 4) RLS Policy ยังไม่ครบ 4 แบบ</p>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ Deployment</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ข้อควรระวังอันดับ 1 ก่อน Deploy คืออะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🔐 ตรวจว่าไม่มี Secret (.env, API Key) หลุดขึ้น GitHub — ตรวจ .gitignore + git status ก่อน Push ทุกครั้ง!</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">เปลี่ยน Env Vars บน Vercel แล้วต้องทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🔄 Redeploy! ค่าจะมีผลหลัง Build ใหม่เท่านั้น</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">git reset --hard ทำไมถูกห้ามในข้อควรระวัง?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🚨 ลบโค้ดถาวร กู้คืนยาก! ใช้ git revert หรือ --soft แทนที่ปลอดภัยกว่า</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('security')">
+      <div class="nav-label">← ก่อนหน้า</div>
+      <div class="nav-title">🛡️ Security & RLS</div>
+    </a>
+    <a class="next" onclick="goTo('project')">
+      <div class="nav-label">ถัดไป →</div>
+      <div class="nav-title">📋 โปรเจกต์ Task App</div>
+    </a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('deployment')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

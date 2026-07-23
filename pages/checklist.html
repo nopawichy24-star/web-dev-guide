@@ -1,0 +1,70 @@
+<div class="section" id="sec-checklist">
+  <span class="section-emoji">✅</span>
+  <h1>Checklist รวม</h1>
+  <p>รายการตรวจสอบแยกตามสถานการณ์ — ติ๊กได้! ระบบจะจำให้อัตโนมัติ</p>
+
+  <h2>🆕 ก่อนเริ่มโปรเจกต์</h2>
+  <ul class="checklist" data-checklist="pre-project">
+    <li><input type="checkbox" id="pp1"><label for="pp1">ติดตั้ง Node.js — <code>node --version</code></label></li>
+    <li><input type="checkbox" id="pp2"><label for="pp2">ติดตั้ง Git — <code>git --version</code></label></li>
+    <li><input type="checkbox" id="pp3"><label for="pp3">ตั้ง Git user.name + user.email</label></li>
+    <li><input type="checkbox" id="pp4"><label for="pp4">สร้างบัญชี GitHub</label></li>
+    <li><input type="checkbox" id="pp5"><label for="pp5">สร้างบัญชี Vercel (เชื่อม GitHub)</label></li>
+    <li><input type="checkbox" id="pp6"><label for="pp6">สร้างบัญชี Supabase</label></li>
+  </ul>
+
+  <h2>💾 ก่อน Commit</h2>
+  <ul class="checklist" data-checklist="pre-commit">
+    <li><input type="checkbox" id="pc1"><label for="pc1"><code>git status</code> — ตรวจว่าไม่มี .env หลุด</label></li>
+    <li><input type="checkbox" id="pc2"><label for="pc2">ตรวจว่าไม่มี Secret ในโค้ด</label></li>
+    <li><input type="checkbox" id="pc3"><label for="pc3">ทดสอบโค้ดใน Local</label></li>
+    <li><input type="checkbox" id="pc4"><label for="pc4">เขียน Commit Message ให้ชัดเจน</label></li>
+  </ul>
+
+  <h2>📤 ก่อน Push</h2>
+  <ul class="checklist" data-checklist="pre-push">
+    <li><input type="checkbox" id="pu1"><label for="pu1"><code>git pull</code> ดึงโค้ดล่าสุด</label></li>
+    <li><input type="checkbox" id="pu2"><label for="pu2">ตรวจ Branch ที่จะ Push</label></li>
+    <li><input type="checkbox" id="pu3"><label for="pu3">ตรวจ Conflict (ถ้ามี)</label></li>
+    <li><input type="checkbox" id="pu4"><label for="pu4">.gitignore มี .env แล้ว</label></li>
+  </ul>
+
+  <h2>🚀 ก่อน Deploy</h2>
+  <ul class="checklist" data-checklist="pre-deploy">
+    <li><input type="checkbox" id="pd1"><label for="pd1"><code>npm run build</code> ใน Local ผ่าน</label></li>
+    <li><input type="checkbox" id="pd2"><label for="pd2">Env Vars บน Vercel ครบทุกตัว</label></li>
+    <li><input type="checkbox" id="pd3"><label for="pd3">RLS เปิดทุกตาราง + Policy ครบ</label></li>
+    <li><input type="checkbox" id="pd4"><label for="pd4">Redirect URLs ตรง (localhost + production)</label></li>
+  </ul>
+
+  <h2>🌐 ก่อนเปิดใช้งานจริง</h2>
+  <ul class="checklist" data-checklist="pre-launch">
+    <li><input type="checkbox" id="pl1"><label for="pl1">ทดสอบสมัครสมาชิก</label></li>
+    <li><input type="checkbox" id="pl2"><label for="pl2">ทดสอบ Login / Logout</label></li>
+    <li><input type="checkbox" id="pl3"><label for="pl3">ทดสอบ CRUD (สร้าง/อ่าน/แก้/ลบ)</label></li>
+    <li><input type="checkbox" id="pl4"><label for="pl4">ทดสอบบนมือถือ</label></li>
+    <li><input type="checkbox" id="pl5"><label for="pl5">ตรวจว่าผู้ใช้ไม่เห็นข้อมูลคนอื่น</label></li>
+    <li><input type="checkbox" id="pl6"><label for="pl6">ตรวจ HTTPS (กุญแจล็อกสีเขียว)</label></li>
+    <li><input type="checkbox" id="pl7"><label for="pl7">ตรวจ Error Handling (ลอง offline, ลองกรอกผิด)</label></li>
+  </ul>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบ — คุณพร้อม Deploy หรือยัง?</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">3 สิ่งที่ต้องตรวจก่อน Push ขึ้น GitHub คืออะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">1) git status — ไม่มี .env หลุด 2) git pull — ดึงโค้ดล่าสุด 3) ตรวจ Branch ที่ถูกต้อง</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ก่อนเปิดเว็บจริง ต้องทดสอบอะไรบ้าง?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">✅ สมัคร/Login/Logout, CRUD ทั้ง 4, มือถือ, ตรวจว่าไม่เห็นข้อมูลคนอื่น, HTTPS, Error Handling</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('troubleshoot')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🔧 แก้ปัญหา</div></a>
+    <a class="next" onclick="goTo('glossary')"><div class="nav-label">ถัดไป →</div><div class="nav-title">📖 คำศัพท์</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('checklist')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

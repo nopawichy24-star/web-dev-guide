@@ -1,0 +1,499 @@
+<div class="section" id="sec-project">
+  <span class="section-emoji">📋</span>
+  <h1>โปรเจกต์ตัวอย่าง: Task Management App</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge intermediate">🟡 Intermediate</span>
+    <span class="reading-time">⏱️ อ่าน ~25 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> ทุกบทก่อนหน้า</div>
+  </div>
+  <p>สรุปทุกอย่างที่เรียนมา สร้างเป็นเว็บแอปจัดการงานครบวงจร!</p>
+
+  <h2>✨ ฟีเจอร์ของแอป</h2>
+  <ul>
+    <li>📝 สมัครสมาชิก / เข้าสู่ระบบ / ออกจากระบบ</li>
+    <li>➕ สร้าง Task ใหม่</li>
+    <li>📋 แสดงรายการ Task</li>
+    <li>✏️ แก้ไข Task</li>
+    <li>🗑️ ลบ Task (มี Confirm ก่อนลบ)</li>
+    <li>✅ เปลี่ยนสถานะ (เสร็จ/ยังไม่เสร็จ)</li>
+    <li>🔒 ผู้ใช้เห็นเฉพาะ Task ของตัวเอง (RLS)</li>
+    <li>📱 รองรับมือถือ</li>
+  </ul>
+
+  <h2>🛠 เทคโนโลยี</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ส่วน</th><th>เทคโนโลยี</th></tr></thead>
+      <tbody>
+        <tr><td>Frontend</td><td>Next.js 15 + TypeScript + Tailwind CSS</td></tr>
+        <tr><td>Backend + DB</td><td>Supabase (PostgreSQL + Auth + RLS)</td></tr>
+        <tr><td>Hosting</td><td>Vercel</td></tr>
+        <tr><td>Source Control</td><td>Git + GitHub</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>🗄️ Database Schema</h2>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">sql</span><span class="code-where">⚡ Supabase → SQL Editor — รันทีเดียวจบ!</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>-- 1. ตาราง profiles
+CREATE TABLE profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  username TEXT UNIQUE,
+  full_name TEXT,
+  avatar_url TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 2. ตาราง tasks
+CREATE TABLE tasks (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
+  title TEXT NOT NULL,
+  completed BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 3. เปิด RLS
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
+
+-- 4. Policy — profiles
+CREATE POLICY "profiles_select" ON profiles FOR SELECT
+  USING (auth.uid() = id);
+CREATE POLICY "profiles_update" ON profiles FOR UPDATE
+  USING (auth.uid() = id);
+
+-- 5. Policy — tasks (ครบ 4 แบบ)
+CREATE POLICY "tasks_select" ON tasks FOR SELECT
+  USING (auth.uid() = user_id);
+CREATE POLICY "tasks_insert" ON tasks FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "tasks_update" ON tasks FOR UPDATE
+  USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "tasks_delete" ON tasks FOR DELETE
+  USING (auth.uid() = user_id);
+
+-- 6. สร้าง profile อัตโนมัติเมื่อ signup
+CREATE OR REPLACE FUNCTION handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO profiles (id) VALUES (NEW.id);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION handle_new_user();</code></pre>
+  </div>
+
+  <h2>📁 โครงสร้างไฟล์</h2>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">text</span></div>
+    <pre><code>task-app/
+├── app/
+│   ├── layout.tsx          ← Layout หลัก
+│   ├── page.tsx            ← หน้าแรก (redirect ไป /tasks)
+│   ├── login/page.tsx      ← หน้า Login/Signup
+│   └── tasks/page.tsx      ← หน้า Dashboard แสดง Tasks
+├── components/
+│   ├── AuthForm.tsx        ← ฟอร์ม Login/Signup
+│   ├── TaskList.tsx        ← แสดงรายการ Task
+│   ├── TaskItem.tsx        ← Task แต่ละตัว
+│   └── AddTaskForm.tsx     ← ฟอร์มเพิ่ม Task
+├── lib/
+│   └── supabase.ts         ← Supabase Client
+├── .env.local              ← 🚨 ห้าม Push!
+├── .env.example            ← ✅ Push ได้
+├── .gitignore
+├── package.json
+└── README.md</code></pre>
+  </div>
+
+  <h2>🔐 Environment Variables</h2>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">env</span><span class="code-where">📄 .env.example</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=</code></pre>
+  </div>
+
+  <h2>💻 โค้ดจริงทุกไฟล์สำคัญ</h2>
+
+  <h3>📄 <code>app/layout.tsx</code> — Layout หลัก</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 app/layout.tsx</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>import type { Metadata } from 'next'
+import './globals.css'
+
+export const metadata: Metadata = {
+  title: 'Task App — จัดการงานง่ายๆ',
+  description: 'เว็บแอปจัดการงานด้วย Next.js + Supabase',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    &lt;html lang="th"&gt;
+      &lt;body className="bg-gray-50 min-h-screen"&gt;
+        {children}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}</code></pre>
+  </div>
+
+  <h3>📄 <code>app/page.tsx</code> — หน้าแรก (Redirect)</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 app/page.tsx</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>import { redirect } from 'next/navigation'
+
+export default function Home() {
+  redirect('/tasks')  // ส่งไปหน้า tasks ทันที
+}</code></pre>
+  </div>
+
+  <h3>📄 <code>middleware.ts</code> — ป้องกันหน้าที่ต้อง Login ⭐</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">ts</span><span class="code-where">📄 middleware.ts — ไฟล์นี้อยู่ที่ root ของโปรเจกต์ (ไม่ใช่ใน app/)</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+
+export async function middleware(request: NextRequest) {
+  // หน้าที่ไม่ต้อง Login
+  const publicPaths = ['/login']
+  if (publicPaths.includes(request.nextUrl.pathname)) {
+    return NextResponse.next()
+  }
+
+  // ตรวจ session จาก cookie
+  const token = request.cookies.get('sb-access-token')?.value
+  if (!token) {
+    // ไม่มี session → ส่งไป login
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  return NextResponse.next()
+}
+
+export const config = {
+  matcher: ['/tasks/:path*'],  // ใช้ middleware เฉพาะหน้า tasks
+}</code></pre>
+  </div>
+  <div class="callout info">
+    <div class="callout-title">💡 Middleware คืออะไร?</div>
+    <p><span class="en" data-th="โค้ดที่ทำงานก่อนทุก request — ใช้ตรวจสิทธิ์ก่อนโหลดหน้า">Middleware</span> คือโค้ดที่ทำงาน<strong>ก่อน</strong>ที่หน้าเว็บจะโหลด ใช้ตรวจว่าผู้ใช้ Login แล้วหรือยัง ถ้ายัง → ส่งไปหน้า Login ทันที</p>
+  </div>
+
+  <h3>📄 <code>app/globals.css</code> — Tailwind CSS</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">css</span><span class="code-where">📄 app/globals.css</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>@tailwind base;
+@tailwind components;
+@tailwind utilities;</code></pre>
+  </div>
+
+  <h3>📄 <code>package.json</code> — Dependencies</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">json</span><span class="code-where">📄 package.json (ส่วนสำคัญ)</span></div>
+    <pre><code>{
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@supabase/supabase-js": "^2.45.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "tailwindcss": "^4.0.0",
+    "@types/react": "^19.0.0",
+    "@types/node": "^22.0.0"
+  }
+}</code></pre>
+  </div>
+
+  <h3>📄 <code>lib/supabase.ts</code> — Supabase Client</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">ts</span><span class="code-where">📄 lib/supabase.ts</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)</code></pre>
+  </div>
+
+  <h3>📄 <code>app/login/page.tsx</code> — หน้า Login/Signup</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 app/login/page.tsx</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>'use client'
+import { useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
+
+export default function LoginPage() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [isSignUp, setIsSignUp] = useState(false)
+  const router = useRouter()
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+
+    const { error } = isSignUp
+      ? await supabase.auth.signUp({ email, password })
+      : await supabase.auth.signInWithPassword({ email, password })
+
+    if (error) {
+      setError(error.message)
+    } else if (isSignUp) {
+      setError('สมัครสำเร็จ! กรุณาตรวจอีเมลเพื่อยืนยัน')
+    } else {
+      router.push('/tasks')
+    }
+    setLoading(false)
+  }
+
+  return (
+    &lt;div className="min-h-screen flex items-center justify-center bg-gray-50"&gt;
+      &lt;div className="w-full max-w-sm p-6 bg-white rounded-xl shadow"&gt;
+        &lt;h1 className="text-2xl font-bold text-center mb-6"&gt;
+          {isSignUp ? '📝 สมัครสมาชิก' : '🔑 เข้าสู่ระบบ'}
+        &lt;/h1&gt;
+
+        &lt;form onSubmit={handleSubmit} className="space-y-4"&gt;
+          &lt;input type="email" placeholder="อีเมล"
+            value={email} onChange={e =&gt; setEmail(e.target.value)}
+            required className="w-full p-3 border rounded-lg" /&gt;
+          &lt;input type="password" placeholder="รหัสผ่าน (อย่างน้อย 6 ตัว)"
+            value={password} onChange={e =&gt; setPassword(e.target.value)}
+            required minLength={6} className="w-full p-3 border rounded-lg" /&gt;
+
+          {error &amp;&amp; &lt;p className="text-red-500 text-sm"&gt;{error}&lt;/p&gt;}
+
+          &lt;button type="submit" disabled={loading}
+            className="w-full p-3 bg-blue-600 text-white rounded-lg
+                       hover:bg-blue-700 disabled:opacity-50"&gt;
+            {loading ? '⏳ กำลังดำเนินการ...' : isSignUp ? 'สมัครสมาชิก' : 'เข้าสู่ระบบ'}
+          &lt;/button&gt;
+        &lt;/form&gt;
+
+        &lt;p className="text-center mt-4 text-sm text-gray-500"&gt;
+          {isSignUp ? 'มีบัญชีแล้ว?' : 'ยังไม่มีบัญชี?'}
+          &lt;button onClick={() =&gt; setIsSignUp(!isSignUp)}
+            className="text-blue-600 ml-1 hover:underline"&gt;
+            {isSignUp ? 'เข้าสู่ระบบ' : 'สมัครสมาชิก'}
+          &lt;/button&gt;
+        &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}</code></pre>
+  </div>
+  <div class="callout info">
+    <div class="callout-title">💡 สังเกตในโค้ด</div>
+    <p>• <code>'use client'</code> = บอก Next.js ว่าเป็น Client Component (ใช้ useState ได้)<br>
+    • <code>loading</code> state = ป้องกันกด Submit ซ้ำ (Double Submit)<br>
+    • <code>error</code> state = แสดง Error ให้ผู้ใช้เห็น ไม่ใช่แค่ console.error<br>
+    • <code>disabled={loading}</code> = ปุ่มจะเทาตอนกำลังโหลด</p>
+  </div>
+
+  <h3>📄 <code>app/tasks/page.tsx</code> — หน้า Dashboard</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 app/tasks/page.tsx</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>'use client'
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
+
+type Task = {
+  id: string
+  title: string
+  completed: boolean
+  created_at: string
+}
+
+export default function TasksPage() {
+  const [tasks, setTasks] = useState&lt;Task[]&gt;([])
+  const [newTitle, setNewTitle] = useState('')
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
+
+  // ตรวจสอบ Login + โหลด Tasks
+  useEffect(() =&gt; {
+    async function init() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) { router.push('/login'); return }
+      await loadTasks()
+    }
+    init()
+  }, [])
+
+  async function loadTasks() {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from('tasks').select('*')
+      .order('created_at', { ascending: false })
+    if (!error &amp;&amp; data) setTasks(data)
+    setLoading(false)
+  }
+
+  async function addTask(e: React.FormEvent) {
+    e.preventDefault()
+    if (!newTitle.trim()) return
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return
+
+    const { error } = await supabase
+      .from('tasks')
+      .insert({ title: newTitle.trim(), user_id: user.id })
+    if (!error) { setNewTitle(''); await loadTasks() }
+  }
+
+  async function toggleTask(id: string, completed: boolean) {
+    await supabase.from('tasks')
+      .update({ completed: !completed }).eq('id', id)
+    await loadTasks()
+  }
+
+  async function deleteTask(id: string) {
+    if (!confirm('ต้องการลบ Task นี้?')) return
+    await supabase.from('tasks').delete().eq('id', id)
+    await loadTasks()
+  }
+
+  async function handleLogout() {
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
+
+  return (
+    &lt;div className="max-w-lg mx-auto p-4"&gt;
+      &lt;div className="flex justify-between items-center mb-6"&gt;
+        &lt;h1 className="text-2xl font-bold"&gt;📋 Tasks&lt;/h1&gt;
+        &lt;button onClick={handleLogout}
+          className="text-sm text-red-500 hover:underline"&gt;
+          ออกจากระบบ
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+      {/* ฟอร์มเพิ่ม Task */}
+      &lt;form onSubmit={addTask} className="flex gap-2 mb-6"&gt;
+        &lt;input type="text" placeholder="เพิ่ม Task ใหม่..."
+          value={newTitle} onChange={e =&gt; setNewTitle(e.target.value)}
+          className="flex-1 p-3 border rounded-lg" /&gt;
+        &lt;button type="submit"
+          className="px-4 py-3 bg-blue-600 text-white rounded-lg"&gt;
+          ➕
+        &lt;/button&gt;
+      &lt;/form&gt;
+
+      {/* รายการ Tasks */}
+      {loading ? (
+        &lt;p className="text-center text-gray-400"&gt;⏳ กำลังโหลด...&lt;/p&gt;
+      ) : tasks.length === 0 ? (
+        &lt;p className="text-center text-gray-400"&gt;📭 ยังไม่มี Task&lt;/p&gt;
+      ) : (
+        &lt;ul className="space-y-2"&gt;
+          {tasks.map(task =&gt; (
+            &lt;li key={task.id}
+              className="flex items-center gap-3 p-3 bg-white
+                         border rounded-lg shadow-sm"&gt;
+              &lt;input type="checkbox" checked={task.completed}
+                onChange={() =&gt; toggleTask(task.id, task.completed)}
+                className="w-5 h-5" /&gt;
+              &lt;span className={task.completed
+                ? 'flex-1 line-through text-gray-400'
+                : 'flex-1'}&gt;
+                {task.title}
+              &lt;/span&gt;
+              &lt;button onClick={() =&gt; deleteTask(task.id)}
+                className="text-red-400 hover:text-red-600"&gt;
+                🗑️
+              &lt;/button&gt;
+            &lt;/li&gt;
+          ))}
+        &lt;/ul&gt;
+      )}
+    &lt;/div&gt;
+  )
+}</code></pre>
+  </div>
+  <div class="callout tip">
+    <div class="callout-title">💜 โค้ดนี้มีครบ!</div>
+    <p>✅ Loading state (⏳ กำลังโหลด...)<br>
+    ✅ Empty state (📭 ยังไม่มี Task)<br>
+    ✅ Confirm ก่อนลบ<br>
+    ✅ ตรวจ Login ก่อนแสดงหน้า<br>
+    ✅ RLS กรองให้เห็นเฉพาะ Task ของตัวเองอัตโนมัติ</p>
+  </div>
+
+  <h2>📋 สรุปขั้นตอนสร้างทั้งหมด</h2>
+  <ol>
+    <li>สร้างโปรเจกต์ Supabase → รัน SQL Schema</li>
+    <li>สร้าง Next.js: <code>npx create-next-app@latest task-app --typescript --tailwind</code></li>
+    <li>ติดตั้ง: <code>npm install @supabase/supabase-js</code></li>
+    <li>สร้างไฟล์ <code>.env.local</code> ใส่ค่า Supabase</li>
+    <li>สร้าง <code>lib/supabase.ts</code></li>
+    <li>สร้างหน้า Login, Tasks, Components</li>
+    <li>ตั้ง Redirect URL ใน Supabase</li>
+    <li><code>git init → git add . → git commit → push ไป GitHub</code></li>
+    <li>Import เข้า Vercel + เพิ่ม Env Vars</li>
+    <li>Deploy → ทดสอบ!</li>
+  </ol>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ — Task App</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">'use client' ใช้ทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">💻 บอก Next.js ว่าเป็น Client Component — ทำให้ใช้ useState, useEffect, onClick ได้</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">middleware.ts ทำหน้าที่อะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🛡️ ทำงานก่อนหน้าเว็บโหลด — ตรวจว่า Login แล้วหรือยัง ถ้ายัง redirect ไป /login ทันที</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ทำไมต้อง confirm ก่อนลบ?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">⚠️ ป้องกันลบโดยไม่ตั้งใจ! ข้อมูลที่ลบแล้วกู้คืนไม่ได้ (ถ้าไม่มี Backup)</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Trigger on_auth_user_created ทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🤖 สร้าง row ในตาราง profiles อัตโนมัติทุกครั้งที่มีผู้ใช้สมัครใหม่ — ไม่ต้องทำเอง!</div>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <p>ถ้าทำตามขั้นตอนครบ คุณจะได้เว็บแอป Task Management ที่ทำงานจริงบนอินเทอร์เน็ต — มีระบบสมาชิก มีฐานข้อมูล มีความปลอดภัย!</p>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('deployment')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🚀 Deployment</div></a>
+    <a class="next" onclick="goTo('ai-coding')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🤖 AI ช่วยเขียนโค้ด</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="
+  <div class="callout tip">
+    <div class="callout-title">🎯 โปรเจกต์ถัดไป — ลองสร้าง!</div>
+    <p>หลังทำ Task App แล้ว ลองสร้าง:<br>
+    📝 <strong>Blog</strong> — CRUD + Rich Text<br>
+    💰 <strong>Expense Tracker</strong> — CRUD + Chart<br>
+    🖼️ <strong>Gallery</strong> — Storage + Upload<br>
+    💬 <strong>Chat</strong> — Realtime + Auth</p>
+  </div>
+  <button class="fc-start-btn" onclick="openFlashcard()" style="margin-bottom:1em">🃏 ทบทวน Flashcard</button>
+  toggleComplete('project')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

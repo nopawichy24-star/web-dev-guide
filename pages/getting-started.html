@@ -1,0 +1,140 @@
+<div class="section" id="sec-getting-started">
+  <span class="section-emoji">🎯</span>
+  <h1>เริ่มต้นใช้งาน</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge beginner">🟢 Beginner</span>
+    <span class="reading-time">⏱️ อ่าน ~5 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> พื้นฐานการใช้คอมพิวเตอร์</div>
+  </div>
+  <p>ก่อนจะเขียนโค้ดได้ เราต้องเข้าใจภาพรวมและเตรียมเครื่องมือให้พร้อมก่อน</p>
+
+  <h2>📋 สิ่งที่ต้องมีก่อนเริ่ม</h2>
+  <ul class="checklist" data-checklist="getting-started">
+    <li><input type="checkbox" id="gs1"><label for="gs1">คอมพิวเตอร์ (Windows, Mac หรือ Linux)</label></li>
+    <li><input type="checkbox" id="gs2"><label for="gs2">อินเทอร์เน็ต</label></li>
+    <li><input type="checkbox" id="gs3"><label for="gs3">อีเมลสำหรับสมัครบัญชี</label></li>
+    <li><input type="checkbox" id="gs4"><label for="gs4">ความอดทนและความตั้งใจ 💪</label></li>
+  </ul>
+
+  <h2>🗂️ บัญชีที่ต้องสมัคร (ฟรีทั้งหมด)</h2>
+  <p>เราจะใช้บริการ 3 อย่างที่ <strong>สมัครฟรี</strong> ได้ทั้งหมด:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>บริการ</th><th>ลิงก์สมัคร</th><th>ใช้ทำอะไร</th><th>แผนฟรี</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>🐙 <span class="en" data-th="เว็บไซต์เก็บโค้ดออนไลน์">GitHub</span></td>
+          <td>github.com</td>
+          <td>เก็บโค้ดบนคลาวด์</td>
+          <td><span class="en" data-th="ที่เก็บข้อมูลแบบไม่จำกัด (เปิดสาธารณะ)">Unlimited public repos</span></td>
+        </tr>
+        <tr>
+          <td>▲ <span class="en" data-th="แพลตฟอร์มเผยแพร่เว็บไซต์">Vercel</span></td>
+          <td>vercel.com</td>
+          <td>เผยแพร่เว็บออนไลน์</td>
+          <td><span class="en" data-th="แผนงานส่วนตัว — ใช้ฟรีสำหรับงานส่วนบุคคล">Hobby plan</span> ฟรี</td>
+        </tr>
+        <tr>
+          <td>⚡ <span class="en" data-th="ระบบฐานข้อมูลสำเร็จรูป">Supabase</span></td>
+          <td>supabase.com</td>
+          <td>ฐานข้อมูล + สมาชิก</td>
+          <td><span class="en" data-th="แผนฟรี — 2 โปรเจกต์, พื้นที่ 500MB">Free tier</span> 2 โปรเจกต์</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">💜 แนะนำ</div>
+    <p>ใช้อีเมลเดียวกันสมัครทั้ง 3 บริการ จะจำง่ายและจัดการง่ายกว่า สมัครด้วย <span class="en" data-th="บัญชี Google — ใช้ปุ่ม 'Sign in with Google' ได้เลย">Google Account</span> ได้ทั้งหมด</p>
+  </div>
+
+  <h2>💻 ซอฟต์แวร์ที่ต้องติดตั้ง</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ซอฟต์แวร์</th><th>คืออะไร</th><th>ทำไมต้องใช้</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="en" data-th="โปรแกรมรันภาษา JavaScript — ทำให้คอมฯ เข้าใจโค้ด JavaScript ได้">Node.js</span></td>
+          <td>โปรแกรมสำหรับรันโค้ด JavaScript</td>
+          <td>เว็บไซต์สมัยใหม่ต้องใช้ตัวนี้ในการพัฒนา</td>
+        </tr>
+        <tr>
+          <td><span class="en" data-th="ระบบควบคุมเวอร์ชัน — ติดตามทุกการเปลี่ยนแปลงไฟล์">Git</span></td>
+          <td>ระบบควบคุมเวอร์ชัน</td>
+          <td>บันทึกประวัติการเปลี่ยนแปลงโค้ด</td>
+        </tr>
+        <tr>
+          <td><span class="en" data-th="โปรแกรมเขียนโค้ด — เหมือน Word แต่สำหรับเขียนโค้ด">VS Code</span></td>
+          <td>โปรแกรมเขียนโค้ด</td>
+          <td>เครื่องมือยอดนิยมสำหรับเขียนโค้ด</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>📖 ดูวิธีติดตั้งละเอียดในบท <a onclick="goTo('install')">🔧 ติดตั้งเครื่องมือ</a></p>
+
+  <h2>🔤 ศัพท์สำคัญที่ต้องรู้ก่อน</h2>
+  <p>กดคำภาษาอังกฤษเพื่อดูคำแปลไทย:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>คำศัพท์</th><th>ความหมาย</th><th>เปรียบเทียบ</th></tr></thead>
+      <tbody>
+        <tr><td><span class="en" data-th="ส่วนหน้าบ้าน — สิ่งที่ผู้ใช้เห็นและโต้ตอบได้">Frontend</span></td><td>ส่วนที่ผู้ใช้เห็นบนหน้าจอ</td><td>🏠 หน้าบ้านที่แขกเห็น</td></tr>
+        <tr><td><span class="en" data-th="ส่วนหลังบ้าน — ประมวลผล, จัดการข้อมูล, ตรวจสอบสิทธิ์">Backend</span></td><td>ส่วนที่ทำงานเบื้องหลัง</td><td>🍳 ห้องครัวที่ทำอาหาร</td></tr>
+        <tr><td><span class="en" data-th="ฐานข้อมูล — ที่เก็บข้อมูลทั้งหมดอย่างเป็นระบบ">Database</span></td><td>ที่เก็บข้อมูล</td><td>🗄️ ตู้เก็บเอกสาร</td></tr>
+        <tr><td><span class="en" data-th="บริการเก็บเว็บไซต์ให้เปิดได้ตลอด 24 ชม.">Hosting</span></td><td>ที่พักเว็บไซต์บนอินเทอร์เน็ต</td><td>🏨 โรงแรมที่เว็บพักอยู่</td></tr>
+        <tr><td><span class="en" data-th="การนำเว็บไซต์ขึ้นออนไลน์ — เปิดให้คนอื่นเข้าถึงได้">Deploy</span></td><td>การเผยแพร่เว็บไซต์ขึ้นออนไลน์</td><td>📦 ส่งสินค้าออกจากโรงงาน</td></tr>
+        <tr><td><span class="en" data-th="ที่เก็บโค้ดทั้งโปรเจกต์ — โฟลเดอร์ที่ Git ติดตามอยู่">Repository</span></td><td>ที่เก็บโค้ดทั้งโปรเจกต์</td><td>📁 โฟลเดอร์โปรเจกต์ทั้งหมด</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ — กดที่การ์ดเพื่อเฉลย</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Frontend</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🏠 ส่วนหน้าบ้าน — สิ่งที่ผู้ใช้เห็นและโต้ตอบได้บนหน้าจอ</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Backend</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🍳 ส่วนหลังบ้าน — ประมวลผลข้อมูลเบื้องหลัง ที่ผู้ใช้ไม่เห็น</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Deploy</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📦 การนำเว็บไซต์ขึ้นออนไลน์ — ให้คนอื่นเข้าถึงได้จริง</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Repository</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📁 ที่เก็บโค้ดทั้งโปรเจกต์ — โฟลเดอร์ที่ Git ติดตาม</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('home')">
+      <div class="nav-label">← ก่อนหน้า</div>
+      <div class="nav-title">🏠 หน้าแรก</div>
+    </a>
+    <a class="next" onclick="goTo('web-basics')">
+      <div class="nav-label">ถัดไป →</div>
+      <div class="nav-title">🌐 พื้นฐานการสร้างเว็บ</div>
+    </a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('getting-started')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>
+
+
+<!-- ╔═══════════════════════════════════════════════════════════╗
+     ║  SECTION 3: พื้นฐานการสร้างเว็บ                             ║
+     ╚═══════════════════════════════════════════════════════════╝ -->

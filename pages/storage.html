@@ -1,0 +1,200 @@
+<div class="section" id="sec-storage">
+  <span class="section-emoji">📁</span>
+  <h1>Storage (เก็บไฟล์)</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge beginner">🟢 Beginner</span>
+    <span class="reading-time">⏱️ อ่าน ~8 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> Supabase พื้นฐาน</div>
+  </div>
+  <p>Supabase <span class="en" data-th="ที่เก็บไฟล์ — อัปโหลดรูป, วิดีโอ, เอกสาร">Storage</span> ให้เราอัปโหลดไฟล์ (รูปภาพ, เอกสาร) และสร้างลิงก์สำหรับดาวน์โหลด</p>
+
+  <h2>📦 แนวคิดหลัก</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>คำศัพท์</th><th>คืออะไร</th><th>ตัวอย่าง</th></tr></thead>
+      <tbody>
+        <tr><td><span class="en" data-th="ถังเก็บ — โฟลเดอร์ระดับบนสุดสำหรับจัดกลุ่มไฟล์">Bucket</span></td><td>โฟลเดอร์หลักสำหรับเก็บไฟล์</td><td><code>avatars</code>, <code>documents</code></td></tr>
+        <tr><td><span class="en" data-th="กฎเกณฑ์ — กำหนดว่าใครอัปโหลด/ดาวน์โหลดได้">Policy</span></td><td>กฎว่าใครเข้าถึงไฟล์ไหนได้</td><td>เฉพาะเจ้าของดูรูปตัวเองได้</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>🪣 สร้าง Bucket</h2>
+  <ol>
+    <li>Supabase Dashboard → <strong>Storage</strong></li>
+    <li>กด <strong>New bucket</strong></li>
+    <li>ตั้งชื่อ เช่น <code>avatars</code></li>
+    <li>เลือก <strong>Public</strong> (ถ้าต้องการให้ดูได้โดยไม่ต้อง Login) หรือ <strong>Private</strong></li>
+    <li>กด <strong>Create bucket</strong></li>
+  </ol>
+
+  <h2>📤 อัปโหลดไฟล์</h2>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">ts</span><span class="code-where">📄 ตัวอย่างโค้ด</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>async function uploadAvatar(file: File, userId: string) {
+  // ตั้ง path เป็น userId/filename เพื่อจัดการ Policy ง่าย
+  const filePath = `${userId}/${Date.now()}_${file.name}`
+
+  const { error } = await supabase.storage
+    .from('avatars')       // ชื่อ Bucket
+    .upload(filePath, file, {
+      cacheControl: '3600',  // cache 1 ชม.
+      upsert: false          // false = ห้ามเขียนทับ
+    })
+
+  if (error) {
+    console.error('อัปโหลดไม่สำเร็จ:', error.message)
+    return null
+  }
+
+  // สร้าง URL สาธารณะ
+  const { data } = supabase.storage
+    .from('avatars')
+    .getPublicUrl(filePath)
+
+  return data.publicUrl
+}</code></pre>
+  </div>
+
+  <h2>📥 ดาวน์โหลด / ดูไฟล์</h2>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">ts</span><span class="code-where">📄 ตัวอย่างโค้ด</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>// Public bucket — ดู URL ได้เลย
+const { data } = supabase.storage
+  .from('avatars')
+  .getPublicUrl('userId/photo.jpg')
+// ใช้ data.publicUrl ใน &lt;img src={...} /&gt;
+
+// Private bucket — สร้าง URL ชั่วคราว (หมดอายุได้)
+const { data: signedData } = await supabase.storage
+  .from('private-docs')
+  .createSignedUrl('userId/secret.pdf', 3600)  // หมดอายุใน 1 ชม.
+// ใช้ signedData?.signedUrl</code></pre>
+  </div>
+
+  <h2>📋 แสดงรายการไฟล์</h2>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">ts</span><span class="code-where">📄 ตัวอย่างโค้ด</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>const { data: files, error } = await supabase.storage
+  .from('avatars')
+  .list('userId/', {        // โฟลเดอร์ย่อย
+    limit: 20,
+    sortBy: { column: 'created_at', order: 'desc' }
+  })
+
+if (files) {
+  files.forEach(f => console.log(f.name, f.metadata))
+}</code></pre>
+  </div>
+
+  <h2>🗑️ ลบไฟล์</h2>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">ts</span><span class="code-where">📄 ตัวอย่างโค้ด</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>const { error } = await supabase.storage
+  .from('avatars')
+  .remove(['userId/old-photo.jpg'])</code></pre>
+  </div>
+
+  <h2>🛡️ Storage Policy</h2>
+  <p>เหมือน RLS ใน Database — ต้องตั้ง Policy เพื่อกำหนดสิทธิ์:</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">sql</span><span class="code-where">⚡ SQL Editor</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>-- อนุญาตให้ผู้ใช้อัปโหลดเฉพาะในโฟลเดอร์ของตัวเอง
+CREATE POLICY "users upload own folder"
+  ON storage.objects FOR INSERT
+  WITH CHECK (
+    bucket_id = 'avatars'
+    AND auth.uid()::text = (storage.foldername(name))[1]
+  );
+
+-- อนุญาตให้ทุกคนดูไฟล์ใน public bucket
+CREATE POLICY "public read avatars"
+  ON storage.objects FOR SELECT
+  USING (bucket_id = 'avatars');</code></pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">💜 จัดโฟลเดอร์ตาม User ID</div>
+    <p>ตั้ง path เป็น <code>userId/filename</code> จะจัดการ Policy ได้ง่าย — ให้ผู้ใช้แต่ละคนเข้าถึงเฉพาะโฟลเดอร์ของตัวเอง</p>
+  </div>
+
+  <h2>📤 ตัวอย่าง Upload Component</h2>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 components/AvatarUpload.tsx</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>'use client'
+import { useState } from 'react'
+import { supabase } from '@/lib/supabase'
+
+export default function AvatarUpload({ userId }: { userId: string }) {
+  const [uploading, setUploading] = useState(false)
+
+  async function handleUpload(e: React.ChangeEvent&lt;HTMLInputElement&gt;) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // ตรวจขนาดไฟล์ (จำกัด 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      alert('ไฟล์ใหญ่เกิน 2MB!')
+      return
+    }
+
+    // ตรวจประเภทไฟล์
+    if (!file.type.startsWith('image/')) {
+      alert('อัปโหลดได้เฉพาะรูปภาพ!')
+      return
+    }
+
+    setUploading(true)
+    const path = `${userId}/${Date.now()}.${file.name.split('.').pop()}`
+
+    const { error } = await supabase.storage
+      .from('avatars')
+      .upload(path, file)
+
+    if (error) alert('อัปโหลดไม่สำเร็จ: ' + error.message)
+    else alert('อัปโหลดสำเร็จ! ✅')
+
+    setUploading(false)
+  }
+
+  return (
+    &lt;label className="cursor-pointer"&gt;
+      &lt;span className="text-blue-600 hover:underline"&gt;
+        {uploading ? '⏳ กำลังอัปโหลด...' : '📷 เปลี่ยนรูปโปรไฟล์'}
+      &lt;/span&gt;
+      &lt;input type="file" accept="image/*"
+        onChange={handleUpload} disabled={uploading}
+        className="hidden" /&gt;
+    &lt;/label&gt;
+  )
+}</code></pre>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ Storage</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Bucket คืออะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🪣 โฟลเดอร์ระดับบนสุดสำหรับจัดกลุ่มไฟล์ เช่น avatars สำหรับรูปโปรไฟล์, documents สำหรับเอกสาร</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Public vs Private bucket ต่างกันอย่างไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🌍 Public = ดูได้เลยด้วย URL / 🔒 Private = ต้องสร้าง Signed URL ที่มีวันหมดอายุ</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ทำไมต้องตรวจขนาดไฟล์ก่อนอัปโหลด?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">💾 ป้องกันผู้ใช้อัปไฟล์ใหญ่มาก → กินพื้นที่ Free tier + โหลดช้า — ควรจำกัดขนาดฝั่ง Client ด้วย</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('database')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🗄️ Database</div></a>
+    <a class="next" onclick="goTo('security')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🛡️ Security & RLS</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('storage')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

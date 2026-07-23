@@ -1,0 +1,95 @@
+<div class="section" id="sec-env-dev-prod">
+  <span class="section-emoji">🌍</span>
+  <h1>Development vs Production</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge beginner">🟢 Beginner</span>
+    <span class="reading-time">⏱️ อ่าน ~8 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> พื้นฐาน Command Line</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> ติดตั้ง Node.js + Git</div>
+  </div>
+
+  <p>สภาพแวดล้อม 2 แบบที่ต้องเข้าใจก่อนสร้างเว็บ:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th></th><th>💻 Development</th><th>🌍 Production</th></tr></thead>
+      <tbody>
+        <tr><td>คือ</td><td>เครื่องเรา</td><td>เว็บจริงบนอินเทอร์เน็ต</td></tr>
+        <tr><td>URL</td><td><code>localhost:3000</code></td><td><code>mysite.vercel.app</code></td></tr>
+        <tr><td>ใครเห็น</td><td>เราคนเดียว</td><td>ผู้ใช้ทั่วโลก</td></tr>
+        <tr><td>Debug</td><td>ทำได้เต็มที่</td><td>ระวัง! ข้อมูลจริง</td></tr>
+        <tr><td>แก้ไข</td><td>เปลี่ยนได้ตลอด</td><td>ต้องทดสอบก่อน</td></tr>
+        <tr><td>ข้อมูล</td><td>ข้อมูลทดสอบ</td><td>ข้อมูลจริงของผู้ใช้</td></tr>
+        <tr><td>Env Vars</td><td><code>.env.local</code></td><td>Vercel Dashboard</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>🔄 Flow จาก Dev ไป Production</h2>
+  <div class="workflow">
+    <div class="wf-step">👨‍💻 Developer เขียนโค้ด<div class="wf-sub">localhost:3000 — ทดสอบในเครื่อง</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">📦 Git commit + push<div class="wf-sub">บันทึกแล้วส่งขึ้น GitHub</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">🐙 GitHub เก็บโค้ด<div class="wf-sub">ที่เก็บโค้ดบนคลาวด์</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">▲ Vercel Build<div class="wf-sub">แปลงโค้ดเป็นเว็บ + ใส่ Env Vars</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">🌍 Production — เว็บจริง!<div class="wf-sub">mysite.vercel.app — ผู้ใช้เข้าถึงได้</div></div>
+  </div>
+
+  <h2>🔐 Environment Variables แต่ละตัว</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ตัวแปร</th><th>เปิดเผยได้?</th><th>ทำไม</th></tr></thead>
+      <tbody>
+        <tr><td><code>NEXT_PUBLIC_SUPABASE_URL</code></td><td>✅ ได้</td><td>เป็นแค่ที่อยู่ API ไม่ใช่ Secret</td></tr>
+        <tr><td><code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code></td><td>🟡 ได้ถ้ามี RLS</td><td>RLS จะป้องกันข้อมูลให้</td></tr>
+        <tr><td><code>SUPABASE_SERVICE_ROLE_KEY</code></td><td>🔴 ห้ามเด็ดขาด!</td><td>ข้าม RLS ได้ → เข้าถึงทุกอย่าง</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">🚨 ทำไมห้าม Push .env.local ขึ้น GitHub</div>
+    <p>ไฟล์ <code>.env.local</code> มี Secret จริง — ถ้า Push ขึ้น GitHub (โดยเฉพาะ Public repo) ใครก็เห็นได้ → <strong>ต้องเปลี่ยน Key ทันที!</strong></p>
+  </div>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">gitignore</span><span class="code-where">📄 .gitignore — ต้องมีบรรทัดนี้เสมอ!</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>.env.local
+.env
+.env.production</code></pre>
+  </div>
+
+  <div class="practice-card best">
+    <div class="pc-title">✅ Best Practice</div>
+    <p>ทดสอบใน localhost จนมั่นใจแล้วค่อย Push → Vercel จะ Deploy ให้อัตโนมัติ อย่าแก้ Production โดยตรง!</p>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Development กับ Production ต่างกันอย่างไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">💻 Dev = เครื่องเรา (localhost) ทดลองได้เต็มที่ / 🌍 Prod = เว็บจริง ผู้ใช้จริง ต้องระวัง!</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ทำไม .env.local ห้าม Push?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🔐 เพราะมี Secret จริง — ถ้าคนอื่นเห็น service_role key จะเข้าถึงข้อมูลทั้งหมดได้!</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('security')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🛡️ Security & RLS</div></a>
+    <a class="next" onclick="goTo('deployment')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🚀 Deployment</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('env-dev-prod')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗
+     ║  NEW: AI Workflow                                         ║
+     ╚═══════════════════════════════════════════════════════════╝ -->

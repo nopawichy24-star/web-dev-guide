@@ -1,0 +1,194 @@
+<div class="section" id="sec-troubleshoot">
+  <span class="section-emoji">🔧</span>
+  <h1>การแก้ปัญหาอย่างเป็นระบบ</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge intermediate">🟡 Intermediate</span>
+    <span class="reading-time">⏱️ อ่าน ~12 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> Git</div><div class="prereq-item"><span class="prereq-check">✓</span> Vercel</div><div class="prereq-item"><span class="prereq-check">✓</span> Supabase</div>
+  </div>
+  <p>เมื่อเจอ Error อย่าตกใจ! ทำตาม <span class="en" data-th="กรอบแนวคิดสำหรับแก้ปัญหา">Framework</span> นี้ทีละขั้น:</p>
+
+  <h2>🔍 12 ขั้นตอนแก้ปัญหา</h2>
+  <ol>
+    <li>📖 <strong>อ่าน Error Message</strong> — มักบอกสาเหตุอยู่แล้ว!</li>
+    <li>📍 <strong>ระบุว่า Error อยู่ที่ไหน?</strong> — Local / GitHub / Vercel / Supabase?</li>
+    <li>📂 <strong>ตรวจไฟล์ที่เกี่ยวข้อง</strong> — ชื่อไฟล์ / import path ถูกไหม?</li>
+    <li>🔐 <strong>ตรวจ Environment Variables</strong> — ครบไหม? ชื่อตรงไหม?</li>
+    <li>📋 <strong>ตรวจ Logs</strong> — Vercel Build Logs / Browser Console / Supabase Logs</li>
+    <li>📦 <strong>ตรวจ Version</strong> — Node.js / npm / package version ตรงไหม?</li>
+    <li>📝 <strong>ตรวจชื่อไฟล์</strong> — ตัวพิมพ์ใหญ่-เล็ก (Mac ไม่แยก แต่ Vercel แยก!)</li>
+    <li>🛡️ <strong>ตรวจ RLS</strong> — เปิดไหม? Policy ถูกไหม?</li>
+    <li>🔀 <strong>เปรียบเทียบ Local กับ Production</strong> — อะไรต่างกัน?</li>
+    <li>🎯 <strong>แก้ทีละจุด</strong> — อย่าแก้หลายอย่างพร้อมกัน!</li>
+    <li>🔁 <strong>ทดสอบซ้ำ</strong></li>
+    <li>💾 <strong>Commit เมื่อแก้สำเร็จ</strong></li>
+  </ol>
+
+  <h2>📖 วิธีอ่าน Error Message (สำคัญมาก!)</h2>
+  <p>หลายคนเลิกเขียนโปรแกรมเพราะอ่าน Error ไม่เป็น — จริงๆ แล้ว Error <strong>พยายามบอกเรา</strong>ว่าผิดตรงไหน!</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Error ที่เห็น</th><th>แปลว่า</th><th>แก้อย่างไร</th></tr></thead>
+      <tbody>
+        <tr><td><code>Module not found</code></td><td>🔍 หาไฟล์/library ไม่เจอ</td><td>ตรวจชื่อ import, ตรวจว่า <code>npm install</code> แล้ว, ตรวจ path</td></tr>
+        <tr><td><code>Unexpected token</code></td><td>📝 Syntax ผิด — พิมพ์อะไรผิดไป</td><td>ดูบรรทัดที่บอก → หา , ; ) } ที่ขาด หรือเกิน</td></tr>
+        <tr><td><code>Permission denied</code></td><td>🔒 สิทธิ์ไม่พอ</td><td>ตรวจ Token/SSH Key, ตรวจ RLS Policy</td></tr>
+        <tr><td><code>Cannot read properties of undefined</code></td><td>❌ พยายามอ่านค่าจากตัวแปรที่เป็น undefined</td><td>ตรวจว่าข้อมูลโหลดเสร็จแล้วหรือยัง, ใช้ <code>?.</code></td></tr>
+        <tr><td><code>TypeError: X is not a function</code></td><td>🚫 เรียกใช้สิ่งที่ไม่ใช่ฟังก์ชัน</td><td>ตรวจชื่อฟังก์ชัน, ตรวจ import ถูกไหม</td></tr>
+        <tr><td><code>CORS error</code></td><td>🌐 เบราว์เซอร์บล็อกเพราะข้ามโดเมน</td><td>ตั้ง CORS headers บน Server หรือใช้ API Route</td></tr>
+        <tr><td><code>404 Not Found</code></td><td>📄 หน้า/ไฟล์ที่ขอไม่มีอยู่</td><td>ตรวจ URL, ตรวจชื่อไฟล์, ตรวจ routing</td></tr>
+        <tr><td><code>500 Internal Server Error</code></td><td>💥 Server มีปัญหา</td><td>ดู Server Logs, ตรวจโค้ดฝั่ง Server</td></tr>
+        <tr><td><code>RLS: insufficient privilege</code></td><td>🛡️ RLS บล็อกเพราะไม่มี Policy</td><td>เพิ่ม Policy ที่ถูกต้องสำหรับ operation นั้น</td></tr>
+        <tr><td><code>JWT expired</code></td><td>⏰ Token หมดอายุ</td><td>Login ใหม่ หรือใช้ <code>onAuthStateChange</code> refresh</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">💜 วิธีอ่าน Error ที่ดี</div>
+    <p>1) <strong>อ่านบรรทัดแรก</strong> — มักบอกประเภท Error<br>
+    2) <strong>หาชื่อไฟล์ + เลขบรรทัด</strong> — บอกว่าผิดตรงไหน เช่น <code>page.tsx:25:3</code><br>
+    3) <strong>อ่านจากล่างขึ้นบน</strong> — Error จริงมักอยู่ล่างสุด<br>
+    4) <strong>Copy ทั้งก้อนให้ Claude ช่วย</strong> — แต่เอา Secret ออกก่อน!</p>
+  </div>
+
+  <h2>🔧 Debugging Checklist — เมื่อรันไม่ได้ ⭐</h2>
+  <p>ทำตามทีละข้อจากบนลงล่าง:</p>
+  <ul class="checklist" data-checklist="debugging">
+    <li><input type="checkbox" id="db1"><label for="db1">📦 รัน <code>npm install</code> แล้วหรือยัง?</label></li>
+    <li><input type="checkbox" id="db2"><label for="db2">▶️ รัน <code>npm run dev</code> แล้วหรือยัง?</label></li>
+    <li><input type="checkbox" id="db3"><label for="db3">🌐 เปิด <code>localhost:3000</code> ใน Browser แล้วหรือยัง?</label></li>
+    <li><input type="checkbox" id="db4"><label for="db4">📄 มีไฟล์ <code>.env.local</code> หรือยัง?</label></li>
+    <li><input type="checkbox" id="db5"><label for="db5">🔗 <code>NEXT_PUBLIC_SUPABASE_URL</code> ถูกไหม? (ไม่มี / ต่อท้าย)</label></li>
+    <li><input type="checkbox" id="db6"><label for="db6">🔑 <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> ถูกไหม? (ไม่มีช่องว่าง/เครื่องหมายคำพูด)</label></li>
+    <li><input type="checkbox" id="db7"><label for="db7">🗄️ ตาราง Supabase สร้างแล้วหรือยัง?</label></li>
+    <li><input type="checkbox" id="db8"><label for="db8">🛡️ RLS เปิดแล้ว + Policy ครบ 4 แบบ?</label></li>
+    <li><input type="checkbox" id="db9"><label for="db9">🔗 Redirect URL ตั้งแล้ว? (localhost + production)</label></li>
+    <li><input type="checkbox" id="db10"><label for="db10">📂 อยู่ในโฟลเดอร์ที่ถูกต้อง? (<code>pwd</code> ตรวจสอบ)</label></li>
+    <li><input type="checkbox" id="db11"><label for="db11">💻 ปิด Terminal แล้วเปิดใหม่ ลองรันใหม่?</label></li>
+    <li><input type="checkbox" id="db12"><label for="db12">🔄 ลอง <code>rm -rf node_modules && npm install</code> ใหม่?</label></li>
+  </ul>
+
+  <h3>🖥️ วิธี Copy Error จากที่ต่างๆ</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Error อยู่ที่ไหน</th><th>วิธี Copy</th></tr></thead>
+      <tbody>
+        <tr><td>💻 <span class="en" data-th="หน้าต่างพิมพ์คำสั่ง">Terminal</span></td><td>ลากเมาส์เลือกข้อความ → <code>Ctrl+C</code> (หรือ <code>Cmd+C</code> บน Mac)</td></tr>
+        <tr><td>🌐 <span class="en" data-th="เครื่องมือนักพัฒนาในเบราว์เซอร์ — กด F12 เปิด">Browser Console</span></td><td>กด <code>F12</code> → แท็บ Console → คลิกขวาที่ Error → Copy</td></tr>
+        <tr><td>📡 <span class="en" data-th="แท็บ Network ใน DevTools — ดูคำขอ API ทั้งหมด">Network Tab</span></td><td>กด <code>F12</code> → แท็บ Network → คลิกที่ request สีแดง → ดู Response</td></tr>
+        <tr><td>▲ Vercel Build Logs</td><td>Vercel Dashboard → Deployments → คลิก deployment → Build Logs</td></tr>
+        <tr><td>⚡ Supabase Logs</td><td>Supabase Dashboard → Logs → เลือก API หรือ Auth</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ปัญหา</th><th>สาเหตุ</th><th>วิธีแก้</th></tr></thead>
+      <tbody>
+        <tr><td><code>npm install</code> ไม่ได้</td><td>Node.js ยังไม่ติดตั้ง</td><td>ติดตั้ง Node.js จาก nodejs.org</td></tr>
+        <tr><td><code>git push</code> ถูก reject</td><td>GitHub มี Commit ที่เราไม่มี</td><td><code>git pull --rebase</code> ก่อน push</td></tr>
+        <tr><td>Build failed บน Vercel</td><td>TypeScript error / import ผิด</td><td>อ่าน Build Logs → แก้ error → push ใหม่</td></tr>
+        <tr><td>หน้าเว็บขาวหลัง Deploy</td><td>Framework ถูกตรวจจับผิด / Root Dir ผิด</td><td>Vercel Settings → ตรวจ Framework + Root</td></tr>
+        <tr><td>Supabase <code>undefined</code></td><td>Env Vars ไม่ถูกตั้ง</td><td>ตรวจชื่อตัวแปร + Redeploy</td></tr>
+        <tr><td>Login แล้วไม่ redirect กลับ</td><td>Redirect URL ไม่ได้เพิ่ม</td><td>Supabase → Auth → URL Config</td></tr>
+        <tr><td>ผู้ใช้เห็นข้อมูลคนอื่น</td><td>RLS ไม่ได้เปิด / Policy ผิด</td><td>เปิด RLS + ตรวจ Policy ทุกตาราง</td></tr>
+        <tr><td>CORS error</td><td>เรียก API ข้ามโดเมน</td><td>ใช้ API Route ของ Next.js หรือตั้ง headers</td></tr>
+        <tr><td>Case-sensitive error</td><td>ชื่อไฟล์ Mac ≠ Linux (Vercel)</td><td>แก้ชื่อไฟล์ให้ตรงกับ import</td></tr>
+        <tr><td>DNS ยังไม่เชื่อม</td><td>Custom domain ยังไม่ propagate</td><td>รอ 1-48 ชม. ตรวจ DNS settings</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">💜 เคล็ดลับ</div>
+    <p>Copy Error Message ทั้งก้อนแล้ววางให้ AI (เช่น Claude) ช่วยอ่าน — แต่อย่าลืมเอา Secret ออกก่อน!</p>
+  </div>
+
+  <h2>📋 ปัญหาแยกตามเครื่องมือ</h2>
+
+  <h3>📦 Git</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ปัญหา</th><th>วิธีแก้</th></tr></thead>
+      <tbody>
+        <tr><td><code>fatal: not a git repository</code></td><td>ยังไม่ได้รัน <code>git init</code> หรืออยู่ผิดโฟลเดอร์ → <code>cd</code> ไปให้ถูก</td></tr>
+        <tr><td><code>nothing to commit</code></td><td>ไม่มีไฟล์เปลี่ยนแปลง หรือ add แล้วยังไม่ได้แก้อะไร</td></tr>
+        <tr><td><code>merge conflict</code></td><td>เปิดไฟล์ → หาเครื่องหมาย <code>&lt;&lt;&lt;</code> → เลือกโค้ด → ลบเครื่องหมาย → add + commit</td></tr>
+        <tr><td>โค้ดหายหลัง <code>reset --hard</code></td><td>ลองใช้ <code>git reflog</code> หา commit เก่า → <code>git reset --hard &lt;hash&gt;</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>🐙 GitHub</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ปัญหา</th><th>วิธีแก้</th></tr></thead>
+      <tbody>
+        <tr><td>Push แล้วโดน reject</td><td><code>git pull --rebase</code> ก่อน push</td></tr>
+        <tr><td>Secret ถูก Push ไปแล้ว</td><td>เปลี่ยน Key ทันที! → <code>git rm --cached</code> → เพิ่ม .gitignore</td></tr>
+        <tr><td>Permission denied</td><td>ตรวจ Token/SSH → สร้าง Token ใหม่ หรือตั้ง SSH Key</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>▲ Vercel</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ปัญหา</th><th>วิธีแก้</th></tr></thead>
+      <tbody>
+        <tr><td>Build failed</td><td>อ่าน Build Logs → แก้ Error ที่ระบุ → Push ใหม่</td></tr>
+        <tr><td>Env var undefined</td><td>ตรวจชื่อ + prefix <code>NEXT_PUBLIC_</code> + Redeploy</td></tr>
+        <tr><td>หน้าขาว</td><td>ตรวจ Framework Preset + Root Directory ใน Settings</td></tr>
+        <tr><td>404 เมื่อเปิด URL ตรง</td><td>ตรวจ routing ของ Framework (Next.js มักไม่มีปัญหานี้)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>⚡ Supabase</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ปัญหา</th><th>วิธีแก้</th></tr></thead>
+      <tbody>
+        <tr><td>ข้อมูลไม่ขึ้น</td><td>ตรวจ RLS → Policy อาจบล็อกการอ่าน → เพิ่ม SELECT policy</td></tr>
+        <tr><td>Insert ไม่ได้</td><td>ตรวจ RLS INSERT policy → <code>WITH CHECK (auth.uid() = user_id)</code></td></tr>
+        <tr><td>เห็นข้อมูลคนอื่น</td><td>RLS ไม่ได้เปิด หรือ Policy ใช้ <code>USING (true)</code></td></tr>
+        <tr><td>Login แล้วไม่ redirect</td><td>ตรวจ Redirect URLs ใน Auth → URL Config</td></tr>
+        <tr><td>อีเมลยืนยันไม่มา</td><td>ดู Spam folder, รอ 1-2 นาที, ตรวจ SMTP settings</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">เจอ Error ขั้นตอนแรกที่ควรทำคืออะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📖 อ่าน Error Message! มักบอกสาเหตุและบรรทัดที่มีปัญหาอยู่แล้ว อย่าเพิ่งตกใจหรือลบโค้ด</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ข้อมูลไม่ขึ้นเลยหลัง Deploy สาเหตุน่าจะเป็นอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🛡️ RLS อาจบล็อกอยู่! ตรวจว่า 1) RLS เปิด 2) มี SELECT policy 3) Env Vars ตรง 4) Supabase URL/Key ถูก</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Local ใช้ได้แต่ Production ไม่ได้ ตรวจอะไรก่อน?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🔐 ตรวจ Environment Variables ก่อน! ค่าใน .env.local กับ Vercel ตรงกันไหม? Redirect URL มี production domain ไหม?</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('ai-coding')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🤖 AI ช่วยเขียนโค้ด</div></a>
+    <a class="next" onclick="goTo('checklist')"><div class="nav-label">ถัดไป →</div><div class="nav-title">✅ Checklist</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('troubleshoot')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗
+     ║  NEW: Environment (Dev vs Production)                     ║
+     ╚═══════════════════════════════════════════════════════════╝ -->

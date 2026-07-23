@@ -1,0 +1,101 @@
+<div class="section" id="sec-testing">
+  <span class="section-emoji">🧪</span>
+  <h1>Testing — ทดสอบก่อนเปิดใช้งาน</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge intermediate">🟡 Intermediate</span>
+    <span class="reading-time">⏱️ อ่าน ~10 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> สร้างเว็บที่มี Login + CRUD ได้</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> Deploy บน Vercel ได้</div>
+  </div>
+
+  <h2>📋 ประเภทการทดสอบ</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ประเภท</th><th>คืออะไร</th><th>ใครทำ</th><th>ใช้เมื่อ</th></tr></thead>
+      <tbody>
+        <tr><td>🖱️ <span class="en" data-th="ทดสอบด้วยมือ — คลิก กรอก ดูผลเอง">Manual Testing</span></td><td>ทดสอบด้วยมือ</td><td>เรา ⭐</td><td>ทุกครั้งก่อน Deploy</td></tr>
+        <tr><td>🧩 <span class="en" data-th="ทดสอบทีละฟังก์ชัน">Unit Testing</span></td><td>ทดสอบทีละฟังก์ชัน</td><td>โค้ดทดสอบ</td><td>โปรเจกต์ใหญ่</td></tr>
+        <tr><td>🔗 <span class="en" data-th="ทดสอบว่าหลายส่วนทำงานร่วมกันได้">Integration</span></td><td>ทดสอบหลายส่วนรวมกัน</td><td>โค้ดทดสอบ</td><td>โปรเจกต์ใหญ่</td></tr>
+        <tr><td>🌐 <span class="en" data-th="ทดสอบตั้งแต่ต้นจนจบ — เหมือนผู้ใช้จริง">E2E Testing</span></td><td>ทดสอบทั้ง flow</td><td>เครื่องมือ เช่น Playwright</td><td>โปรเจกต์ใหญ่มาก</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">💡 สำหรับผู้เริ่มต้น</div>
+    <p>เน้น <strong>Manual Testing</strong> ก่อน! ทดสอบด้วยมือเหมือนผู้ใช้จริง — ใช้ Checklist ด้านล่างทุกครั้งก่อน Deploy</p>
+  </div>
+
+  <h2>📋 Deployment Test Checklist ⭐</h2>
+  <h3>👤 Authentication</h3>
+  <ul class="checklist" data-checklist="test-auth">
+    <li><input type="checkbox" id="ta1"><label for="ta1">☐ สมัครสมาชิกใหม่ได้</label></li>
+    <li><input type="checkbox" id="ta2"><label for="ta2">☐ Login ด้วย Email + Password ได้</label></li>
+    <li><input type="checkbox" id="ta3"><label for="ta3">☐ Logout แล้วกลับไปหน้า Login</label></li>
+    <li><input type="checkbox" id="ta4"><label for="ta4">☐ Reset Password ได้</label></li>
+    <li><input type="checkbox" id="ta5"><label for="ta5">☐ เข้าหน้าที่ต้อง Login โดยไม่ Login → redirect ไป Login</label></li>
+  </ul>
+  <h3>📝 CRUD</h3>
+  <ul class="checklist" data-checklist="test-crud">
+    <li><input type="checkbox" id="tc1"><label for="tc1">☐ สร้างข้อมูลใหม่ (Insert)</label></li>
+    <li><input type="checkbox" id="tc2"><label for="tc2">☐ แสดงข้อมูล (Select)</label></li>
+    <li><input type="checkbox" id="tc3"><label for="tc3">☐ แก้ไขข้อมูล (Update)</label></li>
+    <li><input type="checkbox" id="tc4"><label for="tc4">☐ ลบข้อมูล (Delete) — มี Confirm ก่อนลบ</label></li>
+    <li><input type="checkbox" id="tc5"><label for="tc5">☐ ไม่เห็นข้อมูลของผู้ใช้คนอื่น (RLS ทำงาน)</label></li>
+  </ul>
+  <h3>📱 UI / UX</h3>
+  <ul class="checklist" data-checklist="test-ui">
+    <li><input type="checkbox" id="tu1"><label for="tu1">☐ มือถือ — หน้าตาถูกต้อง</label></li>
+    <li><input type="checkbox" id="tu2"><label for="tu2">☐ Tablet — หน้าตาถูกต้อง</label></li>
+    <li><input type="checkbox" id="tu3"><label for="tu3">☐ Desktop — หน้าตาถูกต้อง</label></li>
+    <li><input type="checkbox" id="tu4"><label for="tu4">☐ Loading state แสดงตอนรอข้อมูล</label></li>
+    <li><input type="checkbox" id="tu5"><label for="tu5">☐ Empty state แสดงเมื่อไม่มีข้อมูล</label></li>
+    <li><input type="checkbox" id="tu6"><label for="tu6">☐ Error handling — กรอกผิดแล้วแจ้ง Error</label></li>
+    <li><input type="checkbox" id="tu7"><label for="tu7">☐ ทุกหน้าเปิดได้ ไม่ 404</label></li>
+  </ul>
+
+  <h2>🐛 Bug Report Template</h2>
+  <p>เมื่อเจอบั๊ก ให้จดข้อมูลเหล่านี้:</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">markdown</span><span class="code-where">📄 Bug Report</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>## 🐛 Bug Report
+
+**สิ่งที่ทำ:**
+กดปุ่มลบ Task
+
+**ผลที่คาดหวัง:**
+Task ถูกลบ
+
+**ผลที่เกิดขึ้น:**
+ไม่มีอะไรเกิดขึ้น ไม่มี Error
+
+**Screenshot:**
+[แนบรูปหน้าจอ]
+
+**Browser:** Chrome 127
+**Device:** iPhone 15 / Desktop
+**URL:** https://mysite.vercel.app/tasks</code></pre>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Manual Testing สำคัญอย่างไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🖱️ เป็นการทดสอบเหมือนผู้ใช้จริง — คลิก กรอก ดูผล ต้องทำทุกครั้งก่อน Deploy!</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('debugging')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🐛 Debugging</div></a>
+    <a class="next" onclick="goTo('troubleshoot')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🔧 แก้ปัญหา</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('testing')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗
+     ║  NEW: Performance                                         ║
+     ╚═══════════════════════════════════════════════════════════╝ -->

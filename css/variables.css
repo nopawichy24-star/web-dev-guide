@@ -1,0 +1,54 @@
+/* ═══════════════════════════════════════════
+   🎨 CSS VARIABLES & THEME SYSTEM
+   ═══════════════════════════════════════════ */
+:root {
+  --bg: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-sidebar: #f1f5f9;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
+  --accent: #3b82f6;
+  --accent-light: #dbeafe;
+  --accent-dark: #1d4ed8;
+  --code-bg: #1e293b;
+  --code-text: #e2e8f0;
+  --info-bg: #eff6ff; --info-border: #3b82f6; --info-text: #1e40af;
+  --tip-bg: #f5f3ff; --tip-border: #8b5cf6; --tip-text: #5b21b6;
+  --warn-bg: #fffbeb; --warn-border: #f59e0b; --warn-text: #92400e;
+  --danger-bg: #fef2f2; --danger-border: #ef4444; --danger-text: #991b1b;
+  --success-bg: #f0fdf4; --success-border: #22c55e; --success-text: #166534;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 14px rgba(0,0,0,0.1);
+  --radius: 10px;
+  --sidebar-w: 280px;
+  --popup-bg: #1e293b;
+  --popup-text: #f8fafc;
+  --highlight-en: #dbeafe;
+}
+
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-sidebar: #1e293b;
+  --text: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: #334155;
+  --accent: #60a5fa;
+  --accent-light: #1e3a5f;
+  --accent-dark: #93bbfd;
+  --code-bg: #0c1222;
+  --code-text: #e2e8f0;
+  --info-bg: #0c1d3a; --info-border: #3b82f6; --info-text: #93c5fd;
+  --tip-bg: #1a0f30; --tip-border: #8b5cf6; --tip-text: #c4b5fd;
+  --warn-bg: #2a1f05; --warn-border: #f59e0b; --warn-text: #fcd34d;
+  --danger-bg: #2a0a0a; --danger-border: #ef4444; --danger-text: #fca5a5;
+  --success-bg: #052e16; --success-border: #22c55e; --success-text: #86efac;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-lg: 0 4px 14px rgba(0,0,0,0.4);
+  --popup-bg: #f8fafc;
+  --popup-text: #1e293b;
+  --highlight-en: #1e3a5f;
+}

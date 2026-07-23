@@ -1,0 +1,217 @@
+<div class="section" id="sec-cli">
+  <span class="section-emoji">⌨️</span>
+  <h1>พื้นฐาน Command Line</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge beginner">🟢 Beginner</span>
+    <span class="reading-time">⏱️ อ่าน ~8 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> พื้นฐานการใช้คอมพิวเตอร์</div>
+  </div>
+  <p><span class="en" data-th="เครื่องมือที่พิมพ์คำสั่งเพื่อสั่งคอมพิวเตอร์ — แทนที่จะใช้เมาส์คลิก">Command Line</span> (หรือ <span class="en" data-th="หน้าต่างสำหรับพิมพ์คำสั่ง — จอดำที่เห็นในหนัง">Terminal</span>) คือเครื่องมือที่เราพิมพ์คำสั่งเพื่อสั่งคอมพิวเตอร์ แทนที่จะใช้เมาส์คลิก</p>
+
+  <div class="callout info">
+    <div class="callout-title">💡 ทำไมต้องใช้ Command Line?</div>
+    <p>เครื่องมือพัฒนาเว็บสมัยใหม่ เช่น <span class="en" data-th="ระบบควบคุมเวอร์ชัน">Git</span>, <span class="en" data-th="ตัวจัดการ package ของ Node.js — ติดตั้งไลบรารี่ได้ง่าย">npm</span>, <span class="en" data-th="โปรแกรมรัน JavaScript">Node.js</span> ล้วนใช้ผ่าน Command Line ทั้งนั้น ถ้าเราคุ้นเคยกับมัน จะทำงานได้เร็วขึ้นมาก!</p>
+  </div>
+
+  <h2>🖥️ เปิด Terminal อย่างไร?</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ระบบปฏิบัติการ</th><th>วิธีเปิด</th></tr></thead>
+      <tbody>
+        <tr><td>🪟 Windows</td><td>กด <code>Win + R</code> พิมพ์ <code>cmd</code> แล้วกด Enter — หรือค้นหา "Terminal" ใน Start Menu</td></tr>
+        <tr><td>🍎 Mac</td><td>กด <code>Cmd + Space</code> พิมพ์ "Terminal" แล้วกด Enter</td></tr>
+        <tr><td>💻 VS Code</td><td>กด <code>Ctrl + `</code> (backtick) — หรือเมนู Terminal → New Terminal</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">💜 แนะนำ</div>
+    <p>ใช้ <span class="en" data-th="หน้าต่าง Terminal ที่อยู่ในโปรแกรม VS Code — สะดวกเพราะอยู่คู่กับโค้ด">Terminal ใน VS Code</span> เพราะสะดวกที่สุด — เปิดโค้ดและ Terminal ในหน้าจอเดียวกัน!</p>
+  </div>
+
+  <h2>📂 คำสั่งจัดการไฟล์และโฟลเดอร์</h2>
+
+  <h3><code>pwd</code> — ดูว่าเราอยู่ที่ไหน</h3>
+  <p><span class="en" data-th="Print Working Directory — แสดงตำแหน่งโฟลเดอร์ปัจจุบัน">pwd</span> = แสดงตำแหน่งโฟลเดอร์ที่เราอยู่ตอนนี้</p>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <span class="code-where">💻 Terminal</span>
+      <button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button>
+    </div>
+    <pre><code>pwd</code></pre>
+  </div>
+  <p><strong>ผลลัพธ์ตัวอย่าง:</strong></p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">output</span></div>
+    <pre><code>/Users/nopawich/Documents</code></pre>
+  </div>
+
+  <h3><code>ls</code> — ดูไฟล์ในโฟลเดอร์</h3>
+  <p><span class="en" data-th="List — แสดงรายชื่อไฟล์และโฟลเดอร์">ls</span> = แสดงรายชื่อไฟล์และโฟลเดอร์ทั้งหมดที่อยู่ตรงนี้</p>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <span class="code-where">💻 Terminal</span>
+      <button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button>
+    </div>
+    <pre><code># Mac / Linux
+ls
+
+# Windows (cmd)
+dir
+
+# Windows (PowerShell)
+ls</code></pre>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">💡 Windows vs Mac</div>
+    <p>คำสั่ง <code>ls</code> ใช้ได้ใน Mac, Linux และ PowerShell ของ Windows — ถ้าใช้ <span class="en" data-th="โปรแกรม Command Prompt ของ Windows แบบเก่า">cmd</span> ต้องใช้ <code>dir</code> แทน แต่ถ้าใช้ Terminal ใน VS Code จะใช้ <code>ls</code> ได้เลย</p>
+  </div>
+
+  <h3><code>cd</code> — เปลี่ยนโฟลเดอร์</h3>
+  <p><span class="en" data-th="Change Directory — เปลี่ยนไปยังโฟลเดอร์อื่น">cd</span> = ย้ายไปที่โฟลเดอร์ที่ต้องการ</p>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <span class="code-where">💻 Terminal</span>
+      <button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button>
+    </div>
+    <pre><code># เข้าไปในโฟลเดอร์ Documents
+cd Documents
+
+# ถอยกลับ 1 ระดับ
+cd ..
+
+# กลับไปที่โฟลเดอร์หลัก (home)
+cd ~
+
+# เข้าไปในโฟลเดอร์ my-project ที่อยู่ใน Desktop
+cd Desktop/my-project</code></pre>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠️ ข้อควรระวัง</div>
+    <p>ชื่อโฟลเดอร์ต้องพิมพ์ให้ตรง! ถ้าชื่อมีช่องว่าง ต้องใส่เครื่องหมายคำพูดครอบ เช่น <code>cd "My Project"</code></p>
+  </div>
+
+  <h3><code>mkdir</code> — สร้างโฟลเดอร์ใหม่</h3>
+  <p><span class="en" data-th="Make Directory — สร้างโฟลเดอร์ใหม่">mkdir</span> = สร้างโฟลเดอร์ใหม่</p>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <span class="code-where">💻 Terminal</span>
+      <button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button>
+    </div>
+    <pre><code># สร้างโฟลเดอร์ชื่อ my-website
+mkdir my-website
+
+# เข้าไปในโฟลเดอร์ที่เพิ่งสร้าง
+cd my-website</code></pre>
+  </div>
+
+  <h3><code>touch</code> / <code>echo</code> — สร้างไฟล์ใหม่</h3>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <span class="code-where">💻 Terminal</span>
+      <button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button>
+    </div>
+    <pre><code># Mac / Linux — สร้างไฟล์เปล่า
+touch index.html
+
+# Windows (PowerShell) — สร้างไฟล์เปล่า
+New-Item index.html
+
+# ทุกระบบ — สร้างไฟล์พร้อมเนื้อหา
+echo "Hello World" > index.html</code></pre>
+  </div>
+
+  <h3>คำสั่งอื่นที่มีประโยชน์</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>คำสั่ง</th><th>ความหมาย</th><th>ตัวอย่าง</th></tr></thead>
+      <tbody>
+        <tr><td><code>cat</code></td><td>แสดงเนื้อหาไฟล์</td><td><code>cat index.html</code></td></tr>
+        <tr><td><code>cp</code></td><td><span class="en" data-th="Copy — คัดลอกไฟล์">Copy</span> คัดลอกไฟล์</td><td><code>cp file1.txt file2.txt</code></td></tr>
+        <tr><td><code>mv</code></td><td><span class="en" data-th="Move — ย้ายหรือเปลี่ยนชื่อไฟล์">Move</span> ย้าย/เปลี่ยนชื่อ</td><td><code>mv old.txt new.txt</code></td></tr>
+        <tr><td><code>rm</code></td><td><span class="en" data-th="Remove — ลบไฟล์ (ลบแล้วกู้ไม่ได้!)">Remove</span> ลบไฟล์</td><td><code>rm file.txt</code></td></tr>
+        <tr><td><code>clear</code></td><td>ล้างหน้าจอ Terminal</td><td><code>clear</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">🚨 อันตราย!</div>
+    <p>คำสั่ง <code>rm</code> ลบไฟล์แล้ว<strong>กู้คืนไม่ได้!</strong> ไม่มีถังขยะ! ตรวจสอบชื่อไฟล์ให้แน่ใจก่อนลบทุกครั้ง อย่าใช้ <code>rm -rf /</code> เด็ดขาด (จะลบทุกอย่างในเครื่อง!)</p>
+  </div>
+
+  <h2>📦 คำสั่ง npm ที่ต้องรู้</h2>
+  <p><span class="en" data-th="Node Package Manager — ตัวจัดการไลบรารี่ของ JavaScript">npm</span> คือตัวจัดการ <span class="en" data-th="ชุดโค้ดสำเร็จรูปที่คนอื่นเขียนไว้ให้ — เราเอามาใช้ได้เลยโดยไม่ต้องเขียนเอง">package</span> (ไลบรารี่) ของ JavaScript ติดตั้งมาพร้อมกับ Node.js</p>
+
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <span class="code-where">💻 Terminal</span>
+      <button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button>
+    </div>
+    <pre><code># สร้างโปรเจกต์ใหม่ (สร้างไฟล์ package.json)
+npm init -y
+
+# ติดตั้ง package (เช่น supabase)
+npm install @supabase/supabase-js
+
+# รันโปรเจกต์ (ขึ้นอยู่กับคำสั่งในไฟล์ package.json)
+npm run dev
+
+# ตรวจสอบ version ของ npm
+npm --version</code></pre>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">pwd ใช้ทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📍 แสดงตำแหน่งโฟลเดอร์ที่เราอยู่ตอนนี้ (Print Working Directory)</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">cd .. ทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">⬆️ ถอยกลับไปโฟลเดอร์ก่อนหน้า 1 ระดับ</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">npm install ทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📦 ติดตั้ง package (ไลบรารี่) เพิ่มเข้าในโปรเจกต์</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ทำไม rm ถึงอันตราย?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🚨 เพราะลบไฟล์แล้วกู้คืนไม่ได้! ไม่มีถังขยะ ไม่มี Undo!</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('web-basics')">
+      <div class="nav-label">← ก่อนหน้า</div>
+      <div class="nav-title">🌐 พื้นฐานเว็บ</div>
+    </a>
+    <a class="next" onclick="goTo('install')">
+      <div class="nav-label">ถัดไป →</div>
+      <div class="nav-title">🔧 ติดตั้งเครื่องมือ</div>
+    </a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('cli')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>
+
+
+<!-- ╔═══════════════════════════════════════════════════════════╗
+     ║  SECTION 5: ติดตั้งเครื่องมือ                                ║
+     ╚═══════════════════════════════════════════════════════════╝ -->

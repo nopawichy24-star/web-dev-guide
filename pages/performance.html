@@ -1,0 +1,114 @@
+<div class="section" id="sec-performance">
+  <span class="section-emoji">⚡</span>
+  <h1>Performance — ทำให้เว็บเร็วขึ้น</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge advanced">🔴 Advanced</span>
+    <span class="reading-time">⏱️ อ่าน ~12 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> React / Next.js</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> Deployment บน Vercel</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> Supabase Database</div>
+  </div>
+
+  <h2>🤔 Performance คืออะไร?</h2>
+  <p>คือความเร็วและประสิทธิภาพของเว็บ — ผู้ใช้จะออกจากเว็บถ้าโหลดนานเกิน 3 วินาที!</p>
+
+  <h2>📊 <span class="en" data-th="ตัวชี้วัดสุขภาพเว็บของ Google — 3 ค่าหลักที่ Google ใช้จัดอันดับ">Core Web Vitals</span></h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ตัวชี้วัด</th><th>คืออะไร</th><th>ค่าที่ดี</th></tr></thead>
+      <tbody>
+        <tr><td><span class="en" data-th="เวลาแสดงเนื้อหาใหญ่สุด — เว็บโหลดเร็วแค่ไหน">LCP</span></td><td>เว็บโหลดเสร็จเร็วแค่ไหน</td><td>< 2.5 วินาที</td></tr>
+        <tr><td><span class="en" data-th="ความล่าช้าของการตอบสนอง — กดแล้วตอบเร็วแค่ไหน">INP</span></td><td>กดแล้วตอบสนองเร็วแค่ไหน</td><td>< 200ms</td></tr>
+        <tr><td><span class="en" data-th="การเลื่อนของหน้าเว็บ — เนื้อหากระโดดไหม">CLS</span></td><td>หน้าเว็บกระโดดไหม</td><td>< 0.1</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>🚨 ถ้าเว็บเริ่มช้า — ตรวจ 5 อย่างนี้ก่อน!</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>ปัญหา</th><th>วิธีแก้</th></tr></thead>
+      <tbody>
+        <tr><td>1️⃣</td><td>🖼️ รูปภาพใหญ่เกินไป</td><td>ใช้ <code>next/image</code> + format WebP + ลดขนาด</td></tr>
+        <tr><td>2️⃣</td><td>📊 โหลดข้อมูลเยอะเกิน</td><td>ใช้ <span class="en" data-th="แบ่งข้อมูลเป็นหน้าๆ — ไม่โหลดทีเดียวทั้งหมด">Pagination</span> หรือ <code>.limit(20)</code></td></tr>
+        <tr><td>3️⃣</td><td>📦 JavaScript ใหญ่เกิน</td><td>ลบ package ที่ไม่ใช้ + ใช้ <span class="en" data-th="โหลดเมื่อต้องการ — ไม่โหลดทุกอย่างตั้งแต่แรก">Lazy Loading</span></td></tr>
+        <tr><td>4️⃣</td><td>🔄 ไม่มี Cache</td><td>ตั้ง <span class="en" data-th="เก็บข้อมูลไว้ชั่วคราว — ไม่ต้องโหลดซ้ำทุกครั้ง">Cache</span> headers ใน Vercel</td></tr>
+        <tr><td>5️⃣</td><td>🗄️ Query ช้า</td><td>เพิ่ม <span class="en" data-th="ดัชนีฐานข้อมูล — ช่วยค้นหาข้อมูลเร็วขึ้น">Index</span> ใน Database</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>🖼️ Image Optimization ใน Next.js</h2>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">tsx</span><span class="code-where">📄 ใช้ next/image แทน &lt;img&gt;</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>import Image from 'next/image'
+
+// ✅ ดี — Next.js จะ optimize อัตโนมัติ
+&lt;Image src="/photo.jpg" alt="รูป" width={400} height={300} /&gt;
+
+// ❌ ไม่ดี — ไม่ optimize
+&lt;img src="/photo.jpg" alt="รูป" /&gt;</code></pre>
+  </div>
+
+  <h2>📊 Pagination กับ Supabase</h2>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">ts</span><span class="code-where">📄 โหลดข้อมูลทีละหน้า</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>const PAGE_SIZE = 20
+
+async function loadPage(page: number) {
+  const from = page * PAGE_SIZE
+  const to = from + PAGE_SIZE - 1
+
+  const { data } = await supabase
+    .from('tasks')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .range(from, to)  // ดึงเฉพาะ 20 รายการต่อหน้า
+
+  return data
+}</code></pre>
+  </div>
+
+  <h2>📋 Performance Checklist</h2>
+  <ul class="checklist" data-checklist="perf">
+    <li><input type="checkbox" id="pf1"><label for="pf1">☐ ใช้ <code>next/image</code> แทน <code>&lt;img&gt;</code></label></li>
+    <li><input type="checkbox" id="pf2"><label for="pf2">☐ ใช้ Lazy Loading สำหรับ component ที่ไม่ต้องโหลดทันที</label></li>
+    <li><input type="checkbox" id="pf3"><label for="pf3">☐ ใช้ Pagination หรือ <code>.limit()</code> กับ query</label></li>
+    <li><input type="checkbox" id="pf4"><label for="pf4">☐ ตั้ง Cache headers</label></li>
+    <li><input type="checkbox" id="pf5"><label for="pf5">☐ ลบ package ที่ไม่ใช้ (<code>npm prune</code>)</label></li>
+    <li><input type="checkbox" id="pf6"><label for="pf6">☐ Compress รูปภาพก่อนอัปโหลด</label></li>
+    <li><input type="checkbox" id="pf7"><label for="pf7">☐ ตรวจ Bundle size ด้วย <code>npm run build</code></label></li>
+  </ul>
+
+  <div class="practice-card best">
+    <div class="pc-title">✅ Best Practice</div>
+    <p>เริ่มจากทำให้เว็บ<strong>ทำงานถูกต้อง</strong>ก่อน แล้วค่อย optimize ความเร็ว — "Make it work, make it right, make it fast"</p>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ถ้าเว็บช้า ควรตรวจอะไรก่อน?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🚨 5 อย่าง: 1) รูปใหญ่ 2) โหลดข้อมูลเยอะ 3) ไม่มี Pagination 4) ไม่มี Cache 5) JS ใหญ่</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Pagination คืออะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📊 แบ่งข้อมูลเป็นหน้าๆ (เช่น 20 รายการต่อหน้า) แทนที่จะโหลดทั้งหมดทีเดียว</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('troubleshoot')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🔧 แก้ปัญหา</div></a>
+    <a class="next" onclick="goTo('checklist')"><div class="nav-label">ถัดไป →</div><div class="nav-title">✅ Checklist</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('performance')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗
+     ║  FLASHCARD PAGE                                           ║
+     ╚═══════════════════════════════════════════════════════════╝ -->

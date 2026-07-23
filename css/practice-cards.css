@@ -1,0 +1,12 @@
+/* ═══════════════════════════════════════════
+   🎯 BEST PRACTICE & COMMON MISTAKE CARDS
+   ═══════════════════════════════════════════ */
+.practice-card {
+  padding: 14px 18px; margin: 1em 0;
+  border-radius: var(--radius); border: 1px solid var(--border);
+}
+.practice-card.best { border-left: 4px solid var(--success-border); background: var(--success-bg); }
+.practice-card.mistake { border-left: 4px solid var(--danger-border); background: var(--danger-bg); }
+.practice-card .pc-title { font-weight: 700; margin-bottom: 6px; font-size: 0.95em; }
+.practice-card.best .pc-title { color: var(--success-text); }
+.practice-card.mistake .pc-title { color: var(--danger-text); }

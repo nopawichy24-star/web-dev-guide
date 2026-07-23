@@ -1,0 +1,58 @@
+<div class="section" id="sec-faq">
+  <span class="section-emoji">❓</span>
+  <h1>คำถามที่พบบ่อย (FAQ)</h1>
+
+  <h3>❓ ต้องรู้เขียนโค้ดก่อนเรียนคู่มือนี้ไหม?</h3>
+  <p>ไม่จำเป็น! คู่มือนี้ออกแบบสำหรับผู้เริ่มต้น อธิบายทุกขั้นตอน แต่ถ้ามีพื้นฐาน HTML/CSS/JavaScript มาก่อนจะเข้าใจเร็วขึ้น</p>
+
+  <h3>❓ ใช้ AI เขียนโค้ดทั้งหมดได้ไหม?</h3>
+  <p>ได้ แต่ต้อง<strong>อ่านโค้ดก่อนใช้เสมอ</strong> ตรวจ Security (RLS, Env Vars) ให้ดี และทดสอบก่อน Deploy อย่าเชื่อ AI 100% โดยไม่ตรวจสอบ</p>
+
+  <h3>❓ ทุกอย่างฟรีจริงหรือ?</h3>
+  <p>ใช่! GitHub (Free), Vercel (Hobby plan), Supabase (Free tier — 2 โปรเจกต์, 500MB) เพียงพอสำหรับเรียนรู้และโปรเจกต์เล็ก-กลาง</p>
+
+  <h3>❓ เลือก Next.js ทำไม? ใช้ React ธรรมดาได้ไหม?</h3>
+  <p>ใช้ได้ แต่ Next.js มีข้อดีเพิ่มเติม: routing อัตโนมัติ, <span class="en" data-th="แสดงผลฝั่งเซิร์ฟเวอร์ — เร็วกว่าและ SEO ดีกว่า">Server-Side Rendering</span>, API Routes ในตัว และ Vercel สร้าง Next.js เองจึงรองรับดีที่สุด</p>
+
+  <h3>❓ Push .env ขึ้น GitHub ไปแล้วทำอย่างไร?</h3>
+  <p>1) <strong>เปลี่ยน Key/Secret ทันที</strong> (สำคัญที่สุด!) 2) เอาไฟล์ออก: <code>git rm --cached .env</code> 3) เพิ่ม .gitignore 4) อัปเดต Key ใหม่ทุกที่ ดูรายละเอียดในบท <a onclick="goTo('github')">🐙 GitHub</a></p>
+
+  <h3>❓ เว็บ Deploy แล้วแต่หน้าขาว?</h3>
+  <p>สาเหตุหลัก: Framework ถูกตรวจจับผิด, Root Directory ผิด, หรือ Build error ที่ไม่ได้ดูใน Logs — ไปที่ Vercel Dashboard → Deployments → อ่าน Build Logs</p>
+
+  <h3>❓ ผู้ใช้คนหนึ่งเห็นข้อมูลของอีกคน?</h3>
+  <p>🚨 RLS อาจยังไม่ได้เปิด หรือ Policy ตั้งผิด! ตรวจว่า: 1) RLS เปิดทุกตาราง 2) Policy ใช้ <code>auth.uid() = user_id</code> 3) ไม่มี <code>USING (true)</code> ใน SELECT</p>
+
+  <h3>❓ จะเรียนอะไรต่อ?</h3>
+  <p>หลังจบคู่มือนี้แนะนำ: TypeScript เชิงลึก → React Hooks → Next.js App Router → Tailwind CSS → PostgreSQL → Testing</p>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบรวม — คุณพร้อมสร้างโปรเจกต์จริงแล้วหรือยัง?</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ขั้นตอนทั้งหมดจากเขียนโค้ดจนเว็บออนไลน์มีอะไรบ้าง?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">✏️ เขียนโค้ด → 📝 git commit → 📤 git push → ▲ Vercel build → ⚡ เชื่อม Supabase → 🌍 เว็บออนไลน์!</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">3 กฎเหล็กด้านความปลอดภัยที่สำคัญที่สุดคืออะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🛡️ 1) ห้าม Push .env ขึ้น GitHub 2) ห้ามใช้ service_role key ใน Frontend 3) เปิด RLS ทุกตาราง!</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Secret รั่วไปแล้วต้องทำอะไรเป็นอันดับแรก?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🚨 เปลี่ยน Key/Secret ทันที! การลบไฟล์ออกจาก Git ไม่เพียงพอเพราะยังอยู่ใน History</div>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-title">🎉 ยินดีด้วยที่เรียนจบทุกบท!</div>
+    <p>คุณได้เรียนรู้ทุกอย่างที่จำเป็นสำหรับสร้างเว็บแอปจริงแล้ว! จาก Git → GitHub → Vercel → Supabase → Deploy — ลงมือสร้างโปรเจกต์ของตัวเองได้เลย! 🚀</p>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('glossary')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">📖 คำศัพท์</div></a>
+    <a class="next" onclick="goTo('home')"><div class="nav-label">กลับหน้าแรก →</div><div class="nav-title">🏠 หน้าแรก</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('faq')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

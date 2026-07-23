@@ -1,0 +1,217 @@
+<div class="section" id="sec-vercel">
+  <span class="section-emoji">▲</span>
+  <h1>คู่มือ Vercel ฉบับละเอียด</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge beginner">🟢 Beginner</span>
+    <span class="reading-time">⏱️ อ่าน ~12 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> GitHub พื้นฐาน</div><div class="prereq-item"><span class="prereq-check">✓</span> มี Vercel Account</div>
+  </div>
+  <p><span class="en" data-th="แพลตฟอร์มเผยแพร่เว็บไซต์ — แปลงโค้ดเป็นเว็บออนไลน์อัตโนมัติ">Vercel</span> คือแพลตฟอร์มที่ช่วยนำเว็บไซต์ของเราขึ้นออนไลน์ เชื่อมกับ GitHub แล้วทุกครั้งที่เรา Push โค้ด เว็บจะอัปเดตอัตโนมัติ</p>
+
+  <h2>🤔 Vercel เหมาะกับโปรเจกต์แบบใด?</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ประเภท</th><th>คำอธิบาย</th><th>ตัวอย่าง</th></tr></thead>
+      <tbody>
+        <tr><td><span class="en" data-th="เว็บไซต์ที่เนื้อหาไม่เปลี่ยน — แสดงผลเหมือนกันทุกครั้ง">Static Website</span></td><td>เว็บไซต์ HTML/CSS/JS ธรรมดา</td><td>Portfolio, Landing page</td></tr>
+        <tr><td><span class="en" data-th="แอปพลิเคชันหน้าเดียว — โหลดครั้งเดียวแล้วเปลี่ยนหน้าโดยไม่โหลดใหม่">SPA</span></td><td>Single Page Application</td><td>React app, Vue app</td></tr>
+        <tr><td><span class="en" data-th="เฟรมเวิร์กของ React — มีระบบ routing, server rendering ในตัว">Next.js</span></td><td>⭐ รองรับดีที่สุด (Vercel สร้าง Next.js เอง!)</td><td>เว็บแอปที่มี Backend</td></tr>
+        <tr><td><span class="en" data-th="ฟังก์ชันที่รันบนเซิร์ฟเวอร์เฉพาะตอนถูกเรียก — ไม่ต้องเปิดเซิร์ฟเวอร์ตลอด">Serverless Functions</span></td><td>API ที่รันเมื่อถูกเรียกเท่านั้น</td><td>API endpoint, Webhook</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>📝 สมัคร Vercel</h2>
+  <ol>
+    <li>เข้าเว็บ <strong>vercel.com</strong></li>
+    <li>กด <strong>Sign Up</strong></li>
+    <li>เลือก <strong>Continue with GitHub</strong> (แนะนำ! เชื่อมทีเดียวจบ)</li>
+    <li>อนุญาตให้ Vercel เข้าถึง GitHub</li>
+    <li>เลือกแผน <strong>Hobby</strong> (ฟรี)</li>
+  </ol>
+
+  <h2>🚀 Deploy เว็บไซต์ครั้งแรก (ทีละขั้นตอน)</h2>
+
+  <h3>ขั้นตอนที่ 1: <span class="en" data-th="นำเข้า Repository จาก GitHub เข้ามาที่ Vercel">Import Repository</span></h3>
+  <ol>
+    <li>เข้า Vercel Dashboard → กด <strong>Add New... → Project</strong></li>
+    <li>จะเห็นรายชื่อ Repo จาก GitHub → กด <strong>Import</strong> ที่ Repo ที่ต้องการ</li>
+    <li>ถ้าไม่เห็น Repo → กด <strong>Adjust GitHub App Permissions</strong></li>
+  </ol>
+
+  <h3>ขั้นตอนที่ 2: ตั้งค่า</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ตั้งค่า</th><th>คำอธิบาย</th><th>ตัวอย่าง</th></tr></thead>
+      <tbody>
+        <tr><td><span class="en" data-th="เลือก Framework ที่ใช้ — Vercel จะตั้งค่าให้อัตโนมัติ">Framework Preset</span></td><td>เลือก Framework (ปกติ Vercel ตรวจจับเอง)</td><td>Next.js, React, Other</td></tr>
+        <tr><td><span class="en" data-th="โฟลเดอร์หลักของโค้ด — ปกติคือ root">Root Directory</span></td><td>โฟลเดอร์ที่โค้ดอยู่</td><td><code>./</code> (root)</td></tr>
+        <tr><td><span class="en" data-th="คำสั่งสำหรับสร้างเว็บ — Vercel จะรันคำสั่งนี้ตอน Deploy">Build Command</span></td><td>คำสั่งสร้างเว็บ</td><td><code>npm run build</code></td></tr>
+        <tr><td><span class="en" data-th="โฟลเดอร์ผลลัพธ์หลังจาก Build — เว็บที่พร้อมเปิด">Output Directory</span></td><td>โฟลเดอร์ผลลัพธ์</td><td><code>.next</code> (Next.js), <code>dist</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>ขั้นตอนที่ 3: เพิ่ม <span class="en" data-th="ตัวแปรสภาพแวดล้อม — ค่าลับที่ไม่ควรใส่ในโค้ด เช่น API Key">Environment Variables</span></h3>
+  <p>กด <strong>Environment Variables</strong> แล้วเพิ่ม:</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">env</span><span class="code-where">⚙️ Vercel Dashboard → Environment Variables</span></div>
+    <pre><code>NEXT_PUBLIC_SUPABASE_URL = https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY = eyJhbGc...
+SUPABASE_SERVICE_ROLE_KEY = eyJhbGc...</code></pre>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">🚨 ห้ามใส่ Service Role Key ในโค้ด!</div>
+    <p>ตัวแปรที่ขึ้นต้นด้วย <code>NEXT_PUBLIC_</code> จะถูกเปิดเผยใน Browser! ดังนั้น <code>SUPABASE_SERVICE_ROLE_KEY</code> ต้อง<strong>ไม่มี</strong> prefix <code>NEXT_PUBLIC_</code></p>
+  </div>
+
+  <h3>ขั้นตอนที่ 4: กด Deploy!</h3>
+  <p>กดปุ่ม <strong>Deploy</strong> → Vercel จะ Build โค้ดของเรา → ถ้าสำเร็จจะได้ URL เว็บไซต์ เช่น <code>my-project.vercel.app</code></p>
+
+  <h2>🌍 3 สภาพแวดล้อม ของ Vercel</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>สภาพแวดล้อม</th><th>คืออะไร</th><th>เมื่อไหร่</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>💻 <span class="en" data-th="สภาพแวดล้อมพัฒนา — รันในเครื่องเราที่ localhost">Development</span></td>
+          <td>เครื่องเราที่ <code>localhost:3000</code></td>
+          <td>ตอนเขียนโค้ด</td>
+        </tr>
+        <tr>
+          <td>👁️ <span class="en" data-th="สภาพแวดล้อมตัวอย่าง — URL ชั่วคราวสำหรับทดสอบก่อนเผยแพร่จริง">Preview</span></td>
+          <td>URL ชั่วคราวทุกครั้งที่ Push branch ที่ไม่ใช่ main</td>
+          <td>ทดสอบก่อน merge</td>
+        </tr>
+        <tr>
+          <td>🌍 <span class="en" data-th="สภาพแวดล้อมจริง — เว็บไซต์ที่ผู้ใช้จริงเข้าถึง">Production</span></td>
+          <td>เว็บไซต์จริงที่ <code>your-project.vercel.app</code></td>
+          <td>เมื่อ Push ไป main</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">💜 ประโยชน์ของ Preview</div>
+    <p>ทุกครั้งที่เราสร้าง <span class="en" data-th="คำขอรวมโค้ด">Pull Request</span> Vercel จะสร้าง URL ตัวอย่างให้ทดสอบก่อน ถ้าใช้ได้ดีค่อย Merge เข้า main → Production อัปเดตอัตโนมัติ!</p>
+  </div>
+
+  <!-- ═══ COMMON ERRORS ═══ -->
+  <h2>🔧 ปัญหาที่พบบ่อยบน Vercel</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ปัญหา</th><th>สาเหตุที่เป็นไปได้</th><th>วิธีแก้</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>❌ <span class="en" data-th="การสร้างเว็บล้มเหลว">Build failed</span></td>
+          <td>โค้ดมี Error, import ผิด, TypeScript error</td>
+          <td>อ่าน <span class="en" data-th="บันทึกการทำงาน">Build Logs</span> ใน Vercel → แก้ Error ที่ระบุ → Push ใหม่</td>
+        </tr>
+        <tr>
+          <td>❌ <span class="en" data-th="หาไลบรารี่ไม่เจอ">Module not found</span></td>
+          <td>ลืมติดตั้ง package หรือ import path ผิด</td>
+          <td>รัน <code>npm install</code> แล้ว Push ใหม่ ตรวจ case ชื่อไฟล์</td>
+        </tr>
+        <tr>
+          <td>❌ Env variable <code>undefined</code></td>
+          <td>ลืมเพิ่มใน Vercel Dashboard หรือชื่อผิด</td>
+          <td>ตรวจชื่อตัวแปรให้ตรงกับโค้ด ตรวจ prefix <code>NEXT_PUBLIC_</code></td>
+        </tr>
+        <tr>
+          <td>❌ Deploy สำเร็จแต่หน้าขาว</td>
+          <td>Root Directory ผิด หรือ Framework ถูกตรวจจับผิด</td>
+          <td>ไปที่ Settings → General → ตรวจ Framework Preset + Root Directory</td>
+        </tr>
+        <tr>
+          <td>❌ Route เปิดตรงแล้ว <code>404</code></td>
+          <td>SPA ต้อง config rewrites</td>
+          <td>Next.js ไม่มีปัญหานี้ / SPA อื่นต้องเพิ่ม <code>vercel.json</code> rewrites</td>
+        </tr>
+        <tr>
+          <td>❌ <span class="en" data-th="ข้อผิดพลาดการเข้าถึงข้ามโดเมน — เบราว์เซอร์บล็อกเพราะความปลอดภัย">CORS error</span></td>
+          <td>เรียก API จากโดเมนอื่นโดยไม่ได้ตั้ง headers</td>
+          <td>เพิ่ม CORS headers ในไฟล์ <code>vercel.json</code> หรือ API route</td>
+        </tr>
+        <tr>
+          <td>❌ Case-sensitive filename</td>
+          <td>Mac/Windows ไม่แยกตัวพิมพ์ แต่ Vercel (Linux) แยก</td>
+          <td><code>Header.tsx</code> ≠ <code>header.tsx</code> → ตรวจชื่อไฟล์ให้ตรง import</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">💡 วิธีดู Build Logs</div>
+    <p>Vercel Dashboard → เลือกโปรเจกต์ → Deployments → กดที่ Deployment ล่าสุด → ดู <strong>Build Logs</strong> → หา Error สีแดง — มันจะบอกว่าบรรทัดไหนมีปัญหา</p>
+  </div>
+
+  <h2>🔄 <span class="en" data-th="ย้อนกลับไปเวอร์ชันก่อนหน้า — ถ้า Deploy แล้วเว็บพัง">Rollback</span> — ย้อนกลับเมื่อเว็บพัง</h2>
+  <p>ถ้า Deploy แล้วเว็บมีปัญหา สามารถกลับไปเวอร์ชันก่อนหน้าได้:</p>
+  <ol>
+    <li>เข้า Vercel Dashboard → Deployments</li>
+    <li>หา Deployment ก่อนหน้าที่ใช้งานได้ดี</li>
+    <li>กดจุด 3 จุด (⋯) → <strong>Promote to Production</strong></li>
+  </ol>
+  <div class="callout success">
+    <div class="callout-title">✅ เว็บกลับมาใช้ได้ทันที!</div>
+    <p>แล้วค่อยแก้โค้ดในเครื่อง → Push ใหม่ → Vercel จะ Deploy เวอร์ชันที่แก้แล้วอัตโนมัติ</p>
+  </div>
+
+  <h2>🌐 เชื่อม <span class="en" data-th="ชื่อโดเมนของเราเอง เช่น mysite.com แทน mysite.vercel.app">Custom Domain</span></h2>
+  <ol>
+    <li>Vercel Dashboard → Settings → <strong>Domains</strong></li>
+    <li>พิมพ์โดเมนของคุณ เช่น <code>mysite.com</code></li>
+    <li>Vercel จะบอกค่า <span class="en" data-th="ระบบจัดการชื่อโดเมน — ชี้ชื่อเว็บไปยังเซิร์ฟเวอร์ที่ถูกต้อง">DNS</span> ที่ต้องตั้ง</li>
+    <li>ไปตั้งค่า DNS ที่เว็บผู้ให้บริการโดเมน (เช่น Namecheap, Cloudflare)</li>
+    <li>รอ DNS อัปเดต (อาจใช้เวลา 1-48 ชม.)</li>
+    <li>Vercel จะสร้าง <span class="en" data-th="ใบรับรองความปลอดภัย — ทำให้เว็บมีกุญแจล็อกสีเขียว https://">SSL/HTTPS</span> ให้อัตโนมัติ! 🔒</li>
+  </ol>
+
+  <!-- ═══ QUIZ ═══ -->
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ Vercel</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Push ไป main จะเกิดอะไรบน Vercel?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🌍 Vercel จะ Build + Deploy เป็น Production อัตโนมัติ — เว็บไซต์จริงอัปเดตทันที!</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Preview Deployment คืออะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">👁️ URL ชั่วคราวที่ Vercel สร้างให้ทุกครั้งที่ Push branch ที่ไม่ใช่ main — ไว้ทดสอบก่อน</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Build failed ควรทำอย่างไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📋 อ่าน Build Logs ใน Vercel Dashboard → หา Error สีแดง → แก้ในโค้ด → Push ใหม่</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">NEXT_PUBLIC_ prefix สำคัญอย่างไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🔓 ตัวแปรที่มี NEXT_PUBLIC_ จะถูกเปิดเผยใน Browser! ดังนั้น Secret ห้ามมี prefix นี้</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">เว็บพังหลัง Deploy ทำอย่างไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">⏪ ใช้ Rollback! ไป Deployments → หา Deployment ก่อนหน้า → Promote to Production</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('github')">
+      <div class="nav-label">← ก่อนหน้า</div>
+      <div class="nav-title">🐙 คู่มือ GitHub</div>
+    </a>
+    <a class="next" onclick="goTo('gh-vercel')">
+      <div class="nav-label">ถัดไป →</div>
+      <div class="nav-title">🔗 เชื่อม GitHub + Vercel</div>
+    </a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('vercel')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

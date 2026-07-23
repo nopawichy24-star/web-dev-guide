@@ -1,0 +1,84 @@
+<div class="section" id="sec-ai-workflow">
+  <span class="section-emoji">🔄</span>
+  <h1>AI Workflow — ทำงานร่วมกับ AI</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge intermediate">🟡 Intermediate</span>
+    <span class="reading-time">⏱️ อ่าน ~12 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> Git + GitHub พื้นฐาน</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> Supabase พื้นฐาน</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> เคยใช้ Claude หรือ ChatGPT</div>
+  </div>
+
+  <h2>🔄 Workflow เต็มรูปแบบ</h2>
+  <div class="workflow">
+    <div class="wf-step">1️⃣ 💡 คิด Feature<div class="wf-sub">ต้องการอะไร? ผู้ใช้จะได้อะไร?</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">2️⃣ 📝 เขียน Requirement<div class="wf-sub">Framework? Database? ข้อจำกัด?</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">3️⃣ 🤖 ให้ AI วางแผน<div class="wf-sub">"ช่วยวาง Architecture / ไฟล์ที่ต้องสร้าง"</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">4️⃣ 💻 ให้ AI เขียน Code<div class="wf-sub">ให้เขียนทีละไฟล์ ไม่ใช่ทีเดียวทั้งหมด</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">5️⃣ 👀 Review<div class="wf-sub">อ่านโค้ดทุกบรรทัด! ตรวจ Security</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">6️⃣ 🐛 Debug<div class="wf-sub">รันใน localhost → แก้ Error</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">7️⃣ 🧪 Test<div class="wf-sub">ทดสอบทุก flow: สมัคร, login, CRUD</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">8️⃣ 💾 Commit → Push → Deploy!<div class="wf-sub">เว็บอัปเดตอัตโนมัติ 🎉</div></div>
+  </div>
+
+  <h2>✅ Prompt ที่ดี vs ❌ Prompt ที่ไม่ดี</h2>
+  <div class="compare-grid">
+    <div class="compare-box">
+      <h4>❌ ไม่ดี</h4>
+      <p><code>"ทำ Login"</code></p>
+      <p>← ไม่บอก Framework, Database, ภาษา, ข้อกำหนด อะไรเลย</p>
+    </div>
+    <div class="compare-box">
+      <h4>✅ ดี</h4>
+      <p><code>"สร้างระบบ Login ด้วย Supabase รองรับ Email Login ใช้ Next.js App Router แบ่ง Component ใช้ TypeScript"</code></p>
+    </div>
+  </div>
+
+  <h2>📋 Checklist ก่อนถาม AI</h2>
+  <ul class="checklist" data-checklist="ai-workflow">
+    <li><input type="checkbox" id="aw1"><label for="aw1">✓ Requirement ชัดเจน — ต้องการอะไร?</label></li>
+    <li><input type="checkbox" id="aw2"><label for="aw2">✓ Framework ชัด — Next.js? React? Vue?</label></li>
+    <li><input type="checkbox" id="aw3"><label for="aw3">✓ Database ชัด — Supabase? Firebase?</label></li>
+    <li><input type="checkbox" id="aw4"><label for="aw4">✓ Output ที่ต้องการ — ไฟล์อะไร? โค้ดเต็ม?</label></li>
+    <li><input type="checkbox" id="aw5"><label for="aw5">✓ ไม่มี Secret ในข้อความ</label></li>
+  </ul>
+
+  <div class="practice-card mistake">
+    <div class="pc-title">❌ Common Mistake</div>
+    <p>ขอ AI เขียนทั้งโปรเจกต์ในครั้งเดียว → โค้ดจะยาวเกิน ผิดพลาดเยอะ ไม่เข้าใจ — <strong>ขอทีละฟีเจอร์ ทีละไฟล์</strong></p>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ก่อนให้ AI เขียนโค้ด ควรทำอะไรก่อน?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📝 เขียน Requirement ให้ชัด: Framework, Database, ภาษา, ข้อกำหนด → แล้วให้ AI วางแผนก่อนเขียนโค้ด</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">หลัง AI เขียนโค้ดให้แล้ว ต้องทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">👀 Review → 🐛 Debug → 🧪 Test → 💾 Commit อย่าใช้โค้ดโดยไม่อ่านเด็ดขาด!</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('ai-coding')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🤖 AI ช่วยเขียนโค้ด</div></a>
+    <a class="next" onclick="goTo('debugging')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🐛 Debugging</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('ai-workflow')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗
+     ║  NEW: Debugging                                           ║
+     ╚═══════════════════════════════════════════════════════════╝ -->

@@ -1,0 +1,250 @@
+<div class="section" id="sec-supabase">
+  <span class="section-emoji">⚡</span>
+  <h1>คู่มือ Supabase ฉบับละเอียด</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge beginner">🟢 Beginner</span>
+    <span class="reading-time">⏱️ อ่าน ~15 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> มี Supabase Account</div>
+  </div>
+  <p><span class="en" data-th="แพลตฟอร์ม Backend สำเร็จรูป — ฐานข้อมูล + ระบบสมาชิก + เก็บไฟล์ พร้อมใช้ ไม่ต้องเขียนเซิร์ฟเวอร์เอง">Supabase</span> คือบริการ <span class="en" data-th="Backend สำเร็จรูป — ให้ระบบหลังบ้านพร้อมใช้โดยไม่ต้องสร้างเอง">Backend-as-a-Service</span> ที่ให้เราได้ฐานข้อมูล, ระบบสมาชิก, เก็บไฟล์ และ API พร้อมใช้ทันที</p>
+
+  <h2>🧩 องค์ประกอบหลักของ Supabase</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ส่วน</th><th>คืออะไร</th><th>ใช้ทำอะไร</th></tr></thead>
+      <tbody>
+        <tr><td>🗄️ <span class="en" data-th="ฐานข้อมูล PostgreSQL — ฐานข้อมูลระดับมืออาชีพที่เสถียรและทรงพลัง">Database</span></td><td>ฐานข้อมูล PostgreSQL</td><td>เก็บข้อมูลทั้งหมด (สมาชิก, โพสต์, สินค้า)</td></tr>
+        <tr><td>👤 <span class="en" data-th="ระบบจัดการสมาชิก — สมัคร, เข้าสู่ระบบ, ออกจากระบบ">Auth</span></td><td>ระบบสมาชิก</td><td>สมัคร/เข้าสู่ระบบ ด้วย Email, Google, LINE</td></tr>
+        <tr><td>📁 <span class="en" data-th="ที่เก็บไฟล์ — อัปโหลดรูป, วิดีโอ, เอกสาร">Storage</span></td><td>เก็บไฟล์</td><td>อัปโหลดรูปภาพ, เอกสาร</td></tr>
+        <tr><td>⚡ <span class="en" data-th="อัปเดตข้อมูลทันที — เห็นการเปลี่ยนแปลงแบบ real-time โดยไม่ต้อง refresh">Realtime</span></td><td>ข้อมูลอัปเดตทันที</td><td>แชท, แจ้งเตือน, Dashboard สด</td></tr>
+        <tr><td>🛡️ <span class="en" data-th="ระบบรักษาความปลอดภัยระดับแถว — กำหนดว่าใครเห็นข้อมูลแถวไหน">RLS</span></td><td>Row Level Security</td><td>กำหนดว่าใครเข้าถึงข้อมูลอะไรได้</td></tr>
+        <tr><td>🔗 <span class="en" data-th="ช่องทางเรียกใช้ข้อมูลจากโค้ด — Supabase สร้าง API ให้อัตโนมัติ">API</span></td><td>API อัตโนมัติ</td><td>เรียกใช้ข้อมูลจากโค้ด JavaScript</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>📝 สมัครและสร้างโปรเจกต์</h2>
+  <ol>
+    <li>เข้าเว็บ <strong>supabase.com</strong> → กด <strong>Start your project</strong></li>
+    <li>สมัครด้วย <strong>GitHub</strong> (แนะนำ — เชื่อมทีเดียวจบ)</li>
+    <li>กด <strong>New project</strong></li>
+    <li>ตั้งชื่อ Project (เช่น <code>my-task-app</code>)</li>
+    <li>ตั้ง<strong>รหัสผ่าน Database</strong> — จดไว้ให้ดี! ใช้แก้ไข Database โดยตรง</li>
+    <li>เลือก <span class="en" data-th="ตำแหน่งเซิร์ฟเวอร์ — เลือกใกล้กลุ่มผู้ใช้ จะเร็วกว่า">Region</span> → เลือก <strong>Northeast Asia (Tokyo)</strong> ถ้าผู้ใช้อยู่เอเชีย</li>
+    <li>กด <strong>Create new project</strong> → รอ 1-2 นาที</li>
+  </ol>
+
+  <div class="callout danger">
+    <div class="callout-title">🚨 จำรหัสผ่าน Database!</div>
+    <p>รหัสผ่านนี้<strong>ดูซ้ำไม่ได้</strong>หลังสร้างโปรเจกต์แล้ว ถ้าลืมต้อง Reset ใหม่ และห้ามเปิดเผยรหัสนี้เด็ดขาด!</p>
+  </div>
+
+  <h2>🔑 Key สำคัญ 3 ตัว</h2>
+  <p>หลังสร้างโปรเจกต์แล้ว ไปที่ Settings → API จะเห็น:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ชื่อ</th><th>คืออะไร</th><th>ใช้ที่ไหน</th><th>ความปลอดภัย</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="en" data-th="URL ของโปรเจกต์ — ที่อยู่สำหรับเชื่อมต่อ">Project URL</span></td>
+          <td>ที่อยู่ API ของโปรเจกต์</td>
+          <td>Frontend ✅</td>
+          <td>🟢 เปิดเผยได้</td>
+        </tr>
+        <tr>
+          <td><span class="en" data-th="กุญแจสาธารณะ — ใช้ฝั่ง Frontend ได้ แต่ต้องมี RLS ป้องกัน">anon key</span></td>
+          <td>กุญแจสำหรับ Frontend</td>
+          <td>Frontend ✅</td>
+          <td>🟡 เปิดเผยได้ถ้ามี RLS</td>
+        </tr>
+        <tr>
+          <td><span class="en" data-th="กุญแจพิเศษ — ข้าม RLS ได้ทั้งหมด เข้าถึงข้อมูลทุกอย่าง อันตรายมาก!">service_role key</span></td>
+          <td>กุญแจ Admin สูงสุด</td>
+          <td>Server เท่านั้น ⚠️</td>
+          <td>🔴 ห้ามเปิดเผยเด็ดขาด!</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">🚨 service_role key อันตรายมาก!</div>
+    <p>Key นี้<strong>ข้าม RLS ได้ทั้งหมด</strong> — ถ้าใครได้ไป จะเข้าถึง/แก้ไข/ลบข้อมูลทุกอย่างในฐานข้อมูลได้ ห้ามใส่ในโค้ด Frontend! ห้ามมี prefix <code>NEXT_PUBLIC_</code>!</p>
+  </div>
+
+  <h2>📊 สร้าง Table (ตาราง)</h2>
+  <p>ลองนึกว่า <span class="en" data-th="ตาราง — เหมือนแผ่น Excel 1 แผ่น">Table</span> คือตาราง Excel แต่ละแผ่น:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>คำศัพท์</th><th>เทียบกับ Excel</th><th>ตัวอย่าง</th></tr></thead>
+      <tbody>
+        <tr><td><span class="en" data-th="ตาราง — กลุ่มข้อมูลประเภทเดียวกัน">Table</span></td><td>แผ่นงาน (Sheet)</td><td>ตาราง users, ตาราง tasks</td></tr>
+        <tr><td><span class="en" data-th="แถว — ข้อมูล 1 รายการ">Row</span></td><td>แถว (แต่ละรายการ)</td><td>ผู้ใช้คนที่ 1, Task ที่ 1</td></tr>
+        <tr><td><span class="en" data-th="คอลัมน์ — ช่องข้อมูล 1 ประเภท">Column</span></td><td>คอลัมน์ (หัวข้อ)</td><td>ชื่อ, อีเมล, วันที่สร้าง</td></tr>
+        <tr><td><span class="en" data-th="คีย์หลัก — รหัสเฉพาะไม่ซ้ำกัน ใช้ระบุแถว">Primary Key</span></td><td>ลำดับที่ (ไม่ซ้ำกัน)</td><td>id</td></tr>
+        <tr><td><span class="en" data-th="คีย์อ้างอิง — เชื่อมโยงข้อมูลกับตารางอื่น">Foreign Key</span></td><td>ลิงก์ไปอีก Sheet</td><td>user_id → users.id</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>สร้าง Table ผ่าน Dashboard</h3>
+  <ol>
+    <li>เข้า Supabase Dashboard → <strong>Table Editor</strong></li>
+    <li>กด <strong>Create a new table</strong></li>
+    <li>ตั้งชื่อ (เช่น <code>tasks</code>)</li>
+    <li>✅ เปิด <strong>Enable Row Level Security</strong> (สำคัญมาก!)</li>
+    <li>เพิ่ม Column ตามต้องการ</li>
+    <li>กด <strong>Save</strong></li>
+  </ol>
+
+  <h3>หรือสร้างด้วย SQL</h3>
+  <p>ไปที่ <strong>SQL Editor</strong> แล้วรัน:</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">sql</span><span class="code-where">⚡ Supabase → SQL Editor</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>-- ตาราง profiles (ข้อมูลผู้ใช้)
+CREATE TABLE profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  username TEXT UNIQUE,
+  full_name TEXT,
+  avatar_url TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- ตาราง tasks (รายการงาน)
+CREATE TABLE tasks (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
+  title TEXT NOT NULL,
+  completed BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- เปิด RLS ทั้ง 2 ตาราง (สำคัญมาก!)
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;</code></pre>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠️ เปิด RLS ทุกตารางเสมอ!</div>
+    <p>ถ้าไม่เปิด RLS ใครก็สามารถอ่าน/แก้/ลบข้อมูลทุกอย่างได้ผ่าน <span class="en" data-th="กุญแจสาธารณะ">anon key</span> ที่อยู่ในโค้ด Frontend! ดูรายละเอียดเรื่อง RLS ในบท 🛡️ Security</p>
+  </div>
+
+  <h2>📝 SQL พื้นฐานที่ต้องรู้</h2>
+
+  <h3>อ่านข้อมูล</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">sql</span><span class="code-where">⚡ SQL Editor</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>-- อ่านทุกแถว ทุกคอลัมน์
+SELECT * FROM tasks;
+
+-- อ่านเฉพาะบางคอลัมน์
+SELECT title, completed FROM tasks;
+
+-- กรองด้วยเงื่อนไข
+SELECT * FROM tasks WHERE completed = false;
+
+-- เรียงลำดับ
+SELECT * FROM tasks ORDER BY created_at DESC;
+
+-- จำกัดจำนวน
+SELECT * FROM tasks LIMIT 10;
+
+-- รวมเงื่อนไข
+SELECT * FROM tasks
+  WHERE user_id = 'xxx' AND completed = false
+  ORDER BY created_at DESC
+  LIMIT 20;</code></pre>
+  </div>
+
+  <h3>เพิ่มข้อมูล</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">sql</span><span class="code-where">⚡ SQL Editor</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>INSERT INTO tasks (user_id, title)
+VALUES ('uuid-ของผู้ใช้', 'ซื้อของที่ตลาด');</code></pre>
+  </div>
+
+  <h3>แก้ไขข้อมูล</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">sql</span><span class="code-where">⚡ SQL Editor</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>UPDATE tasks
+SET completed = true
+WHERE id = 'uuid-ของ-task';</code></pre>
+  </div>
+
+  <h3>ลบข้อมูล</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">sql</span><span class="code-where">⚡ SQL Editor</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>-- ลบแถวที่ระบุ
+DELETE FROM tasks WHERE id = 'uuid-ของ-task';</code></pre>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">🚨 อันตราย! DELETE และ DROP</div>
+    <p><code>DELETE FROM tasks;</code> (ไม่มี WHERE) จะ<strong>ลบข้อมูลทั้งตาราง!</strong><br>
+    <code>DROP TABLE tasks;</code> จะ<strong>ลบตารางทั้งตัว!</strong><br>
+    ตรวจสอบ WHERE ให้แน่ใจทุกครั้งก่อนรัน DELETE! และห้ามรัน DROP บน Production โดยไม่มี Backup!</p>
+  </div>
+
+  <h2>⚡ Realtime — อัปเดตข้อมูลทันที</h2>
+  <p><span class="en" data-th="ข้อมูลเปลี่ยนแปลงแบบเรียลไทม์ — เห็นการเปลี่ยนแปลงทันทีโดยไม่ต้อง refresh">Realtime</span> ทำให้เว็บอัปเดตข้อมูลทันทีที่มีการเปลี่ยนแปลง ไม่ต้อง refresh!</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">ts</span><span class="code-where">📄 ตัวอย่างโค้ด — ฟังการเปลี่ยนแปลง tasks</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>// ฟังเมื่อมีการเพิ่ม/แก้/ลบ Task
+const channel = supabase
+  .channel('tasks-changes')
+  .on(
+    'postgres_changes',
+    {
+      event: '*',          // ฟังทุก event (INSERT/UPDATE/DELETE)
+      schema: 'public',
+      table: 'tasks'
+    },
+    (payload) => {
+      console.log('ข้อมูลเปลี่ยน:', payload)
+      // โหลด Tasks ใหม่
+      loadTasks()
+    }
+  )
+  .subscribe()
+
+// ยกเลิกการฟังเมื่อไม่ใช้แล้ว
+// supabase.removeChannel(channel)</code></pre>
+  </div>
+  <div class="callout info">
+    <div class="callout-title">💡 ใช้ Realtime เมื่อไหร่?</div>
+    <p>เหมาะกับ: แชท, แจ้งเตือน, Dashboard สด, collaborative editing — <strong>ไม่ต้องใช้ทุกโปรเจกต์</strong> ถ้าข้อมูลไม่ต้องอัปเดตทันทีก็ไม่ต้องใช้</p>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ Supabase</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🟡 anon key ใช้ฝั่ง Frontend ได้ (มี RLS คุ้มครอง) / 🔴 service_role key ข้าม RLS ได้ทั้งหมด ห้ามใช้ฝั่ง Frontend เด็ดขาด!</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">RLS คืออะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🛡️ Row Level Security — ระบบกำหนดว่าใครเข้าถึงข้อมูลแถวไหนได้ เช่น ผู้ใช้เห็นเฉพาะ Task ของตัวเอง</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ทำไม DELETE ไม่มี WHERE ถึงอันตราย?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🚨 เพราะจะลบข้อมูลทุกแถวในตาราง! ต้องระบุ WHERE เสมอเพื่อกำหนดว่าจะลบแถวไหน</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('gh-vercel')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🔗 GitHub + Vercel</div></a>
+    <a class="next" onclick="goTo('connect-supa')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🔌 เชื่อมเว็บ + Supabase</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="
+  <div class="callout tip">
+    <div class="callout-title">🎯 Mini Project — ลองทำ!</div>
+    <p>สร้าง Project ใน Supabase → สร้างตาราง <code>notes</code> (id, title, content, created_at) → เพิ่มข้อมูล 3 แถว → ลองใช้ SQL SELECT/INSERT/UPDATE/DELETE</p>
+  </div>
+  toggleComplete('supabase')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

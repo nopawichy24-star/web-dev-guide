@@ -1,0 +1,36 @@
+/* ═══════════════════════════════════════════
+   📐 BASE RESET & TYPOGRAPHY
+   ═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  font-size: 16px;
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Prevent double-tap zoom on interactive elements */
+button, .en, .quiz-card, .nav-item, .fc-btn-know, .fc-btn-dunno, .fc-btn-show,
+.section-complete-btn, .checklist label, .fc-start-btn, .fc-card-item,
+.fc-page-card, .popup-actions button {
+  touch-action: manipulation;
+}
+
+h1 { font-size: 1.8em; font-weight: 700; margin: 0.8em 0 0.4em; line-height: 1.3; }
+h2 { font-size: 1.45em; font-weight: 700; margin: 1.2em 0 0.4em; padding-bottom: 0.3em; border-bottom: 2px solid var(--border); }
+h3 { font-size: 1.15em; font-weight: 600; margin: 1em 0 0.3em; }
+h4 { font-size: 1em; font-weight: 600; margin: 0.8em 0 0.2em; color: var(--text-secondary); }
+
+p { margin: 0.6em 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { font-weight: 600; }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.5em 0; }
+
+ul, ol { padding-left: 1.5em; margin: 0.5em 0; }
+li { margin: 0.3em 0; }

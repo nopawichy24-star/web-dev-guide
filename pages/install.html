@@ -1,0 +1,189 @@
+<div class="section" id="sec-install">
+  <span class="section-emoji">🔧</span>
+  <h1>ติดตั้งเครื่องมือ</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge beginner">🟢 Beginner</span>
+    <span class="reading-time">⏱️ อ่าน ~10 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> พื้นฐาน Command Line</div>
+  </div>
+  <p>ก่อนเริ่มพัฒนาเว็บ เราต้องติดตั้งเครื่องมือ 3 อย่างนี้:</p>
+
+  <h2>1️⃣ ติดตั้ง <span class="en" data-th="โปรแกรมรันภาษา JavaScript — ทำให้คอมฯ รัน JavaScript ได้">Node.js</span></h2>
+  <p>Node.js ทำให้คอมพิวเตอร์ของเราสามารถรันโค้ด <span class="en" data-th="ภาษาโปรแกรมยอดนิยม — ใช้ทำทั้งเว็บและแอป">JavaScript</span> ได้ และมาพร้อมกับ <span class="en" data-th="ตัวจัดการไลบรารี่">npm</span></p>
+
+  <h3>📥 วิธีติดตั้ง</h3>
+  <ol>
+    <li>เข้าเว็บ <strong>nodejs.org</strong></li>
+    <li>กดดาวน์โหลดเวอร์ชัน <span class="en" data-th="เวอร์ชันที่เสถียร แนะนำสำหรับงานจริง — ตัวเลขคู่ เช่น 20, 22">LTS</span> (Long Term Support — เวอร์ชันที่เสถียร)</li>
+    <li>เปิดไฟล์ที่ดาวน์โหลดมา แล้วกด Next/ตกลง ไปเรื่อยๆ จนเสร็จ</li>
+  </ol>
+
+  <h3>✅ ตรวจสอบว่าติดตั้งสำเร็จ</h3>
+  <p>เปิด <span class="en" data-th="หน้าต่างพิมพ์คำสั่ง">Terminal</span> แล้วพิมพ์:</p>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <span class="code-where">💻 Terminal</span>
+      <button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button>
+    </div>
+    <pre><code>node --version
+npm --version</code></pre>
+  </div>
+  <p><strong>ผลลัพธ์ที่ควรเห็น:</strong> (ตัวเลขอาจต่างกันเล็กน้อย)</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">output</span></div>
+    <pre><code>v22.15.0
+10.9.2</code></pre>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠️ ถ้าขึ้นว่า "command not found"</div>
+    <p>หมายความว่ายังไม่ได้ติดตั้ง หรือติดตั้งไม่สำเร็จ ให้ลองปิด Terminal แล้วเปิดใหม่ ถ้ายังไม่ได้ ให้ดาวน์โหลดและติดตั้งใหม่อีกครั้ง</p>
+  </div>
+
+  <hr>
+
+  <h2>2️⃣ ติดตั้ง <span class="en" data-th="ระบบควบคุมเวอร์ชัน — ติดตามทุกการเปลี่ยนแปลงของไฟล์โค้ด">Git</span></h2>
+
+  <h3>📥 วิธีติดตั้ง</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ระบบ</th><th>วิธีติดตั้ง</th></tr></thead>
+      <tbody>
+        <tr><td>🪟 Windows</td><td>ดาวน์โหลดจาก <strong>git-scm.com</strong> → ติดตั้ง → กด Next ไปเรื่อยๆ (ใช้ค่าเริ่มต้นได้เลย)</td></tr>
+        <tr><td>🍎 Mac</td><td>เปิด Terminal พิมพ์ <code>git --version</code> → ถ้ายังไม่มี ระบบจะถามให้ติดตั้ง → กดตกลง</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>✅ ตรวจสอบว่าติดตั้งสำเร็จ</h3>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <span class="code-where">💻 Terminal</span>
+      <button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button>
+    </div>
+    <pre><code>git --version</code></pre>
+  </div>
+  <p><strong>ผลลัพธ์ที่ควรเห็น:</strong></p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">output</span></div>
+    <pre><code>git version 2.47.1</code></pre>
+  </div>
+
+  <h3>⚙️ ตั้งค่า Git (ทำครั้งเดียว)</h3>
+  <p>หลังติดตั้ง Git แล้ว ต้องบอก Git ว่าเราชื่ออะไร ใช้อีเมลอะไร:</p>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <span class="code-where">💻 Terminal</span>
+      <button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button>
+    </div>
+    <pre><code># เปลี่ยน "ชื่อของคุณ" เป็นชื่อจริงของคุณ
+git config --global user.name "ชื่อของคุณ"
+
+# เปลี่ยนเป็นอีเมลที่ใช้สมัคร GitHub
+git config --global user.email "your-email@example.com"</code></pre>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">💡 อธิบาย</div>
+    <p><code>--global</code> หมายถึงตั้งค่าสำหรับทุกโปรเจกต์ในเครื่องนี้ ข้อมูลนี้จะแสดงใน <span class="en" data-th="ประวัติการเปลี่ยนแปลง — ใครเปลี่ยนอะไร เมื่อไหร่">commit history</span> ของ Git ไม่ใช่รหัสผ่าน!</p>
+  </div>
+
+  <h3>✅ ตรวจสอบค่าที่ตั้ง</h3>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <span class="code-where">💻 Terminal</span>
+      <button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button>
+    </div>
+    <pre><code>git config --global user.name
+git config --global user.email</code></pre>
+  </div>
+  <p>ถ้าแสดงชื่อและอีเมลที่เราตั้งไว้ = สำเร็จ! ✅</p>
+
+  <hr>
+
+  <h2>3️⃣ ติดตั้ง <span class="en" data-th="Visual Studio Code — โปรแกรมเขียนโค้ดยอดนิยม ใช้ฟรี">VS Code</span></h2>
+
+  <h3>📥 วิธีติดตั้ง</h3>
+  <ol>
+    <li>เข้าเว็บ <strong>code.visualstudio.com</strong></li>
+    <li>กดดาวน์โหลดตามระบบปฏิบัติการ</li>
+    <li>ติดตั้งตามขั้นตอน</li>
+  </ol>
+
+  <h3>🔌 <span class="en" data-th="ส่วนเสริมที่เพิ่มความสามารถให้ VS Code">Extensions</span> ที่แนะนำ</h3>
+  <p>เปิด VS Code → กดไอคอน Extensions ที่ Sidebar ซ้าย (หรือกด <code>Ctrl+Shift+X</code>) → ค้นหาและติดตั้ง:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Extension</th><th>ทำอะไร</th></tr></thead>
+      <tbody>
+        <tr><td><span class="en" data-th="ตรวจสอบรูปแบบโค้ด JavaScript — ช่วยหาข้อผิดพลาด">ESLint</span></td><td>ตรวจสอบโค้ด JavaScript/TypeScript</td></tr>
+        <tr><td><span class="en" data-th="จัดรูปแบบโค้ดให้สวยอัตโนมัติ">Prettier</span></td><td>จัดรูปแบบโค้ดอัตโนมัติ</td></tr>
+        <tr><td><span class="en" data-th="จำลองเว็บเซิร์ฟเวอร์ — เปิดไฟล์ HTML ดูผลเลย">Live Server</span></td><td>ดูผลเว็บไซต์แบบ real-time</td></tr>
+        <tr><td><span class="en" data-th="ช่วยเรื่อง Git ใน VS Code — เห็นว่าใครแก้บรรทัดไหน">GitLens</span></td><td>ดูประวัติ Git ใน VS Code</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <h2>✅ Checklist สรุป</h2>
+  <ul class="checklist" data-checklist="install">
+    <li><input type="checkbox" id="inst1"><label for="inst1">ติดตั้ง Node.js แล้ว — <code>node --version</code> แสดงเวอร์ชัน</label></li>
+    <li><input type="checkbox" id="inst2"><label for="inst2">ติดตั้ง npm แล้ว — <code>npm --version</code> แสดงเวอร์ชัน</label></li>
+    <li><input type="checkbox" id="inst3"><label for="inst3">ติดตั้ง Git แล้ว — <code>git --version</code> แสดงเวอร์ชัน</label></li>
+    <li><input type="checkbox" id="inst4"><label for="inst4">ตั้งชื่อใน Git แล้ว — <code>git config --global user.name</code></label></li>
+    <li><input type="checkbox" id="inst5"><label for="inst5">ตั้งอีเมลใน Git แล้ว — <code>git config --global user.email</code></label></li>
+    <li><input type="checkbox" id="inst6"><label for="inst6">ติดตั้ง VS Code แล้ว</label></li>
+    <li><input type="checkbox" id="inst7"><label for="inst7">ติดตั้ง Extensions แล้ว (อย่างน้อย Prettier)</label></li>
+  </ul>
+
+  <div class="callout success">
+    <div class="callout-title">🎉 ยินดีด้วย!</div>
+    <p>ถ้าทำ Checklist ครบแล้ว เครื่องของคุณพร้อมพัฒนาเว็บแล้ว! บทถัดไปจะเริ่มเรียน Git อย่างละเอียด</p>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">LTS ย่อมาจากอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">Long Term Support — เวอร์ชันที่ได้รับการดูแลรักษานาน เสถียรที่สุด แนะนำให้ใช้</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">git config --global ทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">⚙️ ตั้งค่า Git สำหรับทุกโปรเจกต์ในเครื่อง (เช่น ชื่อ, อีเมล)</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">npm คืออะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📦 Node Package Manager — ตัวจัดการไลบรารี่ของ JavaScript ติดตั้งมาพร้อม Node.js</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('cli')">
+      <div class="nav-label">← ก่อนหน้า</div>
+      <div class="nav-title">⌨️ Command Line</div>
+    </a>
+    <a class="next" onclick="goTo('git')">
+      <div class="nav-label">ถัดไป →</div>
+      <div class="nav-title">📦 คู่มือ Git (เร็วๆนี้)</div>
+    </a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('install')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>
+
+
+<!-- ═══════ PLACEHOLDER FOR FUTURE SECTIONS ═══════ -->
+<!-- ╔═══════════════════════════════════════════════════════════╗
+     ║  REACT FUNDAMENTALS                                       ║
+     ╚═══════════════════════════════════════════════════════════╝ -->

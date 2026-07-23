@@ -1,0 +1,22 @@
+/* ═══════════════════════════════════════════
+   🔀 PREV / NEXT NAVIGATION
+   ═══════════════════════════════════════════ */
+.page-nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 3em;
+  padding-top: 1.5em;
+  border-top: 2px solid var(--border);
+}
+.page-nav a {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.page-nav a:hover { border-color: var(--accent); box-shadow: var(--shadow); }
+.page-nav .nav-label { font-size: 0.75em; color: var(--text-muted); }
+.page-nav .nav-title { font-weight: 600; color: var(--text); }
+.page-nav .next { text-align: right; }

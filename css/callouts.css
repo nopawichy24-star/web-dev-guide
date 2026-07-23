@@ -1,0 +1,17 @@
+/* ═══════════════════════════════════════════
+   📦 CALLOUT BOXES
+   ═══════════════════════════════════════════ */
+.callout {
+  padding: 14px 18px;
+  border-radius: var(--radius);
+  border-left: 4px solid;
+  margin: 1em 0;
+  font-size: 0.95em;
+}
+.callout-title { font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+
+.callout.info { background: var(--info-bg); border-color: var(--info-border); color: var(--info-text); }
+.callout.tip { background: var(--tip-bg); border-color: var(--tip-border); color: var(--tip-text); }
+.callout.warning { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn-text); }
+.callout.danger { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger-text); }
+.callout.success { background: var(--success-bg); border-color: var(--success-border); color: var(--success-text); }

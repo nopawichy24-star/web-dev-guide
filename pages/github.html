@@ -1,0 +1,364 @@
+<div class="section" id="sec-github">
+  <span class="section-emoji">🐙</span>
+  <h1>คู่มือ GitHub ฉบับละเอียด</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge beginner">🟢 Beginner</span>
+    <span class="reading-time">⏱️ อ่าน ~15 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> Git พื้นฐาน</div><div class="prereq-item"><span class="prereq-check">✓</span> มี GitHub Account</div>
+  </div>
+  <p><span class="en" data-th="เว็บไซต์เก็บโค้ดบนคลาวด์ — เหมือน Google Drive สำหรับโค้ด ทำงานร่วมกับทีมได้">GitHub</span> คือเว็บไซต์ที่เก็บโค้ดของเราไว้บน <span class="en" data-th="คลาวด์ — เซิร์ฟเวอร์บนอินเทอร์เน็ต">Cloud</span> เพื่อสำรองข้อมูล ทำงานร่วมกัน และเชื่อมกับ Vercel เพื่อ Deploy เว็บ</p>
+
+  <!-- ═══ SIGN UP ═══ -->
+  <h2>📝 สมัครบัญชี GitHub</h2>
+  <ol>
+    <li>เข้าเว็บ <strong>github.com</strong></li>
+    <li>กด <strong>Sign up</strong></li>
+    <li>กรอก<strong>อีเมล</strong>, ตั้ง<strong>รหัสผ่าน</strong>, ตั้ง<strong>ชื่อผู้ใช้</strong> (username)</li>
+    <li>ยืนยันอีเมล</li>
+    <li>เลือกแผน <strong>Free</strong> (ฟรีเพียงพอสำหรับงานส่วนตัว)</li>
+  </ol>
+  <div class="callout tip">
+    <div class="callout-title">💜 แนะนำชื่อ Username</div>
+    <p>ใช้ชื่อที่เป็นมืออาชีพ เช่น <code>nopawich</code> หรือ <code>nopawich-dev</code> — เพราะ URL โปรเจกต์จะเป็น <code>github.com/ชื่อคุณ/ชื่อโปรเจกต์</code></p>
+  </div>
+
+  <!-- ═══ CREATE REPO ═══ -->
+  <h2>📁 สร้าง <span class="en" data-th="ที่เก็บโค้ดทั้งโปรเจกต์บน GitHub">Repository</span></h2>
+  <ol>
+    <li>กดปุ่ม <strong>+</strong> มุมบนขวา → <strong>New repository</strong></li>
+    <li>ตั้งชื่อ Repository (เช่น <code>my-first-website</code>)</li>
+    <li>เลือก <span class="en" data-th="สาธารณะ — ทุกคนเห็นโค้ดได้">Public</span> หรือ <span class="en" data-th="ส่วนตัว — เฉพาะคนที่ได้รับเชิญเท่านั้น">Private</span></li>
+    <li>✅ ติ๊ก <strong>Add a README file</strong></li>
+    <li>✅ ติ๊ก <strong>Add .gitignore</strong> → เลือก <code>Node</code></li>
+    <li>กด <strong>Create repository</strong></li>
+  </ol>
+
+  <h3>🆚 Public vs Private</h3>
+  <div class="compare-grid">
+    <div class="compare-box">
+      <h4>🌍 <span class="en" data-th="เปิดสาธารณะ — ทุกคนเห็นโค้ดได้ แต่แก้ไขไม่ได้ถ้าไม่ได้รับอนุญาต">Public</span></h4>
+      <p>ทุกคนเห็นโค้ดได้ เหมาะสำหรับ <span class="en" data-th="โครงการที่เปิดให้ทุกคนใช้และพัฒนาต่อได้ฟรี">Open Source</span> หรือเว็บ Portfolio</p>
+    </div>
+    <div class="compare-box">
+      <h4>🔒 <span class="en" data-th="ส่วนตัว — เฉพาะเจ้าของและคนที่ได้รับเชิญเท่านั้น">Private</span></h4>
+      <p>เฉพาะเราและคนที่เชิญเท่านั้น เหมาะสำหรับโปรเจกต์ลูกค้า หรืองานส่วนตัว</p>
+    </div>
+  </div>
+
+  <!-- ═══ KEY FEATURES ═══ -->
+  <h2>🧩 ฟีเจอร์สำคัญของ GitHub</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ฟีเจอร์</th><th>คืออะไร</th><th>ใช้เมื่อไหร่</th></tr></thead>
+      <tbody>
+        <tr><td>📘 <span class="en" data-th="ไฟล์อธิบายโปรเจกต์ — หน้าแรกที่คนเห็นเมื่อเข้า Repo">README</span></td><td>ไฟล์อธิบายโปรเจกต์</td><td>ทุกโปรเจกต์ต้องมี!</td></tr>
+        <tr><td>🙈 <span class="en" data-th="ไฟล์บอก Git ว่าอย่าติดตามไฟล์ไหน เช่น node_modules, .env">.gitignore</span></td><td>รายชื่อไฟล์ที่ Git จะไม่ติดตาม</td><td>ป้องกัน Secret, node_modules</td></tr>
+        <tr><td>📜 <span class="en" data-th="สัญญาอนุญาตใช้งาน — บอกว่าคนอื่นเอาโค้ดไปใช้ได้แค่ไหน">License</span></td><td>สัญญาอนุญาตใช้งาน</td><td>โปรเจกต์ Open Source</td></tr>
+        <tr><td>🐛 <span class="en" data-th="ระบบแจ้งปัญหา/ข้อเสนอแนะ — เหมือนกระดานบันทึกบั๊กและไอเดีย">Issues</span></td><td>แจ้งบั๊กหรือเสนอฟีเจอร์</td><td>ติดตามงานและปัญหา</td></tr>
+        <tr><td>🔀 <span class="en" data-th="คำขอรวมโค้ด — ส่งโค้ดให้คนอื่นตรวจก่อนรวมเข้า Branch หลัก">Pull Request</span></td><td>ขอรวมโค้ดจาก Branch หนึ่งเข้า Branch หลัก</td><td>ทำงานเป็นทีม, Code Review</td></tr>
+        <tr><td>⚡ <span class="en" data-th="ระบบทำงานอัตโนมัติ — เช่น ทดสอบโค้ดอัตโนมัติทุกครั้งที่ Push">Actions</span></td><td>ระบบทำงานอัตโนมัติ (CI/CD)</td><td>ทดสอบ, Build, Deploy อัตโนมัติ</td></tr>
+        <tr><td>🍴 <span class="en" data-th="คัดลอกโปรเจกต์คนอื่นมาเป็นของเรา — แก้ไขได้อิสระ">Fork</span></td><td>คัดลอก Repo คนอื่นมาเป็นของเรา</td><td>แก้ไข Open Source</td></tr>
+        <tr><td>⭐ <span class="en" data-th="กดดาว — เหมือนกดถูกใจ แสดงว่าชอบโปรเจกต์นี้">Star</span></td><td>กดดาวให้โปรเจกต์ที่ชอบ</td><td>บุ๊คมาร์คโปรเจกต์น่าสนใจ</td></tr>
+        <tr><td>🔑 <span class="en" data-th="ค่าลับที่เก็บไว้ใน GitHub — ใช้ใน Actions โดยไม่ต้องเปิดเผย">Secrets</span></td><td>เก็บค่าลับ (API Key) อย่างปลอดภัย</td><td>ใช้ใน GitHub Actions</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══ CONNECT GIT TO GITHUB ═══ -->
+  <h2>🔗 เชื่อม Git ในเครื่องกับ GitHub</h2>
+  <p>มี 2 วิธีหลัก:</p>
+
+  <h3>วิธีที่ 1: <span class="en" data-th="โปรโตคอลรับส่งข้อมูลผ่านเว็บ — ใช้ง่าย ต้องใส่ username/password หรือ token">HTTPS</span> (แนะนำสำหรับมือใหม่ ✅)</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal — ในโฟลเดอร์โปรเจกต์</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># 1. เชื่อม Git กับ GitHub Repository
+git remote add origin https://github.com/username/my-project.git
+
+# 2. ตั้งชื่อ Branch หลักเป็น main
+git branch -M main
+
+# 3. Push โค้ดขึ้น GitHub ครั้งแรก
+git push -u origin main</code></pre>
+  </div>
+  <div class="callout info">
+    <div class="callout-title">💡 เปลี่ยน <code>username</code> เป็นชื่อ GitHub ของคุณ!</div>
+    <p>URL จะอยู่ในหน้า Repository บน GitHub → กดปุ่ม <strong>Code</strong> สีเขียว → คัดลอก HTTPS URL มาวาง</p>
+  </div>
+
+  <p>เมื่อ Push ครั้งแรก GitHub จะถาม <span class="en" data-th="การยืนยันตัวตน — พิสูจน์ว่าเราเป็นเจ้าของบัญชีจริง">Authentication</span> — ต้องใช้ <span class="en" data-th="โทเค็นส่วนตัว — รหัสพิเศษที่ใช้แทนรหัสผ่าน เพราะ GitHub ไม่รับรหัสผ่านโดยตรงแล้ว">Personal Access Token</span> แทนรหัสผ่าน:</p>
+
+  <h4>📌 สร้าง Personal Access Token</h4>
+  <ol>
+    <li>เข้า GitHub → กดรูปโปรไฟล์มุมบนขวา → <strong>Settings</strong></li>
+    <li>เลื่อนลงซ้ายสุด → <strong>Developer settings</strong></li>
+    <li>เลือก <strong>Personal access tokens</strong> → <strong>Tokens (classic)</strong></li>
+    <li>กด <strong>Generate new token (classic)</strong></li>
+    <li>ตั้งชื่อ (เช่น "my-laptop") ตั้ง <span class="en" data-th="วันหมดอายุ">Expiration</span></li>
+    <li>ติ๊ก <strong>repo</strong> (อย่างน้อย)</li>
+    <li>กด <strong>Generate token</strong></li>
+    <li><strong>คัดลอก Token ทันที!</strong> จะเห็นแค่ครั้งเดียว</li>
+  </ol>
+  <div class="callout danger">
+    <div class="callout-title">🚨 สำคัญมาก!</div>
+    <p>Token นี้คือ<strong>กุญแจเข้าบัญชี GitHub</strong> ของคุณ ห้ามแชร์ ห้ามวางในโค้ด ห้าม Push ขึ้น GitHub! เก็บไว้ที่ปลอดภัย (เช่น Notes ที่ล็อกรหัส)</p>
+  </div>
+
+  <h3>วิธีที่ 2: <span class="en" data-th="กุญแจเข้ารหัส — ปลอดภัยกว่า ไม่ต้องกรอกรหัสทุกครั้ง">SSH</span> (สะดวกกว่าเมื่อตั้งค่าแล้ว)</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># 1. สร้าง SSH Key (กด Enter ไปเรื่อยๆ ไม่ต้องตั้งรหัส)
+ssh-keygen -t ed25519 -C "your@email.com"
+
+# 2. คัดลอก Public Key
+# Mac:
+cat ~/.ssh/id_ed25519.pub | pbcopy
+# Windows (PowerShell):
+Get-Content ~/.ssh/id_ed25519.pub | clip
+
+# 3. ไปวางที่ GitHub → Settings → SSH and GPG keys → New SSH key
+
+# 4. ทดสอบการเชื่อมต่อ
+ssh -T git@github.com</code></pre>
+  </div>
+  <p><strong>ผลลัพธ์ที่ดี:</strong> <code>Hi username! You've successfully authenticated</code></p>
+
+  <p>เมื่อใช้ SSH ให้ใช้ URL แบบ SSH แทน HTTPS:</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>git remote add origin git@github.com:username/my-project.git</code></pre>
+  </div>
+
+  <!-- ═══ GITIGNORE ═══ -->
+  <h2>🙈 .gitignore — ไฟล์ที่ Git ต้องเพิกเฉย</h2>
+  <p>ไฟล์ <code>.gitignore</code> บอก Git ว่า<strong>อย่าติดตาม</strong>ไฟล์อะไรบ้าง สำคัญมากเพื่อป้องกันข้อมูลลับรั่วไหล</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">gitignore</span><span class="code-where">📄 .gitignore — ไฟล์นี้ต้องอยู่ที่ root ของโปรเจกต์</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># Dependencies — ไฟล์ที่ npm ติดตั้ง (ใหญ่มาก ไม่ต้อง Push)
+node_modules
+
+# Build output
+.next
+dist
+build
+
+# 🚨 สำคัญ! ไฟล์ที่มีข้อมูลลับ
+.env
+.env.local
+.env.production
+.env*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea</code></pre>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">🚨 ต้องสร้าง .gitignore ก่อน Commit แรก!</div>
+    <p>ถ้า Commit ไฟล์ <code>.env</code> ไปแล้ว แม้จะเพิ่มใน <code>.gitignore</code> ทีหลัง Git จะยังติดตามอยู่ ต้องใช้ <code>git rm --cached .env</code> เอาออก</p>
+  </div>
+
+  <!-- ═══ FIRST PUSH WORKFLOW ═══ -->
+  <h2>🚀 Push โค้ดขึ้น GitHub ครั้งแรก (ทีละขั้นตอน)</h2>
+  <p>สมมติว่ามีโปรเจกต์ในเครื่องแล้ว และสร้าง Repo เปล่าบน GitHub แล้ว:</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal — ในโฟลเดอร์โปรเจกต์</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># 1. เข้าไปในโฟลเดอร์โปรเจกต์
+cd my-project
+
+# 2. เริ่ม Git (ถ้ายังไม่เคย git init)
+git init
+
+# 3. ตรวจสอบว่ามี .gitignore แล้ว
+cat .gitignore
+
+# 4. เพิ่มไฟล์ทั้งหมด
+git add .
+
+# 5. ตรวจสอบว่าไม่มีไฟล์ .env หลุดเข้ามา!
+git status
+
+# 6. Commit ครั้งแรก
+git commit -m "initial commit"
+
+# 7. ตั้งชื่อ Branch เป็น main
+git branch -M main
+
+# 8. เชื่อมกับ GitHub (เปลี่ยน URL เป็นของคุณ)
+git remote add origin https://github.com/username/my-project.git
+
+# 9. Push ขึ้น GitHub!
+git push -u origin main</code></pre>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-title">🎉 สำเร็จ!</div>
+    <p>เปิด GitHub ในเบราว์เซอร์ → ไปที่ Repo → จะเห็นโค้ดของเราอยู่บนนั้นแล้ว!</p>
+  </div>
+
+  <!-- ═══ COMMON ERRORS ═══ -->
+  <h2>🔧 ปัญหาที่พบบ่อยกับ GitHub</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ปัญหา</th><th>สาเหตุ</th><th>วิธีแก้</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>Permission denied</code></td>
+          <td>ยังไม่ได้ตั้ง Authentication หรือ Token หมดอายุ</td>
+          <td>สร้าง Personal Access Token ใหม่ หรือตั้ง SSH Key</td>
+        </tr>
+        <tr>
+          <td><code>Authentication failed</code></td>
+          <td>ใช้รหัสผ่าน GitHub โดยตรง (GitHub ไม่รับแล้ว)</td>
+          <td>ต้องใช้ Personal Access Token แทน</td>
+        </tr>
+        <tr>
+          <td><code>Repository not found</code></td>
+          <td>URL ผิด หรือ Repo เป็น Private แต่ไม่มีสิทธิ์</td>
+          <td>ตรวจสอบ URL ให้ตรง ดูด้วย <code>git remote -v</code></td>
+        </tr>
+        <tr>
+          <td><code>remote origin already exists</code></td>
+          <td>เคย add remote แล้ว</td>
+          <td>ใช้ <code>git remote set-url origin URL_ใหม่</code></td>
+        </tr>
+        <tr>
+          <td><code>rejected (non-fast-forward)</code></td>
+          <td>GitHub มีโค้ดใหม่ที่เราไม่มี</td>
+          <td>รัน <code>git pull --rebase</code> ก่อนแล้ว Push ใหม่</td>
+        </tr>
+        <tr>
+          <td><code>large file error</code></td>
+          <td>ไฟล์ใหญ่เกิน 100MB</td>
+          <td>ใส่ไฟล์ใหญ่ใน <code>.gitignore</code> หรือใช้ Git LFS</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══ SECRET LEAK ═══ -->
+  <h2>🚨 เมื่อ Secret รั่วไหลขึ้น GitHub</h2>
+  <p>นี่คือสถานการณ์<strong>ฉุกเฉิน</strong>ที่สำคัญมาก — ถ้าเราเผลอ Push ไฟล์ <code>.env</code>, API Key หรือ Password ขึ้น GitHub</p>
+
+  <div class="callout danger">
+    <div class="callout-title">🚨 คำเตือนสำคัญ</div>
+    <p>การลบไฟล์ออกจาก Commit ล่าสุด<strong>ไม่เพียงพอ!</strong> เพราะข้อมูลยังอยู่ใน <span class="en" data-th="ประวัติการเปลี่ยนแปลงทั้งหมด — ใครก็เข้าไปดู Commit เก่าได้">Git History</span> — ใครก็สามารถเข้าไปดู Commit เก่าได้</p>
+  </div>
+
+  <h3>🛠 วิธีแก้เมื่อ Secret รั่วแล้ว</h3>
+  <p><strong>ขั้นตอนที่ 1 — เปลี่ยน Secret ทันที! (สำคัญที่สุด)</strong></p>
+  <ul>
+    <li>ถ้าเป็น Supabase Key → ไปที่ Supabase Dashboard → สร้าง Key ใหม่</li>
+    <li>ถ้าเป็น GitHub Token → ลบ Token เก่า → สร้างใหม่</li>
+    <li>ถ้าเป็น API Key อื่น → เข้าไปที่บริการนั้น → Rotate/Revoke Key</li>
+  </ul>
+
+  <p><strong>ขั้นตอนที่ 2 — เพิ่ม .gitignore</strong></p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><span class="code-where">💻 Terminal</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># เอาไฟล์ .env ออกจาก Git tracking (ไม่ลบไฟล์จริง)
+git rm --cached .env
+git rm --cached .env.local
+
+# เพิ่มใน .gitignore (ถ้ายังไม่มี)
+echo ".env" >> .gitignore
+echo ".env.local" >> .gitignore
+
+# Commit การแก้ไข
+git add .gitignore
+git commit -m "fix: remove .env from tracking, add to .gitignore"
+git push</code></pre>
+  </div>
+
+  <p><strong>ขั้นตอนที่ 3 — อัปเดต Key ใหม่ในทุกที่</strong></p>
+  <ul>
+    <li>อัปเดตไฟล์ <code>.env.local</code> ในเครื่อง</li>
+    <li>อัปเดต <span class="en" data-th="ตัวแปรสภาพแวดล้อม — ค่าตั้งค่าที่เก็บแยกจากโค้ด">Environment Variables</span> ใน Vercel Dashboard</li>
+    <li><span class="en" data-th="เผยแพร่เว็บใหม่">Redeploy</span> บน Vercel</li>
+  </ul>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠️ จำไว้เสมอ</div>
+    <p>Secret ที่ถูก Push ขึ้นอินเทอร์เน็ตแล้ว ให้ถือว่า<strong>ถูกเปิดเผยแล้ว</strong>ตลอดไป แม้จะลบทิ้งก็ตาม วิธีเดียวที่ปลอดภัยคือ<strong>เปลี่ยน Secret ใหม่ทันที</strong></p>
+  </div>
+
+  <!-- ═══ README ═══ -->
+  <h2>📘 เขียน README ที่ดี</h2>
+  <p>ไฟล์ <span class="en" data-th="ไฟล์อธิบายโปรเจกต์ — เขียนด้วยภาษา Markdown หน้าแรกที่คนเห็นเมื่อเปิด Repo">README.md</span> คือหน้าแรกที่คนเห็นเมื่อเปิด Repo ควรมี:</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">markdown</span><span class="code-where">📄 README.md</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># 📋 Task Management App
+
+เว็บแอปจัดการงาน สร้างด้วย Next.js + Supabase
+
+## ✨ ฟีเจอร์
+- สมัครสมาชิก / เข้าสู่ระบบ
+- สร้าง / แก้ไข / ลบ Task
+- เปลี่ยนสถานะ Task
+
+## 🛠 เทคโนโลยี
+- Next.js 15
+- TypeScript
+- Tailwind CSS
+- Supabase
+
+## 🚀 วิธีรัน
+1. Clone โปรเจกต์: `git clone URL`
+2. ติดตั้ง: `npm install`
+3. สร้างไฟล์ `.env.local` (ดูตัวอย่างจาก `.env.example`)
+4. รัน: `npm run dev`
+5. เปิด http://localhost:3000
+
+## 🔐 Environment Variables
+ดูตัวอย่างในไฟล์ `.env.example`</code></pre>
+  </div>
+
+  <!-- ═══ QUIZ ═══ -->
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ GitHub</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Public vs Private ต่างกันอย่างไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🌍 Public = ทุกคนเห็นโค้ดได้ / 🔒 Private = เฉพาะคนที่ได้รับเชิญ</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">.gitignore ทำหน้าที่อะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🙈 บอก Git ว่าอย่าติดตามไฟล์อะไรบ้าง เช่น .env, node_modules — ป้องกัน Secret รั่วไหล</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ทำไมลบไฟล์ .env ออกจาก Commit ล่าสุดไม่เพียงพอ?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🚨 เพราะข้อมูลยังอยู่ใน Git History! ใครก็เข้าไปดู Commit เก่าได้ ต้องเปลี่ยน Secret ใหม่ทันที</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Personal Access Token คืออะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🔑 รหัสพิเศษที่ใช้แทนรหัสผ่าน เพราะ GitHub ไม่รับรหัสผ่านโดยตรงแล้ว ห้ามแชร์ ห้ามวางในโค้ด!</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">git push -u origin main ทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📤 ส่งโค้ดขึ้น GitHub ครั้งแรก โดย -u ตั้ง upstream เพื่อให้ครั้งหลังพิมพ์แค่ git push ก็พอ</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('git')">
+      <div class="nav-label">← ก่อนหน้า</div>
+      <div class="nav-title">📦 คู่มือ Git</div>
+    </a>
+    <a class="next" onclick="goTo('vercel')">
+      <div class="nav-label">ถัดไป →</div>
+      <div class="nav-title">▲ คู่มือ Vercel</div>
+    </a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('github')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

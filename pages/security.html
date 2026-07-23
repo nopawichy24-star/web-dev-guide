@@ -1,0 +1,155 @@
+<div class="section" id="sec-security">
+  <span class="section-emoji">🛡️</span>
+  <h1>Security & Row Level Security (RLS)</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge beginner">🟢 Beginner</span>
+    <span class="reading-time">⏱️ อ่าน ~12 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> Supabase Database</div><div class="prereq-item"><span class="prereq-check">✓</span> Authentication</div>
+  </div>
+  <p><span class="en" data-th="ระบบรักษาความปลอดภัยระดับแถว — กำหนดว่าใครเข้าถึงข้อมูลแถวไหนได้">RLS</span> คือระบบที่สำคัญ<strong>ที่สุด</strong>ใน Supabase — มันกำหนดว่าผู้ใช้คนไหนเข้าถึงข้อมูลแถวไหนได้บ้าง</p>
+
+  <div class="callout danger">
+    <div class="callout-title">🚨 ถ้าไม่เปิด RLS จะเกิดอะไรขึ้น?</div>
+    <p><span class="en" data-th="กุญแจสาธารณะ">anon key</span> อยู่ในโค้ด Frontend ที่ทุกคนเห็น → ถ้าไม่มี RLS → <strong>ใครก็อ่าน/แก้/ลบข้อมูลทั้งหมดได้!</strong> ผู้ใช้ A เห็นข้อมูลของผู้ใช้ B ได้ หรือลบข้อมูลทั้งตารางได้เลย!</p>
+  </div>
+
+  <h2>🔑 auth.uid() คืออะไร?</h2>
+  <p><code>auth.uid()</code> คือฟังก์ชันของ Supabase ที่คืนค่า <span class="en" data-th="รหัสผู้ใช้ปัจจุบัน — UUID ของคนที่กำลัง login อยู่">User ID</span> ของคนที่กำลัง Login อยู่ — เป็นหัวใจของ RLS!</p>
+  <div class="callout info">
+    <div class="callout-title">💡 แนวคิดง่ายๆ</div>
+    <p><code>auth.uid() = user_id</code> หมายความว่า <strong>"ผู้ใช้ที่ login อยู่ ต้องเป็นเจ้าของข้อมูลแถวนั้น"</strong> — ถ้า user_id ในแถวไม่ตรงกับคนที่ login → ปฏิเสธ!</p>
+  </div>
+
+  <h2>📝 สร้าง Policy ทีละตัว</h2>
+
+  <h3>Policy 1: อ่านข้อมูลตัวเอง</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">sql</span><span class="code-where">⚡ Supabase → SQL Editor</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>CREATE POLICY "ผู้ใช้อ่าน Task ของตัวเองได้"
+  ON tasks FOR SELECT
+  USING (auth.uid() = user_id);</code></pre>
+  </div>
+
+  <h3>Policy 2: เพิ่มข้อมูลตัวเอง</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">sql</span><span class="code-where">⚡ SQL Editor</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>CREATE POLICY "ผู้ใช้สร้าง Task ของตัวเองได้"
+  ON tasks FOR INSERT
+  WITH CHECK (auth.uid() = user_id);</code></pre>
+  </div>
+
+  <h3>Policy 3: แก้ไขข้อมูลตัวเอง</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">sql</span><span class="code-where">⚡ SQL Editor</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>CREATE POLICY "ผู้ใช้แก้ไข Task ของตัวเองได้"
+  ON tasks FOR UPDATE
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);</code></pre>
+  </div>
+
+  <h3>Policy 4: ลบข้อมูลตัวเอง</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">sql</span><span class="code-where">⚡ SQL Editor</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>CREATE POLICY "ผู้ใช้ลบ Task ของตัวเองได้"
+  ON tasks FOR DELETE
+  USING (auth.uid() = user_id);</code></pre>
+  </div>
+
+  <h3>🚀 รวมทั้ง 4 Policy ในคำสั่งเดียว</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">sql</span><span class="code-where">⚡ SQL Editor — Copy ไปรันทีเดียวจบ!</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>-- เปิด RLS
+ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
+
+-- SELECT: อ่านเฉพาะของตัวเอง
+CREATE POLICY "tasks_select" ON tasks FOR SELECT
+  USING (auth.uid() = user_id);
+
+-- INSERT: สร้างเฉพาะของตัวเอง
+CREATE POLICY "tasks_insert" ON tasks FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+-- UPDATE: แก้เฉพาะของตัวเอง
+CREATE POLICY "tasks_update" ON tasks FOR UPDATE
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+-- DELETE: ลบเฉพาะของตัวเอง
+CREATE POLICY "tasks_delete" ON tasks FOR DELETE
+  USING (auth.uid() = user_id);</code></pre>
+  </div>
+
+  <h2>🔐 anon key vs service_role key (ทบทวน)</h2>
+  <div class="compare-grid">
+    <div class="compare-box">
+      <h4>🟡 anon key</h4>
+      <p>ใช้ใน Frontend ได้ ✅</p>
+      <p><strong>ต้องมี RLS ป้องกัน!</strong></p>
+      <p>ทำได้เฉพาะที่ Policy อนุญาต</p>
+    </div>
+    <div class="compare-box">
+      <h4>🔴 service_role key</h4>
+      <p>ใช้ฝั่ง Server เท่านั้น ❌</p>
+      <p><strong>ข้าม RLS ได้ทั้งหมด!</strong></p>
+      <p>เข้าถึง/แก้/ลบข้อมูลทุกอย่างได้</p>
+    </div>
+  </div>
+
+  <h2>⚠️ คำเตือนสำคัญ</h2>
+  <div class="callout danger">
+    <div class="callout-title">🚨 ห้ามทำสิ่งเหล่านี้!</div>
+    <ul>
+      <li>❌ ห้ามใส่ <code>service_role key</code> ในโค้ด Frontend</li>
+      <li>❌ ห้าม Push <code>service_role key</code> ขึ้น GitHub</li>
+      <li>❌ ห้ามปิด RLS โดยไม่เข้าใจผลกระทบ</li>
+      <li>❌ ห้ามเปิดเผย Database Password</li>
+      <li>❌ ห้ามสร้าง Policy <code>USING (true)</code> สำหรับ DELETE/UPDATE (= ใครก็ลบ/แก้ได้!)</li>
+    </ul>
+  </div>
+
+  <h2>💥 ตัวอย่างความเสียหายถ้า Policy ผิด</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Policy ที่ผิด</th><th>ความเสียหาย</th></tr></thead>
+      <tbody>
+        <tr><td>ไม่เปิด RLS</td><td>ทุกคนอ่าน/แก้/ลบข้อมูลทุกอย่างได้</td></tr>
+        <tr><td>SELECT ใช้ <code>USING (true)</code></td><td>ทุกคนเห็นข้อมูลของทุกคน (รวมข้อมูลส่วนตัว)</td></tr>
+        <tr><td>DELETE ใช้ <code>USING (true)</code></td><td>ใครก็ลบข้อมูลของคนอื่นได้!</td></tr>
+        <tr><td>service_role key อยู่ใน Frontend</td><td>ข้าม RLS ทั้งหมด = เหมือนไม่มี RLS</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ RLS</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">auth.uid() = user_id หมายความว่าอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🔑 "คนที่ Login อยู่ ต้องเป็นเจ้าของข้อมูลแถวนั้น" — ถ้า user_id ไม่ตรง → ปฏิเสธการเข้าถึง</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">USING vs WITH CHECK ต่างกันอย่างไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">USING = ตรวจข้อมูลที่มีอยู่แล้ว (อ่าน/แก้/ลบ) / WITH CHECK = ตรวจข้อมูลใหม่ที่จะเพิ่ม/แก้</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ทำไม USING (true) ใน DELETE ถึงอันตราย?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🚨 เพราะ true = อนุญาตทุกคน → ใครก็ลบข้อมูลของใครก็ได้! ต้องใช้ auth.uid() = user_id</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('auth')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">👤 Authentication</div></a>
+    <a class="next" onclick="goTo('deployment')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🚀 Deployment</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="
+  <div class="callout tip">
+    <div class="callout-title">🎯 Mini Project — ลองทำ!</div>
+    <p>สร้างตาราง <code>secrets</code> → เปิด RLS → สร้าง Policy ครบ 4 แบบ → ทดสอบว่า User A ไม่เห็นข้อมูล User B จริง!</p>
+  </div>
+  toggleComplete('security')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

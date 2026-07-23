@@ -1,0 +1,38 @@
+/* ═══════════════════════════════════════════
+   🃏 FLASHCARD MODAL
+   ═══════════════════════════════════════════ */
+.fc-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 10000; display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.fc-overlay.show { display: flex; }
+.fc-modal {
+  background: var(--bg); border-radius: 16px; width: 100%; max-width: 420px;
+  box-shadow: var(--shadow-lg); overflow: hidden;
+}
+.fc-header {
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.fc-header h3 { font-size: 1em; margin: 0; }
+.fc-close { background: none; border: none; font-size: 1.3em; cursor: pointer; color: var(--text-muted); }
+.fc-body { padding: 30px 20px; text-align: center; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.fc-term { font-size: 1.6em; font-weight: 700; font-family: "SF Mono", monospace; }
+.fc-ipa { font-size: 0.9em; color: var(--text-muted); margin-top: 4px; }
+.fc-answer { margin-top: 16px; font-size: 1.05em; color: var(--text-secondary); display: none; }
+.fc-answer.show { display: block; }
+.fc-compare { font-size: 0.88em; color: var(--text-muted); margin-top: 8px; display: none; }
+.fc-compare.show { display: block; }
+.fc-actions { display: flex; border-top: 1px solid var(--border); }
+.fc-actions button {
+  flex: 1; padding: 14px; border: none; cursor: pointer;
+  font-size: 0.95em; font-weight: 600; transition: all 0.15s;
+}
+.fc-btn-show { background: var(--accent); color: #fff; }
+.fc-btn-show:hover { opacity: 0.9; }
+.fc-btn-know { background: var(--success-bg); color: var(--success-text); }
+.fc-btn-know:hover { background: var(--success-border); color: #fff; }
+.fc-btn-dunno { background: var(--danger-bg); color: var(--danger-text); border-left: 1px solid var(--border); }
+.fc-btn-dunno:hover { background: var(--danger-border); color: #fff; }
+.fc-progress { padding: 8px 20px; font-size: 0.78em; color: var(--text-muted); text-align: center; border-top: 1px solid var(--border); }

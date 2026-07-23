@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚀 คู่มือพัฒนาเว็บแอป — GitHub · Vercel · Supabase</title>
+
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/english-popup.css">
+<link rel="stylesheet" href="css/flashcard-modal.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/flashcard-page.css">
+<link rel="stylesheet" href="css/code-blocks.css">
+<link rel="stylesheet" href="css/callouts.css">
+<link rel="stylesheet" href="css/checklists.css">
+<link rel="stylesheet" href="css/workflow.css">
+<link rel="stylesheet" href="css/quiz.css">
+<link rel="stylesheet" href="css/page-navigation.css">
+<link rel="stylesheet" href="css/tables.css">
+<link rel="stylesheet" href="css/search.css">
+<link rel="stylesheet" href="css/sidebar-progress.css">
+<link rel="stylesheet" href="css/lesson-meta.css">
+<link rel="stylesheet" href="css/practice-cards.css">
+<link rel="stylesheet" href="css/accordion.css">
+<link rel="stylesheet" href="css/reading-progress.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/print.css">
+<link rel="stylesheet" href="css/utilities.css">
+</head>
+<body>
+<!-- Reading Progress Bar -->
+<div class="reading-progress"><div class="reading-progress-fill" id="readingProgress"></div></div>
+
+<!-- Scroll to top button -->
+<button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="กลับขึ้นบน">⬆️</button>
+
+<!-- Sidebar Overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- Enhanced English Term Popup -->
+<div class="en-popup" id="enPopup">
+  <div class="popup-header">
+    <span class="popup-term"></span><span class="popup-ipa"></span>
+    <div class="popup-def"></div>
+    <span class="popup-compare"></span>
+  </div>
+  <div class="popup-actions">
+    <button class="btn-know" onclick="vocabKnow()">✅ จำได้</button>
+    <button class="btn-dunno" onclick="vocabDunno()">❌ จำไม่ได้</button>
+  </div>
+</div>
+
+<!-- Flashcard Modal -->
+<div class="fc-overlay" id="fcOverlay">
+  <div class="fc-modal">
+    <div class="fc-header">
+      <h3>🃏 Flashcard ทบทวน</h3>
+      <button class="fc-close" onclick="closeFlashcard()">✕</button>
+    </div>
+    <div class="fc-body">
+      <div class="fc-term" id="fcTerm">—</div>
+      <div class="fc-ipa" id="fcIpa"></div>
+      <div class="fc-answer" id="fcAnswer">—</div>
+      <div class="fc-compare" id="fcCompare"></div>
+    </div>
+    <div class="fc-actions" id="fcActions">
+      <button class="fc-btn-show" onclick="showFcAnswer()">👆 แตะเพื่อดูคำตอบ</button>
+    </div>
+    <div class="fc-progress" id="fcProgress">0 / 0</div>
+  </div>
+</div>
+
+<!-- Search Modal -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-modal">
+    <input type="text" class="search-input" id="searchInput" placeholder="🔍 ค้นหาเนื้อหา...">
+    <div class="search-results" id="searchResults">
+      <div class="search-empty">พิมพ์เพื่อค้นหา...</div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- ═══════════════════════════════════════
+       📱 SIDEBAR
+       ═══════════════════════════════════════ -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">🚀 DevGuide</div>
+    </div>
+    <div class="sidebar-nav">
+
+      <div class="nav-section-title">🟢 Beginner</div>
+      <a class="nav-item active" data-section="home" onclick="goTo('home')"><span class="nav-diff">🟢</span> 🏠 หน้าแรก</a>
+      <a class="nav-item" data-section="getting-started" onclick="goTo('getting-started')"><span class="nav-diff">🟢</span> 🎯 เริ่มต้นใช้งาน</a>
+      <a class="nav-item" data-section="web-basics" onclick="goTo('web-basics')"><span class="nav-diff">🟢</span> 🌐 พื้นฐานเว็บ</a>
+      <a class="nav-item" data-section="cli" onclick="goTo('cli')"><span class="nav-diff">🟢</span> ⌨️ Command Line</a>
+      <a class="nav-item" data-section="install" onclick="goTo('install')"><span class="nav-diff">🟢</span> 🔧 ติดตั้งเครื่องมือ</a>
+      <a class="nav-item" data-section="react" onclick="goTo('react')"><span class="nav-diff">🟢</span> ⚛️ React Fundamentals</a>
+      <a class="nav-item" data-section="git" onclick="goTo('git')"><span class="nav-diff">🟢</span> 📦 คู่มือ Git</a>
+      <a class="nav-item" data-section="github" onclick="goTo('github')"><span class="nav-diff">🟢</span> 🐙 คู่มือ GitHub</a>
+      <a class="nav-item" data-section="vercel" onclick="goTo('vercel')"><span class="nav-diff">🟢</span> ▲ คู่มือ Vercel</a>
+      <a class="nav-item" data-section="gh-vercel" onclick="goTo('gh-vercel')"><span class="nav-diff">🟢</span> 🔗 GitHub + Vercel</a>
+      <a class="nav-item" data-section="supabase" onclick="goTo('supabase')"><span class="nav-diff">🟢</span> ⚡ คู่มือ Supabase</a>
+      <a class="nav-item" data-section="connect-supa" onclick="goTo('connect-supa')"><span class="nav-diff">🟢</span> 🔌 เชื่อมเว็บ+Supabase</a>
+      <a class="nav-item" data-section="env-vars" onclick="goTo('env-vars')"><span class="nav-diff">🟢</span> 🔐 Env Variables</a>
+      <a class="nav-item" data-section="auth" onclick="goTo('auth')"><span class="nav-diff">🟢</span> 👤 Authentication</a>
+      <a class="nav-item" data-section="database" onclick="goTo('database')"><span class="nav-diff">🟢</span> 🗄️ Database</a>
+      <a class="nav-item" data-section="storage" onclick="goTo('storage')"><span class="nav-diff">🟢</span> 📁 Storage</a>
+      <a class="nav-item" data-section="security" onclick="goTo('security')"><span class="nav-diff">🟢</span> 🛡️ Security & RLS</a>
+      <a class="nav-item" data-section="env-dev-prod" onclick="goTo('env-dev-prod')"><span class="nav-diff">🟢</span> 🌍 Dev vs Production</a>
+
+      <div class="nav-section-title">🟡 Intermediate</div>
+      <a class="nav-item" data-section="deployment" onclick="goTo('deployment')"><span class="nav-diff">🟡</span> 🚀 Deployment</a>
+      <a class="nav-item" data-section="project" onclick="goTo('project')"><span class="nav-diff">🟡</span> 📋 Task App</a>
+      <a class="nav-item" data-section="ai-coding" onclick="goTo('ai-coding')"><span class="nav-diff">🟡</span> 🤖 AI ช่วยเขียนโค้ด</a>
+      <a class="nav-item" data-section="ai-workflow" onclick="goTo('ai-workflow')"><span class="nav-diff">🟡</span> 🔄 AI Workflow</a>
+      <a class="nav-item" data-section="debugging" onclick="goTo('debugging')"><span class="nav-diff">🟡</span> 🐛 Debugging</a>
+      <a class="nav-item" data-section="testing" onclick="goTo('testing')"><span class="nav-diff">🟡</span> 🧪 Testing</a>
+      <a class="nav-item" data-section="troubleshoot" onclick="goTo('troubleshoot')"><span class="nav-diff">🟡</span> 🔧 แก้ปัญหา</a>
+
+      <div class="nav-section-title">🔴 Advanced</div>
+      <a class="nav-item" data-section="performance" onclick="goTo('performance')"><span class="nav-diff">🔴</span> ⚡ Performance</a>
+
+      <div class="nav-section-title">📚 อ้างอิง</div>
+      <a class="nav-item" data-section="flashcard" onclick="goTo('flashcard')"><span class="nav-diff">🃏</span> 🃏 Flashcard</a>
+      <a class="nav-item" data-section="checklist" onclick="goTo('checklist')"><span class="nav-diff">📋</span> ✅ Checklist</a>
+      <a class="nav-item" data-section="glossary" onclick="goTo('glossary')"><span class="nav-diff">📖</span> 📖 คำศัพท์</a>
+      <a class="nav-item" data-section="faq" onclick="goTo('faq')"><span class="nav-diff">❓</span> ❓ FAQ</a>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-label">📊 ความคืบหน้า: <span id="progressText">0%</span></div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════
+       📄 MAIN CONTENT
+       ═══════════════════════════════════════ -->
+  <div class="main">
+    <div class="topbar">
+      <button class="hamburger" id="hamburgerBtn" aria-label="เปิดเมนู">☰</button>
+      <span class="topbar-title" id="topbarTitle">🏠 หน้าแรก</span>
+      <button class="search-btn" onclick="openSearch()">🔍 ค้นหา <span class="kbd">⌘K</span></button>
+      <button class="theme-toggle" id="themeToggle" aria-label="เปลี่ยนธีม">🌙</button>
+    </div>
+
+    <div class="content">
+
+<!-- ╔═══════════════════════════════════════════════════════════╗
+     ║  SECTION 1: หน้าแรก                                      ║
+     ╚═══════════════════════════════════════════════════════════╝ -->
+<div id="pageLoader" class="callout info">
+  <div class="callout-title">⏳ กำลังโหลดเว็บไซต์</div>
+  <p>กรุณารอสักครู่...</p>
+</div>
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+
+<script src="js/loader.js"></script>
+</body>
+</html>

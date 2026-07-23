@@ -1,0 +1,143 @@
+<div class="section" id="sec-debugging">
+  <span class="section-emoji">🐛</span>
+  <h1>Debugging — หาและแก้บั๊ก</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge intermediate">🟡 Intermediate</span>
+    <span class="reading-time">⏱️ อ่าน ~15 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> JavaScript พื้นฐาน</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> เคยรัน <code>npm run dev</code></div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> เคยใช้ Browser</div>
+  </div>
+
+  <h2>🔍 เครื่องมือ Debug ที่ต้องรู้</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>เครื่องมือ</th><th>เปิดอย่างไร</th><th>ใช้ทำอะไร</th></tr></thead>
+      <tbody>
+        <tr><td>💻 <span class="en" data-th="คอนโซลในเบราว์เซอร์ — แสดง Error, log, warning">Console</span></td><td><code>F12</code> → แท็บ Console</td><td>ดู Error, console.log, warning</td></tr>
+        <tr><td>📡 <span class="en" data-th="แท็บเครือข่าย — ดูทุก request ที่เบราว์เซอร์ส่ง">Network</span></td><td><code>F12</code> → แท็บ Network</td><td>ดู API calls, status code, response</td></tr>
+        <tr><td>🔧 <span class="en" data-th="แท็บ Elements — ดูและแก้ไข HTML/CSS สด">Elements</span></td><td><code>F12</code> → แท็บ Elements</td><td>ตรวจ HTML/CSS, แก้สดได้</td></tr>
+        <tr><td>📦 <span class="en" data-th="แท็บ Application — ดู cookies, storage, session">Application</span></td><td><code>F12</code> → แท็บ Application</td><td>ดู cookies, localStorage, session</td></tr>
+        <tr><td>📂 <span class="en" data-th="แท็บ Sources — ดูและ debug JavaScript ทีละบรรทัด">Sources</span></td><td><code>F12</code> → แท็บ Sources</td><td>ตั้ง breakpoint, debug ทีละบรรทัด</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>📊 ประเภท Error ที่พบบ่อย</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ประเภท</th><th>ตัวอย่าง</th><th>สาเหตุ</th><th>วิธีแก้</th></tr></thead>
+      <tbody>
+        <tr><td><span class="en" data-th="ข้อผิดพลาดเวลา Build">Build Error</span></td><td><code>Module not found</code></td><td>ลืม install หรือ path ผิด</td><td><code>npm install</code> + ตรวจ import path</td></tr>
+        <tr><td><span class="en" data-th="ข้อผิดพลาดตอนรัน">Runtime Error</span></td><td><code>Cannot read undefined</code></td><td>ข้อมูลยังไม่โหลด</td><td>เพิ่ม <code>if</code> ตรวจก่อนใช้ หรือใช้ <code>?.</code></td></tr>
+        <tr><td><span class="en" data-th="ข้อผิดพลาด Syntax">Syntax Error</span></td><td><code>Unexpected token</code></td><td>พิมพ์ผิด ลืม , ; }</td><td>ดูบรรทัดที่ Error บอก</td></tr>
+        <tr><td><span class="en" data-th="อ้างถึงสิ่งที่ไม่มี">Reference Error</span></td><td><code>x is not defined</code></td><td>ตัวแปรยังไม่ประกาศ</td><td>ตรวจชื่อ + ตรวจ import</td></tr>
+        <tr><td><span class="en" data-th="ประเภทผิด">Type Error</span></td><td><code>x is not a function</code></td><td>เรียกใช้สิ่งที่ไม่ใช่ฟังก์ชัน</td><td>ตรวจว่า import ถูกตัว</td></tr>
+        <tr><td><span class="en" data-th="เครือข่ายมีปัญหา">Network Error</span></td><td><code>Failed to fetch</code></td><td>API ล่ม, URL ผิด, CORS</td><td>ตรวจ URL, Network Tab</td></tr>
+        <tr><td><span class="en" data-th="ฐานข้อมูลมีปัญหา">Database Error</span></td><td><code>RLS: insufficient</code></td><td>RLS บล็อก</td><td>ตรวจ Policy + <code>auth.uid()</code></td></tr>
+        <tr><td><span class="en" data-th="ยืนยันตัวตนไม่ผ่าน">Auth Error</span></td><td><code>Invalid login</code></td><td>email/password ผิด</td><td>ตรวจ credentials + Redirect URL</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>🔄 Debug Flow</h2>
+  <div class="workflow">
+    <div class="wf-step">🚨 Error เกิดขึ้น!<div class="wf-sub">อ่าน Error Message ก่อน</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">📍 หา File + Line<div class="wf-sub">เช่น <code>page.tsx:25:3</code></div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">🔍 ตรวจสอบ Console + Network<div class="wf-sub">F12 → ดู Error + API response</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">🔧 แก้ไขทีละจุด<div class="wf-sub">อย่าแก้หลายอย่างพร้อมกัน!</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">🧪 ทดสอบ<div class="wf-sub">รัน <code>npm run dev</code> ดูผลลัพธ์</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">💾 Commit เมื่อแก้สำเร็จ!</div>
+  </div>
+
+  <h2>📝 console.log — เครื่องมือ Debug ง่ายที่สุด</h2>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">ts</span><span class="code-where">📄 ใส่ในโค้ดเพื่อตรวจค่า</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code>// ตรวจว่าตัวแปรมีค่าอะไร
+console.log('user:', user)
+
+// ตรวจว่า function ถูกเรียกไหม
+console.log('=== handleSubmit ถูกเรียกแล้ว ===')
+
+// ตรวจ response จาก Supabase
+const { data, error } = await supabase.from('tasks').select('*')
+console.log('data:', data)
+console.log('error:', error)
+
+// ⚠️ อย่าลืมลบ console.log ก่อน Deploy!</code></pre>
+  </div>
+
+  <h2>📡 Supabase Logs</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Log ประเภท</th><th>ดูที่ไหน</th><th>ใช้ตรวจอะไร</th></tr></thead>
+      <tbody>
+        <tr><td>Auth Logs</td><td>Supabase → Logs → Auth</td><td>Login ล้มเหลว, Token หมดอายุ</td></tr>
+        <tr><td>Database Logs</td><td>Supabase → Logs → Postgres</td><td>Query ช้า, RLS บล็อก</td></tr>
+        <tr><td>API Logs</td><td>Supabase → Logs → API</td><td>Request ที่เข้ามา, status code</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>▲ Vercel Logs</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Log ประเภท</th><th>ดูที่ไหน</th><th>ใช้ตรวจอะไร</th></tr></thead>
+      <tbody>
+        <tr><td><span class="en" data-th="บันทึกตอน Build">Build Logs</span></td><td>Deployments → คลิก deployment</td><td>Build failed, TypeScript error</td></tr>
+        <tr><td><span class="en" data-th="บันทึกตอนรัน">Runtime Logs</span></td><td>Logs → Runtime</td><td>API route error, Server error</td></tr>
+        <tr><td><span class="en" data-th="บันทึก Serverless Function">Function Logs</span></td><td>Logs → Functions</td><td>API function timeout, error</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>📋 Debug Checklist</h2>
+  <ul class="checklist" data-checklist="debug-full">
+    <li><input type="checkbox" id="dbf1"><label for="dbf1">🖥️ เปิด Console (<code>F12</code>)</label></li>
+    <li><input type="checkbox" id="dbf2"><label for="dbf2">📡 ดู Network Tab — มี request สีแดงไหม?</label></li>
+    <li><input type="checkbox" id="dbf3"><label for="dbf3">📋 ดู Response — ข้อมูลกลับมาถูกไหม?</label></li>
+    <li><input type="checkbox" id="dbf4"><label for="dbf4">🔢 ดู Status Code — 200? 401? 404? 500?</label></li>
+    <li><input type="checkbox" id="dbf5"><label for="dbf5">🗄️ เช็ก Database — ข้อมูลอยู่ในตารางไหม?</label></li>
+    <li><input type="checkbox" id="dbf6"><label for="dbf6">🔐 เช็ก Environment — .env.local ครบ? ค่าถูก?</label></li>
+    <li><input type="checkbox" id="dbf7"><label for="dbf7">🔗 เช็ก API — URL ถูกไหม? Key ถูกไหม?</label></li>
+    <li><input type="checkbox" id="dbf8"><label for="dbf8">📋 เช็ก Logs — Supabase? Vercel?</label></li>
+    <li><input type="checkbox" id="dbf9"><label for="dbf9">🧪 ทดสอบใหม่</label></li>
+  </ul>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">กด F12 ในเบราว์เซอร์แล้วได้อะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🔧 Developer Tools — มี Console (ดู Error), Network (ดู API), Elements (ดู HTML/CSS)</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Status Code 401 หมายความว่าอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🔒 Unauthorized — ยังไม่ได้ Login หรือ Token หมดอายุ!</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">console.log ใช้ทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🔍 พิมพ์ค่าออกมาดูใน Console — ช่วยตรวจว่าตัวแปรมีค่าอะไร ฟังก์ชันถูกเรียกหรือเปล่า</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('ai-workflow')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🔄 AI Workflow</div></a>
+    <a class="next" onclick="goTo('testing')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🧪 Testing</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('debugging')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗
+     ║  NEW: Testing                                             ║
+     ╚═══════════════════════════════════════════════════════════╝ -->

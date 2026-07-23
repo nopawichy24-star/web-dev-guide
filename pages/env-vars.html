@@ -1,0 +1,146 @@
+<div class="section" id="sec-env-vars">
+  <span class="section-emoji">🔐</span>
+  <h1>Environment Variables</h1>
+  <div class="lesson-meta">
+    <span class="diff-badge beginner">🟢 Beginner</span>
+    <span class="reading-time">⏱️ อ่าน ~8 นาที</span>
+  </div>
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> Supabase</div><div class="prereq-item"><span class="prereq-check">✓</span> Vercel</div>
+  </div>
+  <p><span class="en" data-th="ตัวแปรสภาพแวดล้อม — ค่าตั้งค่าที่เก็บแยกจากโค้ด เช่น API Key, URL ฐานข้อมูล">Environment Variables</span> คือค่าตั้งค่าที่เก็บ<strong>แยกจากโค้ด</strong> — เช่น API Key, รหัสลับ ที่ไม่ควรใส่ในโค้ดตรงๆ</p>
+
+  <div class="callout info">
+    <div class="callout-title">💡 ทำไมต้องแยก?</div>
+    <p>1) <strong>ความปลอดภัย</strong> — ไม่ต้อง Push Secret ขึ้น GitHub<br>
+    2) <strong>ยืดหยุ่น</strong> — เครื่องเรา (localhost) กับเว็บจริง (Production) ใช้ค่าต่างกันได้</p>
+  </div>
+
+  <h2>📁 ไฟล์ .env แต่ละชนิด</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ไฟล์</th><th>ใช้เมื่อไหร่</th><th>ใส่ใน .gitignore?</th></tr></thead>
+      <tbody>
+        <tr><td><code>.env</code></td><td>ค่าเริ่มต้นทั่วไป</td><td>✅ ใช่</td></tr>
+        <tr><td><code>.env.local</code></td><td>ค่าสำหรับเครื่องเราเอง (ใช้บ่อยสุด!)</td><td>✅ ใช่</td></tr>
+        <tr><td><code>.env.example</code></td><td>ตัวอย่าง — ไม่มี Secret จริง ไว้ให้คนอื่น Copy ไปตั้ง</td><td>❌ Push ได้</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>ตัวอย่าง <code>.env.local</code></h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">env</span><span class="code-where">📄 .env.local — ไฟล์นี้ห้าม Push!</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># Supabase (ใส่ค่าจริงจาก Dashboard)
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...
+
+# Secret — ห้ามมี NEXT_PUBLIC_ !!!
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIs...</code></pre>
+  </div>
+
+  <h3>ตัวอย่าง <code>.env.example</code></h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">env</span><span class="code-where">📄 .env.example — Push ขึ้น GitHub ได้</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># คัดลอกไฟล์นี้เป็น .env.local แล้วใส่ค่าจริง
+# cp .env.example .env.local
+
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=</code></pre>
+  </div>
+
+  <h2>🔓 Public vs Private Variable</h2>
+  <div class="compare-grid">
+    <div class="compare-box">
+      <h4>🔓 <span class="en" data-th="ตัวแปรสาธารณะ — ถูกรวมในโค้ดที่ส่งไป Browser ผู้ใช้เห็นได้">Public</span></h4>
+      <p>ขึ้นต้นด้วย <code>NEXT_PUBLIC_</code></p>
+      <p>ใช้ใน Browser ได้ ✅</p>
+      <p>ผู้ใช้เห็นได้! ⚠️</p>
+      <p>เช่น <code>NEXT_PUBLIC_SUPABASE_URL</code></p>
+    </div>
+    <div class="compare-box">
+      <h4>🔒 <span class="en" data-th="ตัวแปรลับ — ใช้ได้เฉพาะฝั่ง Server เท่านั้น ผู้ใช้เห็นไม่ได้">Private</span></h4>
+      <p>ไม่มี prefix <code>NEXT_PUBLIC_</code></p>
+      <p>ใช้ได้เฉพาะ Server ❌</p>
+      <p>ผู้ใช้เห็นไม่ได้ ✅</p>
+      <p>เช่น <code>SUPABASE_SERVICE_ROLE_KEY</code></p>
+    </div>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">🚨 กฎเหล็ก!</div>
+    <p><strong>Secret ต้องไม่มี <code>NEXT_PUBLIC_</code></strong> — ถ้าตั้งชื่อว่า <code>NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY</code> ค่านี้จะถูกส่งไป Browser ทุกคนเห็นได้ → อันตรายมาก!</p>
+  </div>
+
+  <h2>⚙️ ตั้ง Env Vars บน Vercel</h2>
+  <ol>
+    <li>Vercel Dashboard → เลือกโปรเจกต์ → <strong>Settings</strong> → <strong>Environment Variables</strong></li>
+    <li>เพิ่มตัวแปรทีละตัว (ชื่อ + ค่า)</li>
+    <li>เลือกว่าใช้ใน Environment ไหน (Production / Preview / Development)</li>
+    <li>กด <strong>Save</strong></li>
+    <li><strong>Redeploy</strong> เว็บ! (เปลี่ยน Env Vars แล้วต้อง Deploy ใหม่ถึงจะมีผล)</li>
+  </ol>
+
+  <h2>🔧 ข้อผิดพลาดที่พบบ่อย</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ปัญหา</th><th>สาเหตุ</th><th>วิธีแก้</th></tr></thead>
+      <tbody>
+        <tr><td>ค่าเป็น <code>undefined</code></td><td>ชื่อตัวแปรผิด หรือลืมเพิ่มใน Vercel</td><td>ตรวจชื่อให้ตรง ตรวจ prefix</td></tr>
+        <tr><td>เปลี่ยนค่าแล้วไม่มีผล</td><td>ลืม Redeploy</td><td>เปลี่ยน Env Vars แล้วต้อง Deploy ใหม่เสมอ!</td></tr>
+        <tr><td>ใช้ได้ใน Local แต่ Production ไม่ได้</td><td>ค่าใน <code>.env.local</code> กับ Vercel ไม่ตรงกัน</td><td>ตรวจค่าให้ตรงกันทั้ง 2 ที่</td></tr>
+        <tr><td>มี <code>""</code> หรือช่องว่าง</td><td>ใส่เครื่องหมายคำพูดหรือเว้นวรรคในค่า</td><td>ค่าใน .env ไม่ต้องใส่ <code>""</code> ครอบ</td></tr>
+        <tr><td>Secret อยู่ใน Browser</td><td>ใช้ prefix <code>NEXT_PUBLIC_</code> กับ Secret</td><td>เอา prefix ออก → ใช้ได้เฉพาะ Server</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>📋 .gitignore ตัวอย่าง</h2>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">gitignore</span><span class="code-where">📄 .gitignore</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
+    <pre><code># Dependencies
+node_modules
+
+# Build
+.next
+dist
+build
+
+# 🚨 ห้าม Push ไฟล์เหล่านี้!
+.env
+.env.local
+.env.production
+.env*.local
+
+# OS
+.DS_Store
+Thumbs.db</code></pre>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">NEXT_PUBLIC_ prefix หมายความว่าอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🔓 ตัวแปรนี้จะถูกส่งไป Browser — ผู้ใช้เห็นได้! ดังนั้นห้ามใช้กับ Secret</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">เปลี่ยน Env Vars บน Vercel แล้วต้องทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🔄 ต้อง Redeploy! เพราะค่า Env Vars ถูกอ่านตอน Build ถ้าไม่ Deploy ใหม่จะใช้ค่าเก่า</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">.env.example ไว้ทำอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📋 ไฟล์ตัวอย่างที่ไม่มี Secret จริง — Push ขึ้น GitHub ได้ ให้คนอื่น Copy ไปตั้งค่าเอง</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('connect-supa')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🔌 เชื่อมเว็บ + Supabase</div></a>
+    <a class="next" onclick="goTo('auth')"><div class="nav-label">ถัดไป →</div><div class="nav-title">👤 Authentication</div></a>
+  </div>
+  <button class="section-complete-btn" onclick="toggleComplete('env-vars')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>

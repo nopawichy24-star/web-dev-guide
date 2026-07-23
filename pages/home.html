@@ -1,0 +1,160 @@
+<div class="section active" id="sec-home">
+  <span class="section-emoji">🚀</span>
+  <h1>คู่มือพัฒนาและเผยแพร่เว็บแอป</h1>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard">
+    <div class="dash-card"><div class="dash-icon">📚</div><div class="dash-value" id="dashLessons">0%</div><div class="dash-label">เรียนแล้ว</div></div>
+    <div class="dash-card"><div class="dash-icon">🔤</div><div class="dash-value" id="dashVocab">0</div><div class="dash-label">จำศัพท์ได้</div></div>
+    <div class="dash-card"><div class="dash-icon">🃏</div><div class="dash-value" id="dashCards">0</div><div class="dash-label">Flashcard</div></div>
+    <div class="dash-card"><div class="dash-icon">🧠</div><div class="dash-value" id="dashQuiz">0</div><div class="dash-label">Quiz ตอบถูก</div></div>
+  </div>
+  <button class="fc-start-btn" onclick="openFlashcard()">🃏 เริ่มทบทวน Flashcard</button>
+  <p>เรียนรู้การสร้างเว็บไซต์ตั้งแต่เริ่มต้นจนเปิดใช้งานจริง ด้วย <span class="en" data-th="ระบบควบคุมเวอร์ชัน — ติดตามการเปลี่ยนแปลงของไฟล์">Git</span>, <span class="en" data-th="เว็บไซต์เก็บโค้ดออนไลน์ — ที่เก็บโค้ดบนคลาวด์">GitHub</span>, <span class="en" data-th="แพลตฟอร์มเผยแพร่เว็บไซต์ — นำเว็บขึ้นออนไลน์ง่ายๆ">Vercel</span> และ <span class="en" data-th="ระบบฐานข้อมูลและ backend สำเร็จรูป — จัดการข้อมูลโดยไม่ต้องตั้งเซิร์ฟเวอร์เอง">Supabase</span></p>
+
+  <div class="callout info">
+    <div class="callout-title">💡 คู่มือนี้เหมาะกับใคร?</div>
+    <ul>
+      <li>ผู้เริ่มต้นสร้างเว็บไซต์ ที่ยังไม่มีพื้นฐานมากนัก</li>
+      <li>ผู้ที่ใช้ <span class="en" data-th="ปัญญาประดิษฐ์ — โปรแกรมที่คิดและเขียนโค้ดช่วยได้">AI</span> เช่น Claude หรือ ChatGPT ช่วยเขียนโค้ด</li>
+      <li>ผู้ที่ต้องการ <span class="en" data-th="การเผยแพร่เว็บไซต์ขึ้นออนไลน์">Deploy</span> เว็บจริงโดยไม่ต้องตั้ง <span class="en" data-th="เครื่องคอมพิวเตอร์ที่ให้บริการเว็บไซต์ — คอมฯ ที่รันเว็บ 24 ชม.">Server</span> เอง</li>
+    </ul>
+  </div>
+
+  <h2>🗺️ ภาพรวม: จากโค้ดสู่เว็บออนไลน์</h2>
+  <p>เมื่อเราสร้างเว็บไซต์ กระบวนการทั้งหมดจากเขียนโค้ดจนถึงผู้ใช้เปิดเว็บได้มีดังนี้:</p>
+
+  <div class="workflow">
+    <div class="wf-step">👨‍💻 นักพัฒนา (เรา)<div class="wf-sub">เขียนโค้ดในเครื่องคอมพิวเตอร์</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">📝 <span class="en" data-th="การบันทึกการเปลี่ยนแปลง — 'เซฟเกม' สำหรับโค้ด">Git Commit</span><div class="wf-sub">บันทึกสิ่งที่เปลี่ยนแปลง</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">📤 <span class="en" data-th="ส่งโค้ดขึ้นไปเก็บบนเว็บ">Push</span> ไป <span class="en" data-th="ที่เก็บโค้ดออนไลน์">GitHub</span><div class="wf-sub">อัปโหลดโค้ดไปเก็บบนคลาวด์</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">▲ <span class="en" data-th="แพลตฟอร์มเผยแพร่เว็บไซต์">Vercel</span> ดึงโค้ดจาก GitHub<div class="wf-sub">แปลงโค้ดเป็นเว็บไซต์อัตโนมัติ</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">⚡ เว็บเชื่อม <span class="en" data-th="ระบบฐานข้อมูลสำเร็จรูป">Supabase</span><div class="wf-sub">จัดการข้อมูล, สมาชิก, ไฟล์</div></div>
+    <div class="wf-arrow">⬇️</div>
+    <div class="wf-step">🌍 ผู้ใช้เข้าถึงเว็บไซต์ออนไลน์<div class="wf-sub">พร้อมใช้งานจริง!</div></div>
+  </div>
+
+  <h2>🧩 แต่ละเครื่องมือทำหน้าที่อะไร?</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>เครื่องมือ</th><th>หน้าที่</th><th>เปรียบเทียบ</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><span class="en" data-th="ระบบควบคุมเวอร์ชัน — ติดตามทุกการเปลี่ยนแปลงของไฟล์">Git</span></strong></td>
+          <td>ติดตามการเปลี่ยนแปลงของโค้ด</td>
+          <td>📸 เหมือน "ประวัติการแก้ไข" ใน Google Docs — ย้อนดูได้ทุกเวอร์ชัน</td>
+        </tr>
+        <tr>
+          <td><strong><span class="en" data-th="เว็บไซต์เก็บโค้ด — เหมือน Google Drive สำหรับโค้ด">GitHub</span></strong></td>
+          <td>เก็บโค้ดบนคลาวด์</td>
+          <td>☁️ เหมือน Google Drive แต่สำหรับโค้ดโดยเฉพาะ</td>
+        </tr>
+        <tr>
+          <td><strong><span class="en" data-th="แพลตฟอร์มเผยแพร่เว็บ — กดปุ่มเดียวเว็บขึ้นออนไลน์">Vercel</span></strong></td>
+          <td>แปลงโค้ดเป็นเว็บที่เปิดได้</td>
+          <td>🏗️ เหมือนช่างก่อสร้างที่สร้างบ้านจากแบบแปลน</td>
+        </tr>
+        <tr>
+          <td><strong><span class="en" data-th="ระบบจัดการข้อมูลหลังบ้าน — ฐานข้อมูล+ระบบสมาชิก+ไฟล์ ครบจบ">Supabase</span></strong></td>
+          <td>ฐานข้อมูล + ระบบสมาชิก</td>
+          <td>🗄️ เหมือนตู้เก็บเอกสารอัจฉริยะ ที่จัดการสิทธิ์ให้ด้วย</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>📚 เส้นทางการเรียน</h2>
+  <p>คู่มือนี้แบ่งเป็น <strong>6 ระยะ</strong> เรียนตามลำดับจะเข้าใจง่ายที่สุด:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ระยะ</th><th>หัวข้อ</th><th>สิ่งที่จะทำได้</th></tr></thead>
+      <tbody>
+        <tr><td>1️⃣</td><td>พื้นฐาน</td><td>เข้าใจโครงสร้างเว็บ, ใช้ Command Line ได้, ติดตั้งเครื่องมือ</td></tr>
+        <tr><td>2️⃣</td><td>Git</td><td>ควบคุมเวอร์ชันของโค้ด, บันทึกและย้อนกลับได้</td></tr>
+        <tr><td>3️⃣</td><td>GitHub</td><td>เก็บโค้ดบนคลาวด์, ทำงานร่วมกับทีม</td></tr>
+        <tr><td>4️⃣</td><td>Vercel</td><td>เผยแพร่เว็บไซต์ขึ้นออนไลน์</td></tr>
+        <tr><td>5️⃣</td><td>Supabase</td><td>สร้างฐานข้อมูล, ระบบสมาชิก, จัดการไฟล์</td></tr>
+        <tr><td>6️⃣</td><td>โปรเจกต์จริง</td><td>สร้าง Task App ครบวงจร + แก้ปัญหาได้</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">💜 เคล็ดลับการเรียน</div>
+    <p>กดคำภาษาอังกฤษที่ <span class="en" data-th="มีไฮไลท์สีนี้! — คำไหนเป็นสีนี้ กดแล้วจะขึ้นคำแปลไทย">highlight</span> ไว้เพื่อดูคำแปลไทย ทำตามทีละขั้นตอน อ่านกล่องคำเตือนทุกกล่อง แล้วลองทำแบบทดสอบท้ายบทเพื่อทบทวน!</p>
+  </div>
+
+  <h2>🏗️ สถาปัตยกรรมระบบทั้งหมด</h2>
+  <p>ทุกส่วนเชื่อมกันดังนี้:</p>
+  <div class="workflow">
+    <div class="wf-step">🖥️ Browser (ผู้ใช้)<div class="wf-sub">เปิดเว็บ → เห็นหน้าตา UI</div></div>
+    <div class="wf-arrow">⬇️ ⬆️</div>
+    <div class="wf-step">⚛️ React / Next.js<div class="wf-sub">สร้างหน้าเว็บ + จัดการ State</div></div>
+    <div class="wf-arrow">⬇️ ⬆️</div>
+    <div class="wf-step">📦 Supabase JS Library<div class="wf-sub">แปลงคำสั่ง JavaScript เป็น API call</div></div>
+    <div class="wf-arrow">⬇️ ⬆️</div>
+    <div class="wf-step">🔗 Supabase REST API<div class="wf-sub">รับ-ส่งข้อมูล + ตรวจสิทธิ์ + ตรวจ RLS</div></div>
+    <div class="wf-arrow">⬇️ ⬆️</div>
+    <div class="wf-step">🗄️ PostgreSQL Database<div class="wf-sub">เก็บข้อมูลจริงทั้งหมด</div></div>
+  </div>
+
+  <h2>🗺️ Roadmap — เส้นทางการเรียนรู้</h2>
+  <p>ติ๊กเมื่อเรียนจบแต่ละหัวข้อ — ดู Progress ที่ Sidebar!</p>
+  <ul class="checklist" data-checklist="roadmap">
+    <li><input type="checkbox" id="rm1"><label for="rm1">🌐 HTML / CSS / JavaScript พื้นฐาน</label></li>
+    <li><input type="checkbox" id="rm2"><label for="rm2">⌨️ Command Line พื้นฐาน</label></li>
+    <li><input type="checkbox" id="rm3"><label for="rm3">🔧 ติดตั้ง Node.js + Git + VS Code</label></li>
+    <li><input type="checkbox" id="rm4"><label for="rm4">📦 Git — เข้าใจ commit, branch, merge</label></li>
+    <li><input type="checkbox" id="rm5"><label for="rm5">🐙 GitHub — push โค้ดขึ้นคลาวด์ได้</label></li>
+    <li><input type="checkbox" id="rm6"><label for="rm6">▲ Vercel — Deploy เว็บออนไลน์ได้</label></li>
+    <li><input type="checkbox" id="rm7"><label for="rm7">⚡ Supabase — สร้าง Database + ใช้ SQL ได้</label></li>
+    <li><input type="checkbox" id="rm8"><label for="rm8">👤 Authentication — ระบบ Login ได้</label></li>
+    <li><input type="checkbox" id="rm9"><label for="rm9">🛡️ RLS — ตั้ง Security Policy ได้</label></li>
+    <li><input type="checkbox" id="rm10"><label for="rm10">📁 Storage — อัปโหลดไฟล์ได้</label></li>
+    <li><input type="checkbox" id="rm11"><label for="rm11">🔐 Environment Variables — จัดการ Secret ได้</label></li>
+    <li><input type="checkbox" id="rm12"><label for="rm12">📋 Task App — สร้างโปรเจกต์จริงครบวงจร!</label></li>
+    <li><input type="checkbox" id="rm13"><label for="rm13">🤖 AI Coding — ใช้ Claude ช่วยเขียนโค้ดอย่างปลอดภัย</label></li>
+  </ul>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ — ภาพรวม</div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Git ทำหน้าที่อะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">📸 ติดตามทุกการเปลี่ยนแปลงของโค้ด — เหมือนประวัติการแก้ไข ย้อนกลับได้ทุกเวอร์ชัน</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Vercel ทำหน้าที่อะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🏗️ แปลงโค้ดเป็นเว็บไซต์ที่เปิดได้จริงบนอินเทอร์เน็ต — auto deploy ทุกครั้งที่ Push</div>
+    </div>
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Supabase ทำหน้าที่อะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">🗄️ ให้ฐานข้อมูล + ระบบสมาชิก + เก็บไฟล์ พร้อมใช้ ไม่ต้องสร้าง Backend เอง</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <div></div>
+    <a class="next" onclick="goTo('getting-started')">
+      <div class="nav-label">ถัดไป →</div>
+      <div class="nav-title">🎯 เริ่มต้นใช้งาน</div>
+    </a>
+  </div>
+
+  <button class="section-complete-btn" onclick="toggleComplete('home')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>
+
+
+<!-- ╔═══════════════════════════════════════════════════════════╗
+     ║  SECTION 2: เริ่มต้นใช้งาน                                  ║
+     ╚═══════════════════════════════════════════════════════════╝ -->
