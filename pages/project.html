@@ -485,15 +485,9 @@ export default function TasksPage() {
     <a onclick="goTo('deployment')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🚀 Deployment</div></a>
     <a class="next" onclick="goTo('ai-coding')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🤖 AI ช่วยเขียนโค้ด</div></a>
   </div>
-  <button class="section-complete-btn" onclick="
   <div class="callout tip">
-    <div class="callout-title">🎯 โปรเจกต์ถัดไป — ลองสร้าง!</div>
-    <p>หลังทำ Task App แล้ว ลองสร้าง:<br>
-    📝 <strong>Blog</strong> — CRUD + Rich Text<br>
-    💰 <strong>Expense Tracker</strong> — CRUD + Chart<br>
-    🖼️ <strong>Gallery</strong> — Storage + Upload<br>
-    💬 <strong>Chat</strong> — Realtime + Auth</p>
+    <div class="callout-title">🎯 Mini Project — ลองทำ!</div>
+    <p>สร้างโปรเจกต์ตาม Checklist → ทดสอบ Login, CRUD, RLS และ Responsive → Deploy ขึ้น Vercel และตรวจ Production</p>
   </div>
-  <button class="fc-start-btn" onclick="openFlashcard()" style="margin-bottom:1em">🃏 ทบทวน Flashcard</button>
-  toggleComplete('project')">✅ เรียนจบหน้านี้แล้ว</button>
+  <button class="section-complete-btn" onclick="toggleComplete('project')">✅ เรียนจบหน้านี้แล้ว</button>
 </div>
