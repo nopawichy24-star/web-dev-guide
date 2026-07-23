@@ -1028,6 +1028,7 @@ select {
       <a class="nav-item" data-section="project" onclick="goTo('project')"><span class="nav-diff">🟡</span> 📋 Task App</a>
       <a class="nav-item" data-section="ai-coding" onclick="goTo('ai-coding')"><span class="nav-diff">🟡</span> 🤖 AI ช่วยเขียนโค้ด</a>
       <a class="nav-item" data-section="ai-workflow" onclick="goTo('ai-workflow')"><span class="nav-diff">🟡</span> 🔄 AI Workflow</a>
+      <a class="nav-item" data-section="best-practices" onclick="goTo('best-practices')"><span class="nav-diff">🟡</span> 🧹 Best Practices</a>
       <a class="nav-item" data-section="debugging" onclick="goTo('debugging')"><span class="nav-diff">🟡</span> 🐛 Debugging</a>
       <a class="nav-item" data-section="testing" onclick="goTo('testing')"><span class="nav-diff">🟡</span> 🧪 Testing</a>
       <a class="nav-item" data-section="troubleshoot" onclick="goTo('troubleshoot')"><span class="nav-diff">🟡</span> 🔧 แก้ปัญหา</a>
@@ -6785,9 +6786,435 @@ supabase.auth.getUser()</code></pre>
 
   <div class="page-nav">
     <a onclick="goTo('ai-coding')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🤖 AI ช่วยเขียนโค้ด</div></a>
-    <a class="next" onclick="goTo('debugging')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🐛 Debugging</div></a>
+    <a class="next" onclick="goTo('best-practices')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🧹 Best Practices</div></a>
   </div>
   <button class="section-complete-btn" onclick="toggleComplete('ai-workflow')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>
+
+
+<!-- ╔═══════════════════════════════════════════════════════════╗
+     ║  NEW: Production Best Practices                           ║
+     ╚═══════════════════════════════════════════════════════════╝ -->
+<div class="section" id="sec-best-practices">
+  <span class="section-emoji">🧹</span>
+  <h1>Production Best Practices — เขียนโค้ดให้ทีมอ่านง่ายและดูแลต่อได้</h1>
+
+  <div class="lesson-meta">
+    <span class="diff-badge intermediate">🟡 Intermediate</span>
+    <span class="reading-time">⏱️ อ่าน ~18 นาที</span>
+  </div>
+
+  <div class="prereq-card">
+    <div class="prereq-title">📋 Prerequisite</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> ใช้ Git และ GitHub เบื้องต้นได้</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> เคยสร้างโปรเจกต์จริงอย่างน้อย 1 ตัว</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> อ่าน JavaScript และ React พื้นฐานได้</div>
+  </div>
+
+  <p>โค้ดที่ “ทำงานได้” ยังไม่พอสำหรับโปรเจกต์จริง เพราะโค้ดต้องอ่านง่าย แก้ง่าย ทดสอบง่าย และปลอดภัยเมื่อมีหลายคนทำงานร่วมกัน บทนี้สรุปแนวทางที่ช่วยให้โปรเจกต์เติบโตโดยไม่กลายเป็นโค้ดที่ไม่มีใครกล้าแตะ</p>
+
+  <h2>1️⃣ Clean Code — ให้โค้ดบอกความหมายด้วยตัวเอง</h2>
+  <p>Clean Code ไม่ได้หมายถึงโค้ดสั้นที่สุด แต่หมายถึงโค้ดที่คนอื่นเปิดมาแล้วเข้าใจเจตนาได้โดยไม่ต้องเดา</p>
+
+  <div class="compare-grid">
+    <div class="compare-box">
+      <h3>❌ อ่านยาก</h3>
+      <div class="code-block">
+        <div class="code-header"><span>ชื่อไม่สื่อความหมายและทำหลายอย่างพร้อมกัน</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+        <pre><code>function x(a) {
+  if (a) {
+    if (a.user) {
+      if (a.user.active) {
+        localStorage.setItem('u', JSON.stringify(a.user))
+        location.href = '/dashboard'
+      }
+    }
+  }
+}</code></pre>
+      </div>
+    </div>
+
+    <div class="compare-box">
+      <h3>✅ อ่านง่ายกว่า</h3>
+      <div class="code-block">
+        <div class="code-header"><span>แยกหน้าที่และใช้ Early Return</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+        <pre><code>function redirectActiveUser(session) {
+  const user = session?.user
+
+  if (!user || !user.active) return
+
+  saveCurrentUser(user)
+  window.location.assign('/dashboard')
+}
+
+function saveCurrentUser(user) {
+  localStorage.setItem(
+    'current-user',
+    JSON.stringify(user)
+  )
+}</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>หลักการ</th><th>วิธีใช้จริง</th><th>ผลลัพธ์</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ตั้งชื่อให้สื่อความหมาย</td><td>ใช้ <code>isLoggedIn</code> แทน <code>x</code></td><td>อ่านแล้วรู้ทันทีว่าค่าคืออะไร</td></tr>
+        <tr><td>ฟังก์ชันทำอย่างเดียว</td><td>แยก Fetch, Validate และ Render</td><td>ทดสอบและแก้บั๊กง่ายขึ้น</td></tr>
+        <tr><td>ลด if ซ้อนลึก</td><td>ใช้ Early Return</td><td>เส้นทางการทำงานชัดเจน</td></tr>
+        <tr><td>ลบโค้ดที่ไม่ใช้</td><td>พึ่ง Git History แทนการคอมเมนต์ทิ้งไว้</td><td>ไฟล์ไม่รกและไม่ทำให้สับสน</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="practice-card best">
+    <h3>✅ Best Practice — แยก Business Logic ออกจาก UI</h3>
+    <p>ให้ Component รับผิดชอบการแสดงผล ส่วนการคำนวณหรือแปลงข้อมูลควรอยู่ในฟังก์ชันแยก เพื่อให้เขียน Unit Test ได้ง่าย</p>
+  </div>
+
+  <div class="practice-card mistake">
+    <h3>❌ Common Mistake — สร้างฟังก์ชันยาวหลายร้อยบรรทัด</h3>
+    <p>เมื่อฟังก์ชันทั้ง Fetch API, Validate, คำนวณ และแก้ DOM ในที่เดียว การเปลี่ยนส่วนหนึ่งอาจทำให้อีกส่วนพังโดยไม่รู้ตัว</p>
+  </div>
+
+  <h2>2️⃣ Naming Convention — ใช้รูปแบบชื่อให้สม่ำเสมอ</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>รูปแบบ</th><th>ใช้กับ</th><th>ตัวอย่าง</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>camelCase</code></td><td>ตัวแปรและฟังก์ชัน</td><td><code>currentUser</code>, <code>fetchTasks()</code></td></tr>
+        <tr><td><code>PascalCase</code></td><td>React Component และ Class</td><td><code>TaskCard</code>, <code>UserProfile</code></td></tr>
+        <tr><td><code>UPPER_SNAKE_CASE</code></td><td>ค่าคงที่ระดับโปรเจกต์</td><td><code>MAX_UPLOAD_SIZE</code></td></tr>
+        <tr><td><code>kebab-case</code></td><td>ชื่อไฟล์, โฟลเดอร์ และ URL Route</td><td><code>task-card.jsx</code>, <code>/reset-password</code></td></tr>
+        <tr><td><code>is/has/can</code></td><td>ค่าชนิด Boolean</td><td><code>isLoading</code>, <code>hasAccess</code></td></tr>
+        <tr><td><code>handle...</code></td><td>Event Handler</td><td><code>handleSubmit</code>, <code>handleDelete</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>ตัวอย่างชื่อที่สื่อความหมาย</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>const MAX_LOGIN_ATTEMPTS = 5
+
+function TaskCard({ task, onDelete }) {
+  const isCompleted = task.status === 'done'
+
+  function handleDelete() {
+    onDelete(task.id)
+  }
+
+  return (
+    &lt;article&gt;
+      &lt;h3&gt;{task.title}&lt;/h3&gt;
+      &lt;button onClick={handleDelete}&gt;
+        ลบ
+      &lt;/button&gt;
+    &lt;/article&gt;
+  )
+}</code></pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">💡 ชื่อยาวแต่ชัด ดีกว่าชื่อสั้นแต่ต้องเดา</div>
+    <p><code>daysUntilSubscriptionExpires</code> อ่านง่ายกว่า <code>d</code> แม้จะพิมพ์ยาวกว่าเล็กน้อย</p>
+  </div>
+
+  <h2>3️⃣ Git Branch Strategy — แยกงานก่อนรวมเข้า Production</h2>
+  <p>การทำทุกอย่างบน <code>main</code> เสี่ยงทำให้เว็บจริงพัง Branch ช่วยให้แต่ละงานถูกพัฒนาและตรวจสอบแยกกัน</p>
+
+  <div class="workflow">
+    <div class="wf-step">main</div>
+    <div class="wf-sub">โค้ด Production ที่ผ่านการตรวจแล้ว</div>
+    <div class="wf-arrow">↓ แตก Branch</div>
+    <div class="wf-step">develop</div>
+    <div class="wf-sub">รวมงานสำหรับทดสอบก่อนขึ้นจริง</div>
+    <div class="wf-arrow">↓ แตก Branch ตามงาน</div>
+    <div class="wf-step">feature/login-page</div>
+    <div class="wf-sub">ฟีเจอร์ใหม่</div>
+    <div class="wf-arrow">หรือ</div>
+    <div class="wf-step">fix/mobile-sidebar</div>
+    <div class="wf-sub">แก้บั๊กเฉพาะเรื่อง</div>
+    <div class="wf-arrow">↓ Pull Request + Review</div>
+    <div class="wf-step">develop → main</div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>ตัวอย่าง Workflow ด้วย Git</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>git switch develop
+git pull origin develop
+
+git switch -c feature/login-page
+
+# แก้โค้ดและทดสอบ
+git add .
+git commit -m "feat: add login page"
+
+git push -u origin feature/login-page</code></pre>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Branch</th><th>หน้าที่</th><th>ตัวอย่าง</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>main</code></td><td>โค้ดที่พร้อมใช้งานจริง</td><td>Deploy ไป Vercel Production</td></tr>
+        <tr><td><code>develop</code></td><td>รวมฟีเจอร์ก่อน Release</td><td>ทดสอบหลายงานร่วมกัน</td></tr>
+        <tr><td><code>feature/...</code></td><td>พัฒนาฟีเจอร์ใหม่</td><td><code>feature/flashcard-filter</code></td></tr>
+        <tr><td><code>fix/...</code></td><td>แก้บั๊ก</td><td><code>fix/ipad-layout</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>4️⃣ Commit Convention — ให้ประวัติ Git เล่าเรื่องได้</h2>
+  <p>Commit ที่ดีควรบอกว่าเปลี่ยนอะไรและเพื่ออะไร ไม่ควรใช้ข้อความกว้าง ๆ เช่น “update” หรือ “แก้แล้ว”</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Prefix</th><th>ใช้เมื่อ</th><th>ตัวอย่าง</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>feat:</code></td><td>เพิ่มฟีเจอร์</td><td><code>feat: add flashcard type filter</code></td></tr>
+        <tr><td><code>fix:</code></td><td>แก้บั๊ก</td><td><code>fix: prevent sidebar body scroll</code></td></tr>
+        <tr><td><code>docs:</code></td><td>แก้เอกสาร</td><td><code>docs: add setup instructions</code></td></tr>
+        <tr><td><code>style:</code></td><td>จัดรูปแบบโดยไม่เปลี่ยนพฤติกรรม</td><td><code>style: format lesson headings</code></td></tr>
+        <tr><td><code>refactor:</code></td><td>ปรับโครงสร้างโดยพฤติกรรมเดิม</td><td><code>refactor: extract auth helper</code></td></tr>
+        <tr><td><code>test:</code></td><td>เพิ่มหรือแก้ Test</td><td><code>test: cover task validation</code></td></tr>
+        <tr><td><code>chore:</code></td><td>งานดูแลโปรเจกต์</td><td><code>chore: update dependencies</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-box">
+      <h3>❌ ไม่ชัดเจน</h3>
+      <div class="code-block">
+        <div class="code-header"><span>Commit ที่ตามย้อนหลังยาก</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+        <pre><code>update
+fix code
+final
+แก้ล่าสุด</code></pre>
+      </div>
+    </div>
+    <div class="compare-box">
+      <h3>✅ ชัดเจน</h3>
+      <div class="code-block">
+        <div class="code-header"><span>Commit ที่บอกเจตนา</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+        <pre><code>feat: add login page
+fix: handle expired session
+docs: explain environment variables
+refactor: split task service</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <h2>5️⃣ Code Review — ตรวจโค้ดก่อนรวม Branch</h2>
+  <p>Code Review ไม่ใช่การจับผิด แต่เป็นการลดความเสี่ยง แชร์ความรู้ และช่วยให้มาตรฐานของทีมสม่ำเสมอ</p>
+
+  <ul class="checklist">
+    <li><input type="checkbox" id="bp-review-1"><label for="bp-review-1">ชื่อฟังก์ชันและตัวแปรอ่านแล้วเข้าใจได้</label></li>
+    <li><input type="checkbox" id="bp-review-2"><label for="bp-review-2">ไม่มี API Key, Password หรือ Secret หลุดในโค้ด</label></li>
+    <li><input type="checkbox" id="bp-review-3"><label for="bp-review-3">มี Error Handling สำหรับ API และ Database</label></li>
+    <li><input type="checkbox" id="bp-review-4"><label for="bp-review-4">ตรวจสิทธิ์และ RLS สำหรับข้อมูลของผู้ใช้</label></li>
+    <li><input type="checkbox" id="bp-review-5"><label for="bp-review-5">ไม่มีโค้ดซ้ำหรือฟังก์ชันที่ทำหลายหน้าที่เกินไป</label></li>
+    <li><input type="checkbox" id="bp-review-6"><label for="bp-review-6">UI รองรับ Loading, Empty และ Error State</label></li>
+    <li><input type="checkbox" id="bp-review-7"><label for="bp-review-7">ทดสอบบนมือถือและ Dark Mode แล้ว</label></li>
+  </ul>
+
+  <div class="code-block">
+    <div class="code-header"><span>Error Handling ที่อ่านง่าย</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>async function loadTasks() {
+  setIsLoading(true)
+  setErrorMessage('')
+
+  try {
+    const { data, error } = await supabase
+      .from('tasks')
+      .select('*')
+
+    if (error) throw error
+
+    setTasks(data)
+  } catch (error) {
+    console.error('loadTasks failed:', error)
+    setErrorMessage('โหลดรายการไม่สำเร็จ กรุณาลองใหม่')
+  } finally {
+    setIsLoading(false)
+  }
+}</code></pre>
+  </div>
+
+  <h2>6️⃣ Documentation — อธิบาย “ทำไม” ไม่ใช่บรรยายโค้ดซ้ำ</h2>
+
+  <div class="compare-grid">
+    <div class="compare-box">
+      <h3>❌ คอมเมนต์ที่ไม่ช่วย</h3>
+      <div class="code-block">
+        <div class="code-header"><span>บอกสิ่งที่โค้ดบอกอยู่แล้ว</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+        <pre><code>// เพิ่ม 1 ให้ count
+count = count + 1</code></pre>
+      </div>
+    </div>
+    <div class="compare-box">
+      <h3>✅ คอมเมนต์ที่มีเหตุผล</h3>
+      <div class="code-block">
+        <div class="code-header"><span>อธิบายข้อจำกัดทางธุรกิจ</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+        <pre><code>// จำกัด 5 ครั้งเพื่อป้องกันผู้ใช้กดส่งซ้ำ
+// ระหว่างระบบชำระเงินกำลังตอบกลับ
+retryCount = Math.min(retryCount + 1, 5)</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">📝 เอกสารที่ควรมี</div>
+    <p>README สำหรับเริ่มต้นโปรเจกต์, คำอธิบาย Environment Variables, วิธี Deploy, โครงสร้างฐานข้อมูล และเหตุผลของการตัดสินใจสำคัญ</p>
+  </div>
+
+  <h2>7️⃣ README มาตรฐานของโปรเจกต์</h2>
+
+  <div class="code-block">
+    <div class="code-header"><span>README.md Template</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code># Task App
+
+เว็บจัดการงานส่วนตัวด้วย Next.js และ Supabase
+
+## Features
+
+- สมัครสมาชิกและเข้าสู่ระบบ
+- เพิ่ม แก้ไข และลบ Task
+- ผู้ใช้เห็นเฉพาะข้อมูลของตัวเองด้วย RLS
+
+## Tech Stack
+
+- Next.js
+- Supabase
+- Vercel
+
+## Installation
+
+```bash
+git clone YOUR_REPOSITORY_URL
+cd task-app
+npm install
+```
+
+## Environment Variables
+
+สร้างไฟล์ `.env.local`
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+```
+
+> ห้ามใส่ service role key ใน Client
+
+## Run Locally
+
+```bash
+npm run dev
+```
+
+เปิด `http://localhost:3000`
+
+## Deployment
+
+เชื่อม Repository กับ Vercel และเพิ่ม Environment Variables
+ใน Project Settings ก่อน Deploy</code></pre>
+  </div>
+
+  <div class="practice-card best">
+    <h3>✅ Best Practice — README ต้องทดสอบตามได้จริง</h3>
+    <p>ให้สมาชิกทีมคนใหม่ลองทำตาม README ตั้งแต่ Clone จนเปิดโปรเจกต์ ถ้าติดตรงไหน แสดงว่าเอกสารยังขาดข้อมูล</p>
+  </div>
+
+  <h2>8️⃣ Semantic Versioning — MAJOR.MINOR.PATCH</h2>
+  <p>Semantic Versioning ใช้เลข 3 ชุดเพื่อสื่อว่าการอัปเดตมีผลกระทบมากแค่ไหน เช่น <code>2.4.1</code></p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ส่วน</th><th>เพิ่มเมื่อ</th><th>ตัวอย่าง</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>MAJOR</code></td><td>มี Breaking Change ที่ของเดิมใช้ต่อไม่ได้</td><td><code>1.9.0 → 2.0.0</code></td></tr>
+        <tr><td><code>MINOR</code></td><td>เพิ่มฟีเจอร์ใหม่แต่ยังรองรับของเดิม</td><td><code>1.4.2 → 1.5.0</code></td></tr>
+        <tr><td><code>PATCH</code></td><td>แก้บั๊กโดยไม่เปลี่ยน API เดิม</td><td><code>1.4.2 → 1.4.3</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="workflow">
+    <div class="wf-step">แก้บั๊กเล็ก</div>
+    <div class="wf-arrow">→</div>
+    <div class="wf-step">PATCH</div>
+    <div class="wf-sub">1.2.0 → 1.2.1</div>
+    <div class="wf-arrow">|</div>
+    <div class="wf-step">เพิ่มฟีเจอร์ที่เข้ากันได้</div>
+    <div class="wf-arrow">→</div>
+    <div class="wf-step">MINOR</div>
+    <div class="wf-sub">1.2.1 → 1.3.0</div>
+    <div class="wf-arrow">|</div>
+    <div class="wf-step">เปลี่ยนจนของเดิมใช้ไม่ได้</div>
+    <div class="wf-arrow">→</div>
+    <div class="wf-step">MAJOR</div>
+    <div class="wf-sub">1.3.0 → 2.0.0</div>
+  </div>
+
+  <h2>✅ Production Readiness Checklist</h2>
+  <ul class="checklist">
+    <li><input type="checkbox" id="bp-final-1"><label for="bp-final-1">โค้ดผ่าน Formatter และไม่มี Warning สำคัญ</label></li>
+    <li><input type="checkbox" id="bp-final-2"><label for="bp-final-2">Commit มีข้อความชัดเจนและแยกตามงาน</label></li>
+    <li><input type="checkbox" id="bp-final-3"><label for="bp-final-3">เปิด Pull Request และมีผู้ตรวจโค้ด</label></li>
+    <li><input type="checkbox" id="bp-final-4"><label for="bp-final-4">README และ Environment Variables เป็นปัจจุบัน</label></li>
+    <li><input type="checkbox" id="bp-final-5"><label for="bp-final-5">ไม่มี Secret ใน Git History</label></li>
+    <li><input type="checkbox" id="bp-final-6"><label for="bp-final-6">ทดสอบฟังก์ชันสำคัญก่อน Merge</label></li>
+    <li><input type="checkbox" id="bp-final-7"><label for="bp-final-7">มีแผน Rollback เมื่อ Deploy แล้วพบปัญหา</label></li>
+  </ul>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ Best Practices</div>
+
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ทำไมฟังก์ชันควรทำหน้าที่หลักเพียงอย่างเดียว?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">เพราะอ่าน ทดสอบ และแก้ไขได้ง่ายกว่า เมื่อพฤติกรรมหนึ่งเปลี่ยนจะลดโอกาสกระทบส่วนที่ไม่เกี่ยวข้อง</div>
+    </div>
+
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Branch ชื่อ feature/login-page ควรถูกรวมเข้า main โดยตรงทุกครั้งหรือไม่?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">ไม่จำเป็น — ในทีมที่ใช้ develop ควรเปิด Pull Request เข้า develop เพื่อทดสอบก่อน แล้วจึงรวม Release ที่ผ่านการตรวจเข้า main</div>
+    </div>
+
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Commit “update” มีปัญหาอย่างไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">ไม่บอกว่าเปลี่ยนอะไรหรือทำไม ทำให้ Review, หา Bug และย้อนประวัติยาก ควรใช้ข้อความเช่น fix: handle expired session</div>
+    </div>
+
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">เวอร์ชัน 1.4.2 แก้บั๊กโดยไม่เปลี่ยน API ควรเป็นเลขใด?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">1.4.3 เพราะเป็นการเพิ่ม PATCH</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('ai-workflow')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🔄 AI Workflow</div></a>
+    <a class="next" onclick="goTo('debugging')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🐛 Debugging</div></a>
+  </div>
+
+  <button class="section-complete-btn" onclick="toggleComplete('best-practices')">✅ เรียนจบหน้านี้แล้ว</button>
 </div>
 
 <!-- ╔═══════════════════════════════════════════════════════════╗
@@ -6927,7 +7354,7 @@ console.log('error:', error)
   </div>
 
   <div class="page-nav">
-    <a onclick="goTo('ai-workflow')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🔄 AI Workflow</div></a>
+    <a onclick="goTo('best-practices')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🧹 Best Practices</div></a>
     <a class="next" onclick="goTo('testing')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🧪 Testing</div></a>
   </div>
   <button class="section-complete-btn" onclick="toggleComplete('debugging')">✅ เรียนจบหน้านี้แล้ว</button>
@@ -7416,7 +7843,7 @@ const SECTIONS = [
   'git','github','vercel','gh-vercel',
   'supabase','connect-supa','env-vars','auth','database','storage','security',
   'env-dev-prod',
-  'deployment','project','ai-coding','ai-workflow','debugging','testing',
+  'deployment','project','ai-coding','ai-workflow','best-practices','debugging','testing',
   'troubleshoot','performance',
   'flashcard','checklist','glossary','faq'
 ];
@@ -7433,7 +7860,8 @@ const SECTION_TITLES = {
   'env-dev-prod':'🌍 Dev vs Production',
   'deployment':'🚀 Deployment',
   'project':'📋 Task App','ai-coding':'🤖 AI ช่วยเขียนโค้ด',
-  'ai-workflow':'🔄 AI Workflow','debugging':'🐛 Debugging','testing':'🧪 Testing',
+  'ai-workflow':'🔄 AI Workflow','best-practices':'🧹 Best Practices',
+  'debugging':'🐛 Debugging','testing':'🧪 Testing',
   'troubleshoot':'🔧 แก้ปัญหา','performance':'⚡ Performance',
   'checklist':'✅ Checklist','glossary':'📖 คำศัพท์','faq':'❓ FAQ',
   'flashcard':'🃏 Flashcard'
