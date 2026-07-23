@@ -530,3 +530,45 @@ table {
     padding: 14px 16px;
   }
 }
+
+
+/* =========================================================
+   SIDEBAR OPEN/CLOSE FIX
+   Desktop: collapsible sidebar
+   Mobile/tablet: slide-in drawer
+   ========================================================= */
+
+.hamburger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.hamburger:hover {
+  background: var(--bg-secondary);
+}
+
+@media (min-width: 1101px) {
+  body.sidebar-collapsed .sidebar {
+    transform: translate3d(-100%, 0, 0);
+    box-shadow: none;
+    pointer-events: none;
+  }
+
+  body.sidebar-collapsed .main {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .sidebar,
+  .main {
+    transition:
+      transform 0.24s ease,
+      margin-left 0.24s ease,
+      width 0.24s ease;
+  }
+}
