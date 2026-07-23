@@ -1037,6 +1037,7 @@ select {
       <a class="nav-item" data-section="performance" onclick="goTo('performance')"><span class="nav-diff">🔴</span> ⚡ Performance</a>
 
       <div class="nav-section-title">📚 อ้างอิง</div>
+      <a class="nav-item" data-section="projects" onclick="goTo('projects')"><span class="nav-diff">🟡</span> 🧩 Projects</a>
       <a class="nav-item" data-section="flashcard" onclick="goTo('flashcard')"><span class="nav-diff">🃏</span> 🃏 Flashcard</a>
       <a class="nav-item" data-section="checklist" onclick="goTo('checklist')"><span class="nav-diff">📋</span> ✅ Checklist</a>
       <a class="nav-item" data-section="glossary" onclick="goTo('glossary')"><span class="nav-diff">📖</span> 📖 คำศัพท์</a>
@@ -6607,7 +6608,7 @@ supabase.auth.getUser()</code></pre>
 
   <div class="page-nav">
     <a onclick="goTo('ai-coding')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🤖 AI ช่วยเขียนโค้ด</div></a>
-    <a class="next" onclick="goTo('checklist')"><div class="nav-label">ถัดไป →</div><div class="nav-title">✅ Checklist</div></a>
+    <a class="next" onclick="goTo('projects')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🧩 Projects</div></a>
   </div>
   <button class="section-complete-btn" onclick="toggleComplete('troubleshoot')">✅ เรียนจบหน้านี้แล้ว</button>
 </div>
@@ -7915,6 +7916,363 @@ async function loadPage(page: number) {
 <!-- ╔═══════════════════════════════════════════════════════════╗
      ║  FLASHCARD PAGE                                           ║
      ╚═══════════════════════════════════════════════════════════╝ -->
+
+<!-- ╔═══════════════════════════════════════════════════════════╗
+     ║  NEW: Portfolio Projects                                  ║
+     ╚═══════════════════════════════════════════════════════════╝ -->
+<div class="section" id="sec-projects">
+  <span class="section-emoji">🧩</span>
+  <h1>Portfolio Projects — สร้างผลงานจริง 3 โปรเจกต์</h1>
+
+  <div class="lesson-meta">
+    <span class="diff-badge intermediate">🟡 Intermediate</span>
+    <span class="reading-time">⏱️ อ่าน ~40 นาที</span>
+  </div>
+
+  <p>บทนี้รวมโปรเจกต์ที่ใช้ทักษะ Next.js, Supabase, Authentication, RLS, Database Design และ Vercel โดยแต่ละโปรเจกต์มี Requirement, Schema, Policy, โครงสร้างไฟล์ และ Checklist</p>
+
+  <h2>1️⃣ Todo App</h2>
+  <h3>ฟีเจอร์หลัก</h3>
+  <ul>
+    <li>สมัครสมาชิกและเข้าสู่ระบบ</li>
+    <li>เพิ่ม แก้ไข ลบ และเปลี่ยนสถานะ Task</li>
+    <li>ค้นหาและกรองตามสถานะ</li>
+    <li>ผู้ใช้เห็นเฉพาะข้อมูลของตัวเอง</li>
+  </ul>
+
+  <div class="workflow">
+    <div class="wf-step">Login</div><div class="wf-arrow">↓</div>
+    <div class="wf-step">Session</div><div class="wf-arrow">↓</div>
+    <div class="wf-step">Query Tasks</div><div class="wf-arrow">↓</div>
+    <div class="wf-step">RLS ตรวจ user_id</div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>SQL: tasks</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>create table public.tasks (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  title text not null check (char_length(title) between 1 and 200),
+  description text,
+  status text not null default 'todo'
+    check (status in ('todo', 'doing', 'done')),
+  due_date timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index tasks_user_status_idx
+on public.tasks(user_id, status);</code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>RLS: tasks</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>alter table public.tasks enable row level security;
+
+create policy "Users read own tasks"
+on public.tasks for select to authenticated
+using ((select auth.uid()) = user_id);
+
+create policy "Users insert own tasks"
+on public.tasks for insert to authenticated
+with check ((select auth.uid()) = user_id);
+
+create policy "Users update own tasks"
+on public.tasks for update to authenticated
+using ((select auth.uid()) = user_id)
+with check ((select auth.uid()) = user_id);
+
+create policy "Users delete own tasks"
+on public.tasks for delete to authenticated
+using ((select auth.uid()) = user_id);</code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>สร้าง Task</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>async function createTask(title) {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('กรุณาเข้าสู่ระบบ')
+
+  const { data, error } = await supabase
+    .from('tasks')
+    .insert({
+      title: title.trim(),
+      user_id: user.id
+    })
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}</code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>โครงสร้างไฟล์ Todo App</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>app/
+├─ login/page.jsx
+├─ tasks/page.jsx
+├─ tasks/loading.jsx
+└─ tasks/error.jsx
+components/
+├─ task-form.jsx
+├─ task-card.jsx
+└─ task-filter.jsx
+lib/
+└─ supabase/
+   ├─ client.js
+   └─ server.js</code></pre>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox" id="todo-p1"><label for="todo-p1">CRUD ทำงานครบ</label></li>
+    <li><input type="checkbox" id="todo-p2"><label for="todo-p2">RLS แยกข้อมูลผู้ใช้</label></li>
+    <li><input type="checkbox" id="todo-p3"><label for="todo-p3">มี Loading, Empty และ Error State</label></li>
+  </ul>
+
+  <h2>2️⃣ Expense Tracker</h2>
+  <h3>ฟีเจอร์หลัก</h3>
+  <ul>
+    <li>บันทึกรายรับและรายจ่าย</li>
+    <li>จัดหมวดหมู่และกรองตามเดือน</li>
+    <li>แสดงยอดรายรับ รายจ่าย และคงเหลือ</li>
+    <li>แสดงกราฟสรุปตามหมวดหมู่</li>
+  </ul>
+
+  <div class="code-block">
+    <div class="code-header"><span>SQL: categories และ transactions</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>create table public.categories (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  name text not null,
+  type text not null check (type in ('income', 'expense')),
+  unique (user_id, name, type)
+);
+
+create table public.transactions (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  category_id uuid references public.categories(id) on delete set null,
+  type text not null check (type in ('income', 'expense')),
+  amount numeric(12, 2) not null check (amount > 0),
+  note text,
+  transaction_date date not null default current_date,
+  created_at timestamptz not null default now()
+);
+
+create index transactions_user_date_idx
+on public.transactions(user_id, transaction_date desc);</code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>RLS: Expense Tracker</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>alter table public.categories enable row level security;
+alter table public.transactions enable row level security;
+
+create policy "Users manage own categories"
+on public.categories for all to authenticated
+using ((select auth.uid()) = user_id)
+with check ((select auth.uid()) = user_id);
+
+create policy "Users manage own transactions"
+on public.transactions for all to authenticated
+using ((select auth.uid()) = user_id)
+with check ((select auth.uid()) = user_id);</code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>คำนวณ Summary</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>function summarizeTransactions(items) {
+  return items.reduce((summary, item) => {
+    const amount = Number(item.amount)
+
+    if (item.type === 'income') {
+      summary.income += amount
+    } else {
+      summary.expense += amount
+    }
+
+    summary.balance = summary.income - summary.expense
+    return summary
+  }, { income: 0, expense: 0, balance: 0 })
+}</code></pre>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Component</th><th>หน้าที่</th></tr></thead>
+      <tbody>
+        <tr><td><code>summary-cards.jsx</code></td><td>แสดงยอดรวม</td></tr>
+        <tr><td><code>transaction-form.jsx</code></td><td>เพิ่มและแก้ไขรายการ</td></tr>
+        <tr><td><code>expense-chart.jsx</code></td><td>แสดงกราฟ</td></tr>
+        <tr><td><code>month-filter.jsx</code></td><td>เลือกเดือน</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="practice-card best">
+    <h3>✅ Best Practice</h3>
+    <p>ใช้ชนิด <code>numeric</code> สำหรับเงิน ไม่ควรใช้ Float เพราะอาจเกิดความคลาดเคลื่อนของเลขทศนิยม</p>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox" id="expense-p1"><label for="expense-p1">คำนวณยอดรวมถูกต้อง</label></li>
+    <li><input type="checkbox" id="expense-p2"><label for="expense-p2">กรองตามเดือนได้</label></li>
+    <li><input type="checkbox" id="expense-p3"><label for="expense-p3">RLS ป้องกันข้อมูลข้ามผู้ใช้</label></li>
+  </ul>
+
+  <h2>3️⃣ Blog CMS</h2>
+  <h3>ฟีเจอร์หลัก</h3>
+  <ul>
+    <li>สร้าง Draft และ Published Post</li>
+    <li>ใช้ Slug สำหรับ Dynamic Route</li>
+    <li>รองรับ Category และ Cover Image</li>
+    <li>มี SEO Metadata</li>
+  </ul>
+
+  <div class="code-block">
+    <div class="code-header"><span>SQL: posts</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>create table public.posts (
+  id uuid primary key default gen_random_uuid(),
+  author_id uuid not null references auth.users(id) on delete cascade,
+  title text not null,
+  slug text not null unique,
+  excerpt text,
+  content text not null,
+  cover_url text,
+  status text not null default 'draft'
+    check (status in ('draft', 'published')),
+  published_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);</code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>RLS: Public และ Author</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>alter table public.posts enable row level security;
+
+create policy "Public reads published posts"
+on public.posts for select
+to anon, authenticated
+using (status = 'published');
+
+create policy "Authors read own posts"
+on public.posts for select
+to authenticated
+using ((select auth.uid()) = author_id);
+
+create policy "Authors create own posts"
+on public.posts for insert
+to authenticated
+with check ((select auth.uid()) = author_id);
+
+create policy "Authors update own posts"
+on public.posts for update
+to authenticated
+using ((select auth.uid()) = author_id)
+with check ((select auth.uid()) = author_id);</code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>สร้าง Slug</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>function createSlug(title) {
+  return title
+    .trim()
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[^\p{Letter}\p{Number}\s-]/gu, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+}</code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>SEO Metadata</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>export async function generateMetadata({ params }) {
+  const { slug } = await params
+  const post = await getPublishedPost(slug)
+
+  return {
+    title: post?.title ?? 'ไม่พบบทความ',
+    description: post?.excerpt ?? '',
+    openGraph: {
+      title: post?.title,
+      description: post?.excerpt,
+      images: post?.cover_url ? [post.cover_url] : []
+    }
+  }
+}</code></pre>
+  </div>
+
+  <div class="practice-card mistake">
+    <h3>❌ Common Mistake</h3>
+    <p>Render HTML จาก Rich Text Editor โดยไม่กรอง อาจทำให้เกิด XSS ควร Sanitize เนื้อหาก่อนแสดงผล</p>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox" id="blog-p1"><label for="blog-p1">Draft และ Published ทำงานถูกต้อง</label></li>
+    <li><input type="checkbox" id="blog-p2"><label for="blog-p2">Slug ไม่ซ้ำ</label></li>
+    <li><input type="checkbox" id="blog-p3"><label for="blog-p3">Public อ่านเฉพาะ Published Post</label></li>
+    <li><input type="checkbox" id="blog-p4"><label for="blog-p4">มี SEO Metadata และ Cover Image</label></li>
+  </ul>
+
+  <h2>เปรียบเทียบโปรเจกต์</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>โปรเจกต์</th><th>ทักษะหลัก</th><th>ระดับ</th></tr></thead>
+      <tbody>
+        <tr><td>Todo App</td><td>CRUD, Auth, RLS, Filter</td><td>เริ่มต้น–กลาง</td></tr>
+        <tr><td>Expense Tracker</td><td>Relationship, Dashboard, Summary</td><td>กลาง</td></tr>
+        <tr><td>Blog CMS</td><td>CMS, Storage, Slug, SEO</td><td>กลาง–สูง</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Portfolio Checklist</h2>
+  <ul class="checklist">
+    <li><input type="checkbox" id="portfolio-p1"><label for="portfolio-p1">มี Live Demo และ GitHub Repository</label></li>
+    <li><input type="checkbox" id="portfolio-p2"><label for="portfolio-p2">README อธิบาย Features และวิธีติดตั้ง</label></li>
+    <li><input type="checkbox" id="portfolio-p3"><label for="portfolio-p3">มี Screenshot หรือ Demo GIF</label></li>
+    <li><input type="checkbox" id="portfolio-p4"><label for="portfolio-p4">ไม่มี Secret ใน Repository</label></li>
+  </ul>
+
+  <div class="quiz-section">
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ Projects</div>
+
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">กรอง user_id ใน Frontend อย่างเดียวเพียงพอหรือไม่?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">ไม่เพียงพอ ต้องใช้ RLS ในฐานข้อมูลด้วย เพราะ Request จาก Browser ถูกแก้ไขได้</div>
+    </div>
+
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ทำไมข้อมูลเงินควรใช้ numeric?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">numeric เหมาะกับค่าทศนิยมที่ต้องการความแม่นยำ ขณะที่ Float อาจเกิดความคลาดเคลื่อน</div>
+    </div>
+
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Draft Post ควรเปิดให้ Public อ่านหรือไม่?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">ไม่ควร Public ควรอ่านเฉพาะ Published Post ส่วน Author อ่าน Draft ของตัวเองได้</div>
+    </div>
+
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">ทำไมต้อง Sanitize Rich Text?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">เพื่อป้องกัน Script หรือ Attribute อันตรายที่อาจทำให้เกิด XSS</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a onclick="goTo('performance')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">⚡ Performance</div></a>
+    <a class="next" onclick="goTo('flashcard')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🃏 Flashcard</div></a>
+  </div>
+
+  <button class="section-complete-btn" onclick="toggleComplete('projects')">✅ เรียนจบหน้านี้แล้ว</button>
+</div>
+
 <div class="section" id="sec-flashcard">
   <span class="section-emoji">🃏</span>
   <h1>Flashcard — ฝึกจำศัพท์</h1>
@@ -8182,7 +8540,7 @@ const SECTIONS = [
   'env-dev-prod',
   'deployment','project','ai-coding','ai-workflow','best-practices','debugging','testing',
   'troubleshoot','performance',
-  'flashcard','checklist','glossary','faq'
+  'projects','flashcard','checklist','glossary','faq'
 ];
 
 const SECTION_TITLES = {
@@ -8202,7 +8560,8 @@ const SECTION_TITLES = {
   'troubleshoot':'🔧 แก้ปัญหา','performance':'⚡ Performance',
   'checklist':'✅ Checklist','glossary':'📖 คำศัพท์','faq':'❓ FAQ',
   'flashcard':'🃏 Flashcard'
-};
+,
+  'projects':'🧩 Projects'};
 
 // Completed sections (persist in localStorage)
 let completed = JSON.parse(localStorage.getItem('devguide-completed') || '[]');
