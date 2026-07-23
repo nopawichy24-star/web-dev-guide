@@ -7222,134 +7222,471 @@ npm run dev
      ╚═══════════════════════════════════════════════════════════╝ -->
 <div class="section" id="sec-debugging">
   <span class="section-emoji">🐛</span>
-  <h1>Debugging — หาและแก้บั๊ก</h1>
+  <h1>Debugging — วิเคราะห์ปัญหาอย่างเป็นระบบ</h1>
+
   <div class="lesson-meta">
     <span class="diff-badge intermediate">🟡 Intermediate</span>
-    <span class="reading-time">⏱️ อ่าน ~15 นาที</span>
+    <span class="reading-time">⏱️ อ่าน ~24 นาที</span>
   </div>
+
   <div class="prereq-card">
     <div class="prereq-title">📋 Prerequisite</div>
-    <div class="prereq-item"><span class="prereq-check">✓</span> JavaScript พื้นฐาน</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> JavaScript และ React พื้นฐาน</div>
     <div class="prereq-item"><span class="prereq-check">✓</span> เคยรัน <code>npm run dev</code></div>
-    <div class="prereq-item"><span class="prereq-check">✓</span> เคยใช้ Browser</div>
+    <div class="prereq-item"><span class="prereq-check">✓</span> เข้าใจ API, HTTP Status และ Environment Variables เบื้องต้น</div>
   </div>
 
-  <h2>🔍 เครื่องมือ Debug ที่ต้องรู้</h2>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>เครื่องมือ</th><th>เปิดอย่างไร</th><th>ใช้ทำอะไร</th></tr></thead>
-      <tbody>
-        <tr><td>💻 <span class="en" data-th="คอนโซลในเบราว์เซอร์ — แสดง Error, log, warning">Console</span></td><td><code>F12</code> → แท็บ Console</td><td>ดู Error, console.log, warning</td></tr>
-        <tr><td>📡 <span class="en" data-th="แท็บเครือข่าย — ดูทุก request ที่เบราว์เซอร์ส่ง">Network</span></td><td><code>F12</code> → แท็บ Network</td><td>ดู API calls, status code, response</td></tr>
-        <tr><td>🔧 <span class="en" data-th="แท็บ Elements — ดูและแก้ไข HTML/CSS สด">Elements</span></td><td><code>F12</code> → แท็บ Elements</td><td>ตรวจ HTML/CSS, แก้สดได้</td></tr>
-        <tr><td>📦 <span class="en" data-th="แท็บ Application — ดู cookies, storage, session">Application</span></td><td><code>F12</code> → แท็บ Application</td><td>ดู cookies, localStorage, session</td></tr>
-        <tr><td>📂 <span class="en" data-th="แท็บ Sources — ดูและ debug JavaScript ทีละบรรทัด">Sources</span></td><td><code>F12</code> → แท็บ Sources</td><td>ตั้ง breakpoint, debug ทีละบรรทัด</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <p>Debugging ที่ดีไม่ใช่การสุ่มแก้โค้ดจนเว็บกลับมาทำงาน แต่คือการเก็บหลักฐาน ตั้งสมมติฐาน ทดลองทีละจุด และยืนยันสาเหตุจริงก่อนแก้ บทนี้จะพาใช้ Browser DevTools, React DevTools, Supabase Logs, Vercel Logs และ Lighthouse อย่างเป็นขั้นตอน</p>
 
-  <h2>📊 ประเภท Error ที่พบบ่อย</h2>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>ประเภท</th><th>ตัวอย่าง</th><th>สาเหตุ</th><th>วิธีแก้</th></tr></thead>
-      <tbody>
-        <tr><td><span class="en" data-th="ข้อผิดพลาดเวลา Build">Build Error</span></td><td><code>Module not found</code></td><td>ลืม install หรือ path ผิด</td><td><code>npm install</code> + ตรวจ import path</td></tr>
-        <tr><td><span class="en" data-th="ข้อผิดพลาดตอนรัน">Runtime Error</span></td><td><code>Cannot read undefined</code></td><td>ข้อมูลยังไม่โหลด</td><td>เพิ่ม <code>if</code> ตรวจก่อนใช้ หรือใช้ <code>?.</code></td></tr>
-        <tr><td><span class="en" data-th="ข้อผิดพลาด Syntax">Syntax Error</span></td><td><code>Unexpected token</code></td><td>พิมพ์ผิด ลืม , ; }</td><td>ดูบรรทัดที่ Error บอก</td></tr>
-        <tr><td><span class="en" data-th="อ้างถึงสิ่งที่ไม่มี">Reference Error</span></td><td><code>x is not defined</code></td><td>ตัวแปรยังไม่ประกาศ</td><td>ตรวจชื่อ + ตรวจ import</td></tr>
-        <tr><td><span class="en" data-th="ประเภทผิด">Type Error</span></td><td><code>x is not a function</code></td><td>เรียกใช้สิ่งที่ไม่ใช่ฟังก์ชัน</td><td>ตรวจว่า import ถูกตัว</td></tr>
-        <tr><td><span class="en" data-th="เครือข่ายมีปัญหา">Network Error</span></td><td><code>Failed to fetch</code></td><td>API ล่ม, URL ผิด, CORS</td><td>ตรวจ URL, Network Tab</td></tr>
-        <tr><td><span class="en" data-th="ฐานข้อมูลมีปัญหา">Database Error</span></td><td><code>RLS: insufficient</code></td><td>RLS บล็อก</td><td>ตรวจ Policy + <code>auth.uid()</code></td></tr>
-        <tr><td><span class="en" data-th="ยืนยันตัวตนไม่ผ่าน">Auth Error</span></td><td><code>Invalid login</code></td><td>email/password ผิด</td><td>ตรวจ credentials + Redirect URL</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <h2>1️⃣ Debugging Mindset — อย่าแก้ก่อนเข้าใจ</h2>
 
-  <h2>🔄 Debug Flow</h2>
   <div class="workflow">
-    <div class="wf-step">🚨 Error เกิดขึ้น!<div class="wf-sub">อ่าน Error Message ก่อน</div></div>
-    <div class="wf-arrow">⬇️</div>
-    <div class="wf-step">📍 หา File + Line<div class="wf-sub">เช่น <code>page.tsx:25:3</code></div></div>
-    <div class="wf-arrow">⬇️</div>
-    <div class="wf-step">🔍 ตรวจสอบ Console + Network<div class="wf-sub">F12 → ดู Error + API response</div></div>
-    <div class="wf-arrow">⬇️</div>
-    <div class="wf-step">🔧 แก้ไขทีละจุด<div class="wf-sub">อย่าแก้หลายอย่างพร้อมกัน!</div></div>
-    <div class="wf-arrow">⬇️</div>
-    <div class="wf-step">🧪 ทดสอบ<div class="wf-sub">รัน <code>npm run dev</code> ดูผลลัพธ์</div></div>
-    <div class="wf-arrow">⬇️</div>
-    <div class="wf-step">💾 Commit เมื่อแก้สำเร็จ!</div>
+    <div class="wf-step">1. ทำให้เกิดซ้ำ</div>
+    <div class="wf-sub">จดขั้นตอน อุปกรณ์ Browser และข้อมูลที่ใช้</div>
+    <div class="wf-arrow">↓</div>
+    <div class="wf-step">2. เก็บหลักฐาน</div>
+    <div class="wf-sub">Console, Network, Logs, Screenshot</div>
+    <div class="wf-arrow">↓</div>
+    <div class="wf-step">3. จำกัดขอบเขต</div>
+    <div class="wf-sub">Frontend, API, Auth, Database หรือ Deployment</div>
+    <div class="wf-arrow">↓</div>
+    <div class="wf-step">4. ตั้งสมมติฐาน</div>
+    <div class="wf-sub">เลือกสาเหตุที่ตรวจสอบได้</div>
+    <div class="wf-arrow">↓</div>
+    <div class="wf-step">5. ทดลองทีละตัวแปร</div>
+    <div class="wf-sub">อย่าแก้หลายส่วนพร้อมกัน</div>
+    <div class="wf-arrow">↓</div>
+    <div class="wf-step">6. ยืนยันและป้องกันซ้ำ</div>
+    <div class="wf-sub">เพิ่ม Test, Validation หรือ Logging</div>
   </div>
 
-  <h2>📝 console.log — เครื่องมือ Debug ง่ายที่สุด</h2>
+  <div class="practice-card best">
+    <h3>✅ Best Practice — เขียน Bug Report สั้น ๆ ก่อนเริ่มแก้</h3>
+    <p>ระบุ Expected Result, Actual Result, ขั้นตอนที่ทำให้เกิดซ้ำ, Browser/อุปกรณ์ และ Error Message การเขียนข้อมูลเหล่านี้ช่วยลดการเดาและทำให้ตรวจซ้ำได้</p>
+  </div>
+
+  <div class="practice-card mistake">
+    <h3>❌ Common Mistake — แก้หลายจุดพร้อมกัน</h3>
+    <p>เมื่อแก้ CSS, API และ State พร้อมกัน คุณจะไม่รู้ว่าการเปลี่ยนแปลงใดแก้ปัญหา หรือการเปลี่ยนใดสร้างบั๊กใหม่</p>
+  </div>
+
+  <h2>2️⃣ Browser DevTools — ศูนย์ควบคุมการ Debug</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>แท็บ</th><th>ใช้ตรวจอะไร</th><th>คำถามที่ตอบได้</th></tr></thead>
+      <tbody>
+        <tr><td>Console</td><td>Error, Warning, Log, JavaScript</td><td>โค้ดพังที่บรรทัดไหน? ตัวแปรมีค่าอะไร?</td></tr>
+        <tr><td>Network</td><td>Request, Response, Header, Timing</td><td>API ถูกเรียกไหม? ได้ Status Code อะไร?</td></tr>
+        <tr><td>Elements</td><td>DOM, CSS, Box Model, Accessibility</td><td>Element ถูกซ่อนหรือถูก CSS ทับหรือไม่?</td></tr>
+        <tr><td>Sources</td><td>Breakpoint, Scope, Call Stack</td><td>ค่าตัวแปรเปลี่ยนตรงไหน?</td></tr>
+        <tr><td>Application</td><td>Cookies, Storage, Cache, Service Worker</td><td>Session ถูกเก็บไหม? Cache เก่าค้างหรือไม่?</td></tr>
+        <tr><td>Performance</td><td>Main Thread, Rendering, Long Task</td><td>หน้าเว็บช้าตรงไหน?</td></tr>
+        <tr><td>Lighthouse</td><td>Performance, Accessibility, SEO</td><td>คุณภาพหน้าเว็บมีจุดอ่อนอะไร?</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">⌨️ เปิด DevTools</div>
+    <p>Windows/Linux ใช้ <code>F12</code> หรือ <code>Ctrl + Shift + I</code> ส่วน macOS ใช้ <code>Command + Option + I</code></p>
+  </div>
+
+  <h2>3️⃣ Console — อ่าน Error ให้เป็น</h2>
+
   <div class="code-block">
-    <div class="code-header"><span class="code-lang">ts</span><span class="code-where">📄 ใส่ในโค้ดเพื่อตรวจค่า</span><button class="code-copy" onclick="copyCode(this)">📋 คัดลอก</button></div>
-    <pre><code>// ตรวจว่าตัวแปรมีค่าอะไร
-console.log('user:', user)
+    <div class="code-header"><span>ใช้ Log แบบมีบริบท</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>console.log('[TaskPage] current user:', user)
+console.table(tasks)
+console.warn('[TaskPage] empty task list')
+console.error('[TaskPage] load failed:', error)
 
-// ตรวจว่า function ถูกเรียกไหม
-console.log('=== handleSubmit ถูกเรียกแล้ว ===')
-
-// ตรวจ response จาก Supabase
-const { data, error } = await supabase.from('tasks').select('*')
-console.log('data:', data)
-console.log('error:', error)
-
-// ⚠️ อย่าลืมลบ console.log ก่อน Deploy!</code></pre>
+console.group('Submit task')
+console.log('payload:', payload)
+console.log('session:', session)
+console.groupEnd()</code></pre>
   </div>
 
-  <h2>📡 Supabase Logs</h2>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Log ประเภท</th><th>ดูที่ไหน</th><th>ใช้ตรวจอะไร</th></tr></thead>
+      <thead><tr><th>Error</th><th>ความหมาย</th><th>แนวทางตรวจ</th></tr></thead>
       <tbody>
-        <tr><td>Auth Logs</td><td>Supabase → Logs → Auth</td><td>Login ล้มเหลว, Token หมดอายุ</td></tr>
-        <tr><td>Database Logs</td><td>Supabase → Logs → Postgres</td><td>Query ช้า, RLS บล็อก</td></tr>
-        <tr><td>API Logs</td><td>Supabase → Logs → API</td><td>Request ที่เข้ามา, status code</td></tr>
+        <tr><td><code>ReferenceError</code></td><td>เรียกตัวแปรที่ไม่มี</td><td>ตรวจชื่อ Scope และ Import</td></tr>
+        <tr><td><code>TypeError</code></td><td>ใช้ค่าผิดชนิด</td><td>ตรวจค่าจริงก่อนเรียก Property หรือ Function</td></tr>
+        <tr><td><code>SyntaxError</code></td><td>โครงสร้างโค้ดไม่ถูกต้อง</td><td>ตรวจวงเล็บ Quote Comma และ JSX</td></tr>
+        <tr><td><code>Unhandled Promise Rejection</code></td><td>Promise ล้มเหลวโดยไม่มี Error Handling</td><td>เพิ่ม <code>try...catch</code> หรือ <code>.catch()</code></td></tr>
+        <tr><td><code>Hydration mismatch</code></td><td>HTML ฝั่ง Server และ Client ไม่ตรงกัน</td><td>ตรวจค่าที่เปลี่ยนตามเวลา Browser หรือ localStorage</td></tr>
       </tbody>
     </table>
   </div>
 
-  <h2>▲ Vercel Logs</h2>
+  <div class="code-block">
+    <div class="code-header"><span>Error Handling สำหรับ Supabase</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>async function loadNotes() {
+  try {
+    const { data, error } = await supabase
+      .from('notes')
+      .select('id, term, meaning, created_at')
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+
+    return data
+  } catch (error) {
+    console.error('[loadNotes]', {
+      message: error.message,
+      code: error.code,
+      details: error.details
+    })
+
+    throw new Error('โหลดโน้ตไม่สำเร็จ')
+  }
+}</code></pre>
+  </div>
+
+  <h2>4️⃣ Network — ตรวจ API จากหลักฐานจริง</h2>
+
+  <p>เปิด Network แล้ว Reload หน้า จากนั้นเลือก Request ที่มีปัญหา ตรวจ URL, Method, Status, Request Payload, Response Body และ Timing</p>
+
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Log ประเภท</th><th>ดูที่ไหน</th><th>ใช้ตรวจอะไร</th></tr></thead>
+      <thead><tr><th>Status</th><th>ความหมายโดยทั่วไป</th><th>สิ่งที่ควรตรวจ</th></tr></thead>
       <tbody>
-        <tr><td><span class="en" data-th="บันทึกตอน Build">Build Logs</span></td><td>Deployments → คลิก deployment</td><td>Build failed, TypeScript error</td></tr>
-        <tr><td><span class="en" data-th="บันทึกตอนรัน">Runtime Logs</span></td><td>Logs → Runtime</td><td>API route error, Server error</td></tr>
-        <tr><td><span class="en" data-th="บันทึก Serverless Function">Function Logs</span></td><td>Logs → Functions</td><td>API function timeout, error</td></tr>
+        <tr><td><code>200</code></td><td>สำเร็จ</td><td>Response Shape ตรงกับที่ UI คาดหรือไม่</td></tr>
+        <tr><td><code>201</code></td><td>สร้างข้อมูลสำเร็จ</td><td>Record ถูกบันทึกและคืนค่าหรือไม่</td></tr>
+        <tr><td><code>400</code></td><td>Request ไม่ถูกต้อง</td><td>Payload, Type และ Required Field</td></tr>
+        <tr><td><code>401</code></td><td>ยังไม่ยืนยันตัวตน</td><td>Session, Token และการ Login</td></tr>
+        <tr><td><code>403</code></td><td>ยืนยันตัวตนแล้วแต่ไม่มีสิทธิ์</td><td>RLS Policy และ Authorization</td></tr>
+        <tr><td><code>404</code></td><td>ไม่พบ Route หรือ Resource</td><td>URL, Dynamic Param และ Deployment</td></tr>
+        <tr><td><code>409</code></td><td>ข้อมูลชนกัน</td><td>Unique Constraint หรือข้อมูลซ้ำ</td></tr>
+        <tr><td><code>429</code></td><td>เรียกถี่เกินไป</td><td>Rate Limit และ Retry Strategy</td></tr>
+        <tr><td><code>500</code></td><td>Server ผิดพลาด</td><td>Server Logs, Function Logs และ Stack Trace</td></tr>
       </tbody>
     </table>
   </div>
 
-  <h2>📋 Debug Checklist</h2>
+  <div class="code-block">
+    <div class="code-header"><span>Fetch ที่ตรวจ Status และ Response</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>async function createTask(payload) {
+  const response = await fetch('/api/tasks', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+
+  const result = await response.json()
+
+  if (!response.ok) {
+    console.error('[createTask]', {
+      status: response.status,
+      result
+    })
+
+    throw new Error(result.message ?? 'สร้าง Task ไม่สำเร็จ')
+  }
+
+  return result
+}</code></pre>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">📡 Preserve log</div>
+    <p>เปิด Preserve log เมื่อต้องตรวจ Request ที่เกิดก่อน Redirect หรือ Reload ไม่เช่นนั้นรายการอาจหายไปทันที</p>
+  </div>
+
+  <h2>5️⃣ Elements — แก้ Layout จาก DOM และ CSS</h2>
+
+  <div class="compare-grid">
+    <div class="compare-box">
+      <h3>อาการที่เห็น</h3>
+      <ul>
+        <li>ปุ่มหาย</li>
+        <li>ข้อความล้น</li>
+        <li>Sidebar บังเนื้อหา</li>
+        <li>Element กดไม่ได้</li>
+      </ul>
+    </div>
+    <div class="compare-box">
+      <h3>สิ่งที่ต้องตรวจ</h3>
+      <ul>
+        <li><code>display</code>, <code>visibility</code>, <code>opacity</code></li>
+        <li><code>overflow</code> และความกว้าง</li>
+        <li><code>position</code> และ <code>z-index</code></li>
+        <li>Element อื่นทับอยู่หรือไม่</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>CSS ป้องกันเนื้อหาล้นบนมือถือ</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img,
+video,
+iframe {
+  max-width: 100%;
+}
+
+pre,
+table {
+  max-width: 100%;
+}
+
+.table-wrap,
+.code-block {
+  overflow-x: auto;
+}
+
+main {
+  min-width: 0;
+}</code></pre>
+  </div>
+
+  <div class="practice-card best">
+    <h3>✅ ใช้ Device Toolbar</h3>
+    <p>จำลองความกว้างหลายระดับและหมุน Portrait/Landscape แต่ควรทดสอบบนอุปกรณ์จริงด้วย เพราะ Keyboard, Safe Area และ Browser UI อาจต่างจากการจำลอง</p>
+  </div>
+
+  <h2>6️⃣ Sources — หยุดโค้ดตรงจุดที่ต้องการ</h2>
+
+  <p>Breakpoint ช่วยดูค่าตัวแปรทีละขั้นโดยไม่ต้องใส่ <code>console.log</code> จำนวนมาก</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>เครื่องมือ</th><th>หน้าที่</th></tr></thead>
+      <tbody>
+        <tr><td>Breakpoint</td><td>หยุดก่อนรันบรรทัดที่เลือก</td></tr>
+        <tr><td>Step over</td><td>รันบรรทัดปัจจุบันแล้วไปบรรทัดถัดไป</td></tr>
+        <tr><td>Step into</td><td>เข้าไปดูภายในฟังก์ชันที่ถูกเรียก</td></tr>
+        <tr><td>Step out</td><td>ออกจากฟังก์ชันปัจจุบัน</td></tr>
+        <tr><td>Watch</td><td>ติดตามค่าของ Expression ที่สนใจ</td></tr>
+        <tr><td>Call Stack</td><td>ดูเส้นทางว่าฟังก์ชันใดเรียกฟังก์ชันใด</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>ใช้ debugger statement ชั่วคราว</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>async function handleSubmit(event) {
+  event.preventDefault()
+
+  const payload = {
+    term,
+    meaning
+  }
+
+  debugger
+
+  await createNote(payload)
+}</code></pre>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠️ ลบ <code>debugger</code> ก่อน Commit</div>
+    <p>เมื่อ DevTools เปิดอยู่ คำสั่งนี้จะหยุดการทำงานของหน้าและอาจทำให้ผู้ใช้งานหรือผู้ตรวจโค้ดสับสน</p>
+  </div>
+
+  <h2>7️⃣ Application — ตรวจ Session, Storage และ Cache</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>พื้นที่จัดเก็บ</th><th>เหมาะกับ</th><th>ข้อควรระวัง</th></tr></thead>
+      <tbody>
+        <tr><td>localStorage</td><td>Preference ที่ไม่ลับและอยู่ข้าม Session</td><td>JavaScript อ่านได้ ห้ามเก็บ Secret</td></tr>
+        <tr><td>sessionStorage</td><td>ข้อมูลชั่วคราวใน Tab ปัจจุบัน</td><td>หายเมื่อปิด Tab</td></tr>
+        <tr><td>Cookie</td><td>Session ที่ Server ต้องอ่าน</td><td>ควรพิจารณา Secure, HttpOnly, SameSite</td></tr>
+        <tr><td>Cache Storage</td><td>ไฟล์สำหรับ Offline หรือ Service Worker</td><td>Cache เก่าอาจทำให้เห็นเว็บเวอร์ชันเดิม</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="workflow">
+    <div class="wf-step">Login แล้วกลับมาหน้าเดิม</div>
+    <div class="wf-arrow">↓</div>
+    <div class="wf-step">ตรวจ Cookies / Local Storage</div>
+    <div class="wf-arrow">↓</div>
+    <div class="wf-step">ตรวจ Expiration และ Domain</div>
+    <div class="wf-arrow">↓</div>
+    <div class="wf-step">ตรวจ Redirect URL</div>
+    <div class="wf-arrow">↓</div>
+    <div class="wf-step">ตรวจ Auth Logs</div>
+  </div>
+
+  <h2>8️⃣ React DevTools — ตรวจ Component, Props และ State</h2>
+
+  <p>React DevTools ช่วยดู Component Tree, Props, Hooks และการ Render ซ้ำ เหมาะกับอาการ State ไม่เปลี่ยน ข้อมูลส่งผ่าน Props ผิด หรือ Component Render บ่อยเกินไป</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>แท็บ</th><th>ใช้ทำอะไร</th></tr></thead>
+      <tbody>
+        <tr><td>Components</td><td>เลือก Component แล้วตรวจ Props, State และ Hooks</td></tr>
+        <tr><td>Profiler</td><td>บันทึกการ Render และหา Component ที่ใช้เวลามาก</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>ป้องกัน State ที่พึ่งค่าเดิม</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>// ❌ อาจใช้ค่า count เก่าเมื่อมีหลาย Update
+setCount(count + 1)
+
+// ✅ ใช้ค่าล่าสุดจาก React
+setCount((currentCount) => currentCount + 1)</code></pre>
+  </div>
+
+  <div class="practice-card mistake">
+    <h3>❌ Common Mistake — แก้ State โดยตรง</h3>
+    <p>การใช้ <code>tasks.push(newTask)</code> แล้วส่ง Array เดิมกลับ อาจไม่ทำให้ React Render ใหม่ ควรสร้าง Array ใหม่ เช่น <code>setTasks(current =&gt; [...current, newTask])</code></p>
+  </div>
+
+  <h2>9️⃣ Performance Tab — หา Long Task และ Render ที่ช้า</h2>
+
+  <p>กด Record ทำกิจกรรมที่ช้า แล้ว Stop จากนั้นตรวจ Main Thread, Long Task, Layout และ Script ที่ใช้เวลามาก</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>สัญญาณ</th><th>ความเป็นไปได้</th><th>แนวทาง</th></tr></thead>
+      <tbody>
+        <tr><td>Long Task</td><td>JavaScript ทำงานต่อเนื่องนาน</td><td>แบ่งงาน ลด Loop หรือย้ายงานหนัก</td></tr>
+        <tr><td>Layout จำนวนมาก</td><td>อ่านและเขียน DOM สลับกันถี่</td><td>รวมการแก้ DOM และลด Layout Thrashing</td></tr>
+        <tr><td>ภาพโหลดช้า</td><td>ไฟล์ใหญ่หรือไม่มีขนาด</td><td>บีบอัด กำหนดขนาด และ Lazy Load</td></tr>
+        <tr><td>Render ซ้ำ</td><td>Props หรือ State เปลี่ยนโดยไม่จำเป็น</td><td>ตรวจ Profiler และโครงสร้าง State</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>วัดเวลาฟังก์ชันแบบง่าย</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>console.time('filterTasks')
+
+const visibleTasks = tasks.filter((task) => {
+  return task.title
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase())
+})
+
+console.timeEnd('filterTasks')</code></pre>
+  </div>
+
+  <h2>🔟 Lighthouse — ตรวจคุณภาพหน้าเว็บ</h2>
+
+  <p>Lighthouse ช่วยประเมิน Performance, Accessibility, Best Practices และ SEO ควรรันทดสอบหลายครั้งและใช้ผลลัพธ์เป็นแนวทาง ไม่ใช่ดูคะแนนอย่างเดียว</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>หมวด</th><th>ตัวอย่างปัญหา</th><th>แนวทางแก้</th></tr></thead>
+      <tbody>
+        <tr><td>Performance</td><td>ภาพใหญ่, JavaScript มาก, Render ช้า</td><td>Optimize Assets, Code Splitting, Cache</td></tr>
+        <tr><td>Accessibility</td><td>สี Contrast ต่ำ, ไม่มี Label, Keyboard ใช้ไม่ได้</td><td>Semantic HTML, ARIA และ Focus State</td></tr>
+        <tr><td>Best Practices</td><td>Console Error, Library เสี่ยง, Asset ไม่ปลอดภัย</td><td>แก้ Error และอัปเดต Dependency</td></tr>
+        <tr><td>SEO</td><td>ไม่มี Title, Meta Description หรือ Heading ผิดลำดับ</td><td>เพิ่ม Metadata และโครงสร้างเนื้อหา</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">💡 ทดสอบ Production Build</div>
+    <p>Development Mode มีเครื่องมือและการตรวจเพิ่มเติม จึงอาจช้ากว่า Production ควรทดสอบด้วย <code>npm run build</code> และ <code>npm start</code> ด้วย</p>
+  </div>
+
+  <h2>1️⃣1️⃣ Supabase และ Vercel Logs</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ระบบ</th><th>Log</th><th>ใช้ตรวจ</th></tr></thead>
+      <tbody>
+        <tr><td>Supabase</td><td>Auth Logs</td><td>Login, Token, OAuth Redirect</td></tr>
+        <tr><td>Supabase</td><td>Postgres Logs</td><td>Query, Constraint, Database Error</td></tr>
+        <tr><td>Supabase</td><td>API Logs</td><td>Request, Status และ RLS</td></tr>
+        <tr><td>Vercel</td><td>Build Logs</td><td>Dependency, TypeScript และ Build Failure</td></tr>
+        <tr><td>Vercel</td><td>Runtime / Function Logs</td><td>API Route, Server Action และ Function Error</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span>Logging ฝั่ง Server โดยไม่เปิดเผยข้อมูลลับ</span><button class="code-copy" onclick="copyCode(this)">คัดลอก</button></div>
+    <pre><code>console.error('[POST /api/tasks]', {
+  userId: user.id,
+  errorCode: error.code,
+  message: error.message
+})
+
+// หลีกเลี่ยง
+console.log('password:', password)
+console.log('serviceRoleKey:', process.env.SUPABASE_SERVICE_ROLE_KEY)</code></pre>
+  </div>
+
+  <h2>1️⃣2️⃣ Case Study — Login สำเร็จแต่กลับหน้าเดิม</h2>
+
+  <div class="workflow">
+    <div class="wf-step">ตรวจ Console</div>
+    <div class="wf-sub">มี Auth หรือ Hydration Error หรือไม่</div>
+    <div class="wf-arrow">↓</div>
+    <div class="wf-step">ตรวจ Network</div>
+    <div class="wf-sub">Login ได้ 200 หรือเกิด Redirect Loop</div>
+    <div class="wf-arrow">↓</div>
+    <div class="wf-step">ตรวจ Application</div>
+    <div class="wf-sub">Session ถูกบันทึกหรือ Cookie ถูก Block</div>
+    <div class="wf-arrow">↓</div>
+    <div class="wf-step">ตรวจ URL Configuration</div>
+    <div class="wf-sub">Site URL และ Redirect URL ถูกต้อง</div>
+    <div class="wf-arrow">↓</div>
+    <div class="wf-step">ตรวจ Middleware</div>
+    <div class="wf-sub">อ่าน Session และเงื่อนไข Redirect ถูกหรือไม่</div>
+  </div>
+
+  <h2>✅ Debug Checklist</h2>
+
   <ul class="checklist" data-checklist="debug-full">
-    <li><input type="checkbox" id="dbf1"><label for="dbf1">🖥️ เปิด Console (<code>F12</code>)</label></li>
-    <li><input type="checkbox" id="dbf2"><label for="dbf2">📡 ดู Network Tab — มี request สีแดงไหม?</label></li>
-    <li><input type="checkbox" id="dbf3"><label for="dbf3">📋 ดู Response — ข้อมูลกลับมาถูกไหม?</label></li>
-    <li><input type="checkbox" id="dbf4"><label for="dbf4">🔢 ดู Status Code — 200? 401? 404? 500?</label></li>
-    <li><input type="checkbox" id="dbf5"><label for="dbf5">🗄️ เช็ก Database — ข้อมูลอยู่ในตารางไหม?</label></li>
-    <li><input type="checkbox" id="dbf6"><label for="dbf6">🔐 เช็ก Environment — .env.local ครบ? ค่าถูก?</label></li>
-    <li><input type="checkbox" id="dbf7"><label for="dbf7">🔗 เช็ก API — URL ถูกไหม? Key ถูกไหม?</label></li>
-    <li><input type="checkbox" id="dbf8"><label for="dbf8">📋 เช็ก Logs — Supabase? Vercel?</label></li>
-    <li><input type="checkbox" id="dbf9"><label for="dbf9">🧪 ทดสอบใหม่</label></li>
+    <li><input type="checkbox" id="dbf1"><label for="dbf1">ทำให้ปัญหาเกิดซ้ำได้และจดขั้นตอนแล้ว</label></li>
+    <li><input type="checkbox" id="dbf2"><label for="dbf2">อ่าน Error Message และ Stack Trace ครบ</label></li>
+    <li><input type="checkbox" id="dbf3"><label for="dbf3">ตรวจ Console โดยกรอง Error และ Warning</label></li>
+    <li><input type="checkbox" id="dbf4"><label for="dbf4">ตรวจ Network: URL, Method, Status, Payload และ Response</label></li>
+    <li><input type="checkbox" id="dbf5"><label for="dbf5">ตรวจ DOM, CSS, Box Model และ z-index</label></li>
+    <li><input type="checkbox" id="dbf6"><label for="dbf6">ตรวจ Session, Storage และ Cache</label></li>
+    <li><input type="checkbox" id="dbf7"><label for="dbf7">ตรวจ Supabase หรือ Vercel Logs เมื่อเกี่ยวข้อง</label></li>
+    <li><input type="checkbox" id="dbf8"><label for="dbf8">ทดลองแก้ทีละสมมติฐาน</label></li>
+    <li><input type="checkbox" id="dbf9"><label for="dbf9">ทดสอบ Regression หลังแก้สำเร็จ</label></li>
+    <li><input type="checkbox" id="dbf10"><label for="dbf10">เพิ่ม Test, Validation หรือ Logging เพื่อป้องกันปัญหาซ้ำ</label></li>
   </ul>
 
   <div class="quiz-section">
-    <div class="quiz-title">🧠 ทดสอบความเข้าใจ</div>
+    <div class="quiz-title">🧠 ทดสอบความเข้าใจ Debugging</div>
+
     <div class="quiz-card" onclick="this.classList.toggle('revealed')">
-      <div class="q-term">กด F12 ในเบราว์เซอร์แล้วได้อะไร?</div>
+      <div class="q-term">API คืน Status 403 ต่างจาก 401 อย่างไร?</div>
       <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
-      <div class="q-answer">🔧 Developer Tools — มี Console (ดู Error), Network (ดู API), Elements (ดู HTML/CSS)</div>
+      <div class="q-answer">401 หมายถึงยังไม่ได้ยืนยันตัวตนหรือ Session ใช้ไม่ได้ ส่วน 403 หมายถึงยืนยันตัวตนแล้วแต่ไม่มีสิทธิ์เข้าถึง Resource นั้น</div>
     </div>
+
     <div class="quiz-card" onclick="this.classList.toggle('revealed')">
-      <div class="q-term">Status Code 401 หมายความว่าอะไร?</div>
+      <div class="q-term">ควรใช้ Network Tab ตรวจอะไรบ้าง?</div>
       <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
-      <div class="q-answer">🔒 Unauthorized — ยังไม่ได้ Login หรือ Token หมดอายุ!</div>
+      <div class="q-answer">ตรวจ Request URL, Method, Headers, Payload, Status Code, Response Body และ Timing</div>
     </div>
+
     <div class="quiz-card" onclick="this.classList.toggle('revealed')">
-      <div class="q-term">console.log ใช้ทำอะไร?</div>
+      <div class="q-term">Breakpoint มีข้อดีเหนือ console.log อย่างไร?</div>
       <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
-      <div class="q-answer">🔍 พิมพ์ค่าออกมาดูใน Console — ช่วยตรวจว่าตัวแปรมีค่าอะไร ฟังก์ชันถูกเรียกหรือเปล่า</div>
+      <div class="q-answer">หยุดโค้ด ณ จุดที่เลือกและตรวจ Scope, Call Stack และค่าตัวแปรทีละขั้นได้ โดยไม่ต้องแก้ไฟล์เพื่อเพิ่ม Log หลายจุด</div>
+    </div>
+
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">React Component ไม่ Render หลัง push ข้อมูลลง Array เพราะอะไร?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">เพราะมีการแก้ Array เดิมโดยตรง Reference จึงอาจไม่เปลี่ยน ควรสร้าง Array ใหม่แล้วส่งเข้า State Setter</div>
+    </div>
+
+    <div class="quiz-card" onclick="this.classList.toggle('revealed')">
+      <div class="q-term">Lighthouse คะแนนสูงเพียงครั้งเดียวเพียงพอหรือไม่?</div>
+      <div class="q-hint">👆 กดเพื่อดูคำตอบ</div>
+      <div class="q-answer">ไม่พอ ควรรันหลายครั้ง ทดสอบ Production Build และตรวจปัญหาจริงควบคู่กับคะแนน เพราะสภาพเครื่องและเครือข่ายมีผลต่อผลลัพธ์</div>
     </div>
   </div>
 
@@ -7357,9 +7694,9 @@ console.log('error:', error)
     <a onclick="goTo('best-practices')"><div class="nav-label">← ก่อนหน้า</div><div class="nav-title">🧹 Best Practices</div></a>
     <a class="next" onclick="goTo('testing')"><div class="nav-label">ถัดไป →</div><div class="nav-title">🧪 Testing</div></a>
   </div>
+
   <button class="section-complete-btn" onclick="toggleComplete('debugging')">✅ เรียนจบหน้านี้แล้ว</button>
 </div>
-
 <!-- ╔═══════════════════════════════════════════════════════════╗
      ║  NEW: Testing                                             ║
      ╚═══════════════════════════════════════════════════════════╝ -->
